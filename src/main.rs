@@ -12,6 +12,12 @@ fn main() {
     let str2 = String::from("AB");
     let result = gcd_of_strings(str1, str2);
     println!("gcd_of_strings: {result}");
+
+    println!("------ 拥有最多糖果的孩子 ------");
+    let candies = vec![2, 3, 5, 1, 3];
+    let extra_candies = 3;
+    let result = kids_with_candies(candies, extra_candies);
+    println!("kids_with_candies: {:?}", result);
 }
 
 /// 交替合并字符串
@@ -79,3 +85,24 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
     "".to_string()
 }
 //---------------------------------------------------
+
+fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
+    // 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
+    let max_candies = candies.iter().max().unwrap_or(&0).clone();
+
+    // .iter(): 遍历向量中的每一个元素。迭代器是一个可以记住遍历的位置并在之后再次访问这些位置的对象。
+    // .enumerate(): 这个方法附加在迭代器之后，它会改变迭代器产生的内容。
+    // 原本迭代器只产生向量中的元素，但调用enumerate()后，迭代器现在产生的是元组(Tuple),
+    // 每个元组包含两个元素：第一个是元素的索引(从0开始)，第二个是元素的值。
+    /*for (i, &candy) in candies.iter().enumerate() {
+        if candy + extra_candies >= *max_candies {
+            result[i] = true;
+        }
+    }*/
+
+    // .map(|&candy| candy + extra_candies >= max_candies)
+    // 对迭代器中的每个元素(使用模式匹配|&candy|来借用每个candy的值，避免不必要的复制)应用一个函数。
+    // 这个函数计算后会返回一个bool，true表示当前孩子的糖果加上额外的糖果后至少和最大的糖果数量一样多，false则表示不够。
+    // .collect()方法调用，将map步骤返回的迭代器中的所有布尔值收集到一个新的(Vec<bool>)中
+    candies.iter().map(|&candy| candy + extra_candies >= max_candies).collect()
+}
