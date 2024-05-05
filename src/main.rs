@@ -26,6 +26,12 @@ fn main() {
     let n = 2;
     let result = can_place_flowers(flowerbed, n);
     println!("can_place_flowers {n}: {}", result);
+
+    println!("------ 反转字符串中的元音字母 ------");
+    let s = "leetcode".to_string();
+    // let s = "hello".to_string();
+    let result = reverse_vowels(s);
+    println!("reverse_vowels: {}", result);
 }
 
 /// 交替合并字符串
@@ -96,7 +102,7 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
 
 fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
     // 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
-    let max_candies = candies.iter().max().unwrap_or(&0).clone();
+    let max_candies = *candies.iter().max().unwrap_or(&0);
 
     // .iter(): 遍历向量中的每一个元素。迭代器是一个可以记住遍历的位置并在之后再次访问这些位置的对象。
     // .enumerate(): 这个方法附加在迭代器之后，它会改变迭代器产生的内容。
@@ -116,26 +122,57 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
 }
 //-------------------------------------------------------
 
+// n: 是否可以种的花数量
 fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
-    let mut flowerbed = flowerbed.clone();
-    let mut count = 0;
-    // 双指针操作,一个从头开始，一个从尾开始，向中间遍历。这样可以减少1次遍历，因为如果头部或尾部可以放置花朵，那么相应的位置就会被更新(有待修改)。
-
+    let len = flowerbed.len();
+    let mut n = n;
     let mut i = 0;
-    while i < flowerbed.len() {
+
+    while i < len {
         // 检查头尾&相邻项的问题
-        if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == flowerbed.len() - 1 || flowerbed[i + 1] == 0) {
-            flowerbed[i] = 1;
-            count += 1;
-
-            if count >= n {
+        if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == len - 1 || flowerbed[i + 1] == 0) {
+            n -= 1;
+            /*if n == 0 {
                 return true;
-            }
-        }
+            }*/
 
-        i += 1;
+            i += 2; // 下个位置肯定不能种花，可以跳过
+        } else {
+            i += 1;
+        }
     }
 
-    count >= n
+    n <= 0
 }
 //-------------------------------------------------------
+
+fn is_vowel(c: char) -> bool {
+    matches!(c, 'a'|'e'|'i'|'o'|'u'|'A'|'E'|'I'|'O'|'U')
+}
+
+fn reverse_vowels(s: String) -> String {
+    let mut chars: Vec<char> = s.chars().collect();
+    // 双指针操作
+    let mut i = 0;
+    let mut j = chars.len() - 1;
+
+    while i < j {
+        if !is_vowel(chars[i]) {
+            i += 1;
+            continue;
+        }
+
+        if !is_vowel(chars[j]) {
+            j -= 1;
+            continue;
+        }
+
+        // 交换位置
+        chars.swap(i, j);
+        i += 1;
+        j -= 1;
+    }
+
+    chars.iter().collect()
+}
+//----------------------------------------------------
