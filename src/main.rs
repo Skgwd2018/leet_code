@@ -18,6 +18,14 @@ fn main() {
     let extra_candies = 3;
     let result = kids_with_candies(candies, extra_candies);
     println!("kids_with_candies: {:?}", result);
+
+    println!("------ 种花问题 ------");
+    // let flowerbed = vec![1, 0, 0, 0, 0, 1];
+    let flowerbed = vec![1, 0, 0, 0, 1, 0, 0];
+    // let flowerbed = vec![0, 1, 0];
+    let n = 2;
+    let result = can_place_flowers(flowerbed, n);
+    println!("can_place_flowers {n}: {}", result);
 }
 
 /// 交替合并字符串
@@ -106,3 +114,28 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
     // .collect()方法调用，将map步骤返回的迭代器中的所有布尔值收集到一个新的(Vec<bool>)中
     candies.iter().map(|&candy| candy + extra_candies >= max_candies).collect()
 }
+//-------------------------------------------------------
+
+fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
+    let mut flowerbed = flowerbed.clone();
+    let mut count = 0;
+    // 双指针操作,一个从头开始，一个从尾开始，向中间遍历。这样可以减少1次遍历，因为如果头部或尾部可以放置花朵，那么相应的位置就会被更新(有待修改)。
+
+    let mut i = 0;
+    while i < flowerbed.len() {
+        // 检查头尾&相邻项的问题
+        if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == flowerbed.len() - 1 || flowerbed[i + 1] == 0) {
+            flowerbed[i] = 1;
+            count += 1;
+
+            if count >= n {
+                return true;
+            }
+        }
+
+        i += 1;
+    }
+
+    count >= n
+}
+//-------------------------------------------------------
