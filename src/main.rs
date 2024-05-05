@@ -32,6 +32,11 @@ fn main() {
     // let s = "hello".to_string();
     let result = reverse_vowels(s);
     println!("reverse_vowels: {}", result);
+
+    println!("------ 移动零 ------");
+    let mut nums = vec![0, 1, 0, 3, 12];
+    // let mut nums = vec![4, 1, 5, 3, 12];
+    move_zeroes(&mut nums);
 }
 
 /// 交替合并字符串
@@ -176,3 +181,23 @@ fn reverse_vowels(s: String) -> String {
     chars.iter().collect()
 }
 //----------------------------------------------------
+
+fn move_zeroes(nums: &mut Vec<i32>) {
+    // 双指针操作(快指针&慢指针)
+    let mut j = 0;
+    for i in 0..nums.len() {
+        if nums[i] != 0 {
+            // 交换两个索引位置的元素
+            nums.swap(i, j);
+            /* nums[j] = nums[i];
+            if i != j {
+                nums[i] = 0;
+            } */
+
+            j += 1;
+        }
+    }
+
+    println!("{:?}", nums);
+}
+//-----------------------------------------------------
