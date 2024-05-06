@@ -37,6 +37,11 @@ fn main() {
     let mut nums = vec![0, 1, 0, 3, 12];
     // let mut nums = vec![4, 1, 5, 3, 12];
     move_zeroes(&mut nums);
+
+    println!("------ 判断子序列 ------");
+    let s = "ace";
+    let t = "abcde";
+    println!("Is '{}' a sub of '{}'? {}", s, t, is_subsequence(s.to_string(), t.to_string()));
 }
 
 /// 交替合并字符串
@@ -199,5 +204,28 @@ fn move_zeroes(nums: &mut Vec<i32>) {
     }
 
     println!("{:?}", nums);
+}
+//-----------------------------------------------------
+
+/// 给定字符串 s 和 t,判断 s 是否为 t 的子序列
+fn is_subsequence(s: String, t: String) -> bool {
+    let s_chars: Vec<char> = s.chars().collect();
+    let t_chars: Vec<char> = t.chars().collect();
+    let s_len = s_chars.len();
+    let t_len = t_chars.len();
+
+    // 双指针操作
+    let mut s_index = 0;
+    let mut t_index = 0;
+
+    while t_index < t_len {
+        if s_index < s_len && s_chars[s_index] == t_chars[t_index] {
+            s_index += 1;
+        }
+
+        t_index += 1;
+    }
+
+    s_index == s_len
 }
 //-----------------------------------------------------
