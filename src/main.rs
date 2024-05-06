@@ -42,6 +42,12 @@ fn main() {
     let s = "ace";
     let t = "abcde";
     println!("Is '{}' a sub of '{}'? {}", s, t, is_subsequence(s.to_string(), t.to_string()));
+
+    println!("------ 子数组最大平均数 ------");
+    let nums = vec![1, 12, -5, -6, 50, 3];
+    let k = 4;
+    let result = find_max_average(nums, k);
+    println!("find_max_average: {result}");
 }
 
 /// 交替合并字符串
@@ -86,7 +92,11 @@ fn can_divide(s1: &str, s2: &str) -> bool {
     // 如果 s1 的长度不是 s2.len() 的整数倍，这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0，所以这里不会有问题。
     // .all(|chunk| chunk == s2.as_bytes()) 对所有分割出的块执行检查每个块是否都与 s2 的字节切片相等。
     // 如果所有块都相等，那么 s1 是由 s2 重复构成的，函数返回 true,否则返回 false。
-    s1.len() % s2.len() == 0 && s1.as_bytes().chunks_exact(s2.len()).all(|chunk| chunk == s2.as_bytes())
+    s1.len() % s2.len() == 0
+        && s1
+        .as_bytes()
+        .chunks_exact(s2.len())
+        .all(|chunk| chunk == s2.as_bytes())
 }
 
 /// 字符串的最大公因子
@@ -95,8 +105,10 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
     let len2 = str2.len();
 
     // 求两个字符串长度的最大公约数
-    let gec_len = (1..cmp::min(len1, len2) + 1).rev()
-        .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
+    let gec_len = (1..cmp::min(len1, len2) + 1)
+        .rev()
+        .find(|&i| len1 % i == 0 && len2 % i == 0)
+        .unwrap_or_else(|| cmp::min(len1, len2));
 
     // let cd1 = can_divide(&str1, &str1[0..gec_len]);
     // let cd2 = can_divide(&str2, &str1[0..gec_len]);
@@ -128,7 +140,10 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
     // 对迭代器中的每个元素(使用模式匹配|&candy|来借用每个candy的值，避免不必要的复制)应用一个函数。
     // 这个函数计算后会返回一个bool，true表示当前孩子的糖果加上额外的糖果后至少和最大的糖果数量一样多，false则表示不够。
     // .collect()方法调用，将map步骤返回的迭代器中的所有布尔值收集到一个新的(Vec<bool>)中
-    candies.iter().map(|&candy| candy + extra_candies >= max_candies).collect()
+    candies
+        .iter()
+        .map(|&candy| candy + extra_candies >= max_candies)
+        .collect()
 }
 //-------------------------------------------------------
 
@@ -140,7 +155,10 @@ fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
 
     while i < len {
         // 检查头尾&相邻项的问题
-        if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == len - 1 || flowerbed[i + 1] == 0) {
+        if flowerbed[i] == 0
+            && (i == 0 || flowerbed[i - 1] == 0)
+            && (i == len - 1 || flowerbed[i + 1] == 0)
+        {
             n -= 1;
             /*if n == 0 {
                 return true;
@@ -157,7 +175,7 @@ fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
 //-------------------------------------------------------
 
 fn is_vowel(c: char) -> bool {
-    matches!(c, 'a'|'e'|'i'|'o'|'u'|'A'|'E'|'I'|'O'|'U')
+    matches!(c, 'a' | 'e' | 'i' | 'o' | 'u' | 'A' | 'E' | 'I' | 'O' | 'U')
 }
 
 fn reverse_vowels(s: String) -> String {
@@ -227,5 +245,24 @@ fn is_subsequence(s: String, t: String) -> bool {
     }
 
     s_index == s_len
+}
+//-----------------------------------------------------
+
+/// 找出平均数最大且长度为 k 的连续子数组
+fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
+    let k = k as usize;
+    if nums.len() < k {
+        panic!("Array length is less than k");
+    }
+
+    // 滑动窗口计算总和
+    let mut window_sum: i32 = nums.iter().take(k).sum();
+    let mut max_sum = window_sum;
+    for (&num_in, &num_out) in nums.iter().skip(k).zip(nums.iter()) {
+        window_sum += num_in - num_out;
+        max_sum = i32::max(max_sum, window_sum); // 返回较大值
+    }
+
+    max_sum as f64 / k as f64
 }
 //-----------------------------------------------------
