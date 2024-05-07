@@ -54,6 +54,11 @@ fn main() {
     // let gain = vec![-4, -3, -2, -1, 4, 3, 2];
     let result = largest_altitude(gain);
     println!("largest_altitude: {result}");
+
+    println!("------ 寻找数组的中心下标 ------");
+    let nums = vec![1, 7, 3, 6, 5, 6];
+    let result = pivot_index(nums);
+    println!("pivot_index: {result}");
 }
 
 /// 交替合并字符串
@@ -279,5 +284,19 @@ fn largest_altitude(gain: Vec<i32>) -> i32 {
     // let numbers = vec![1, 2, 3, 4, 5];
     // let sum = numbers.iter().fold(0, |accumulator, &number| accumulator + number); // 15
     gain.iter().fold((0, 0), |(highest, curr), g| (highest.max(curr + g), curr + g)).0
+}
+//-----------------------------------------------------
+
+fn pivot_index(nums: Vec<i32>) -> i32 {
+    let mut sum: i32 = nums.iter().sum();
+    for (i, num) in nums.iter().enumerate() {
+        sum -= num;
+        if sum == 0 {
+            return i as i32;
+        }
+        sum -= num;
+    }
+
+    -1
 }
 //-----------------------------------------------------
