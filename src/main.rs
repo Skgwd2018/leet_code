@@ -48,6 +48,9 @@ fn main() {
     let k = 4;
     let result = find_max_average(nums, k);
     println!("find_max_average: {result}");
+
+    println!("------ 找到最高海拔 ------");
+
 }
 
 /// 交替合并字符串
@@ -84,7 +87,7 @@ fn merge_alternately(word1: String, word2: String) -> String {
 
     result
 }
-//------------------------------------------------
+//-----------------------------------------------------
 
 // 字符串的最大公因子
 fn can_divide(s1: &str, s2: &str) -> bool {
@@ -120,7 +123,7 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
 
     "".to_string()
 }
-//---------------------------------------------------
+//-----------------------------------------------------
 
 fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
     // 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
@@ -145,7 +148,7 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
         .map(|&candy| candy + extra_candies >= max_candies)
         .collect()
 }
-//-------------------------------------------------------
+//-----------------------------------------------------
 
 // n: 是否可以种的花数量
 fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
@@ -172,7 +175,7 @@ fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
 
     n <= 0
 }
-//-------------------------------------------------------
+//-----------------------------------------------------
 
 fn is_vowel(c: char) -> bool {
     matches!(c, 'a' | 'e' | 'i' | 'o' | 'u' | 'A' | 'E' | 'I' | 'O' | 'U')
@@ -203,7 +206,7 @@ fn reverse_vowels(s: String) -> String {
 
     chars.iter().collect()
 }
-//----------------------------------------------------
+//-----------------------------------------------------
 
 fn move_zeroes(nums: &mut Vec<i32>) {
     // 双指针操作(快指针&慢指针)
@@ -265,4 +268,8 @@ fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
 
     max_sum as f64 / k as f64
 }
+//-----------------------------------------------------
+
+
+
 //-----------------------------------------------------
