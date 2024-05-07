@@ -1,4 +1,5 @@
 use std::cmp;
+use std::collections::HashSet;
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -59,6 +60,12 @@ fn main() {
     let nums = vec![1, 7, 3, 6, 5, 6];
     let result = pivot_index(nums);
     println!("pivot_index: {result}");
+
+    println!("------ 找出两数组的不同 ------");
+    let nums1 = vec![1, 2, 3, 3];
+    let nums2 = vec![1, 2, 1, 2, 4];
+    let result = find_difference(nums1, nums2);
+    println!("find_difference: {result:?}");
 }
 
 /// 交替合并字符串
@@ -298,5 +305,26 @@ fn pivot_index(nums: Vec<i32>) -> i32 {
     }
 
     -1
+}
+//-----------------------------------------------------
+
+/// 使用哈希集合解决去重复问题
+fn find_difference(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<Vec<i32>> {
+    // let set1: HashSet<&i32> = nums1.iter().collect();
+    let set1: HashSet<i32> = nums1.into_iter().collect();
+    let set2: HashSet<i32> = nums2.into_iter().collect();
+
+    // let unique_in_nums1: Vec<i32> = nums1.into_iter().filter(|&x| !set2.contains(&x)).collect();
+    // let unique_in_nums1: Vec<i32> = nums1.iter().filter(|x| !set2.contains(x)).cloned().collect();
+    // let unique_in_nums1: Vec<i32> = unique_in_nums1.into_iter().collect::<HashSet<_>>().into_iter().collect();
+
+    // 调用了 HashSet 的 difference() 方法，它返回一个迭代器，其中包含所有在 set1 中但不在 set2 中的元素。
+    // set1.difference(&set2).map(|&x| x).collect(); // 这种方式会更高效
+    // set1.difference(&set2).cloned().collect();    // 作用同上
+    // .cloned() 是一个适配器，它会对迭代器中的每个元素调用 clone() 方法。
+    // 使用 map() 方法来克隆每个元素。map() 方法接受一个闭包，该闭包对迭代器中的每个元素进行转换。
+    // 在这里，闭包 |&x| x 实际上并没有改变元素，因为它只是借用并返回了元素本身。
+    // 因此，这里的 map 操作实际上并没有做额外的工作，它只是简单地返回了元素的引用
+    vec![set1.difference(&set2).cloned().collect(), set2.difference(&set1).map(|&x| x).collect()]
 }
 //-----------------------------------------------------
