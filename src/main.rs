@@ -1,5 +1,5 @@
 use std::cmp;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -66,6 +66,11 @@ fn main() {
     let nums2 = vec![1, 2, 1, 2, 4];
     let result = find_difference(nums1, nums2);
     println!("find_difference: {result:?}");
+
+    println!("------ 独一无二的出现次数 ------");
+    let arr = vec![1,2,2,1,1,3];
+    let result = unique_occurrences(arr);
+    println!("unique_occurrences: {result}");
 }
 
 /// 交替合并字符串
@@ -326,5 +331,36 @@ fn find_difference(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<Vec<i32>> {
     // 在这里，闭包 |&x| x 实际上并没有改变元素，因为它只是借用并返回了元素本身。
     // 因此，这里的 map 操作实际上并没有做额外的工作，它只是简单地返回了元素的引用
     vec![set1.difference(&set2).cloned().collect(), set2.difference(&set1).map(|&x| x).collect()]
+}
+//-----------------------------------------------------
+
+/// 使用哈希集合解决统计出现次数问题
+fn unique_occurrences(arr: Vec<i32>) -> bool {
+    // 存储每个数的出现次数的集合
+    let mut count_map = HashMap::new();
+    /*for num in arr {
+        // 使用 entry() 方法检查键 num 是否已经存在于 count_map 中,
+        // 如果键 num 不存在，or_insert(0) 会将键 num 插入到哈希映射中，并设置其对应的值为 0。
+        // 如果遇到相同的键时，就可以在其现有值的基础上增加计数。
+        *count_map.entry(num).or_insert(0) += 1;
+    }*/
+    // for_each() 方法，用于遍历迭代器中的每个元素，并对每个元素执行一个给定的操作。在这里，它遍历 arr 中的每个 num
+    arr.into_iter().for_each(|num| *count_map.entry(num).or_insert(0) += 1);
+
+    // 存储出现次数的集合
+    let mut occurrences = HashSet::new();
+    /* for count in count_map.values() {
+        // 将值添加到HashSet集合中。
+        // 返回值:是否是新插入的。即:如果集合以前不包含此值，则返回true;如果集合已经包含此值，则返回false，并且不修改集合:不替换原始值,并删除作为参数传递的值
+        if !occurrences.insert(*count) {
+            return false;
+        }
+    }
+    true */
+    // 上面的方式性能更高,因为只获取 值集合，而下面的方式是获取 键值集合(entry集合即条目集合)需要解构操作
+    // all() 方法，用于检查迭代器中的所有元素是否都满足给定的条件.检查 count_map 中的每个出现次数（即值）是否都是唯一的。
+    // 如果所有出现次数都成功插入到 occurrences 中，那么 all() 方法将返回 true。
+    // 如果有任何出现次数已经存在于 occurrences 中，all() 方法将立刻返回 false。
+    count_map.into_iter().all(|entry| occurrences.insert(entry.1))
 }
 //-----------------------------------------------------
