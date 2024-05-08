@@ -68,9 +68,14 @@ fn main() {
     println!("find_difference: {result:?}");
 
     println!("------ 独一无二的出现次数 ------");
-    let arr = vec![1,2,2,1,1,3];
+    let arr = vec![1, 2, 2, 1, 1, 3];
     let result = unique_occurrences(arr);
     println!("unique_occurrences: {result}");
+
+    println!("------ 第N个泰波那契数 ------");
+    let n = 25;
+    let result = tribonacci(n);
+    println!("tribonacci({n}): {result}"); // 1389537
 }
 
 /// 交替合并字符串
@@ -362,5 +367,35 @@ fn unique_occurrences(arr: Vec<i32>) -> bool {
     // 如果所有出现次数都成功插入到 occurrences 中，那么 all() 方法将返回 true。
     // 如果有任何出现次数已经存在于 occurrences 中，all() 方法将立刻返回 false。
     count_map.into_iter().all(|entry| occurrences.insert(entry.1))
+}
+//-----------------------------------------------------
+
+/// 使用动态规划避免重复计算
+/// 泰波那契序列 Tn 定义如下：
+/// T0 = 0, T1 = 1, T2 = 1, 且在 n >= 0 的条件下 Tn+3 = Tn + Tn+1 + Tn+2
+/// 给你整数 n，请返回第 n 个泰波那契数 Tn 的值。
+fn tribonacci(n: i32) -> i32 {
+    // 递归方式:
+    /*match n {
+        0 => 0,
+        1 | 2 => 1,
+        _ => tribonacci(n - 1) + tribonacci(n - 2) + tribonacci(n - 3),
+    }*/
+
+    // 动态规划（Dynamic Programming, DP）来避免重复计算。
+    // 动态规划是一种算法设计技术，用于解决具有重叠子问题和最优子结构特性的问题。
+    // 对于泰波那契数列，你可以使用动态规划来存储已经计算过的值，从而避免重复计算。
+    match n {
+        0 => 0,
+        1 | 2 => 1,
+        _ => {
+            (2..n).fold((0, 1, 1), |(p1, p2, p3), _| (p2, p3, p1 + p2 + p3)).2
+            /*let (mut p1, mut p2, mut p3) = (0, 1, 1);
+            for _ in 2..n {
+                (p1, p2, p3) = (p2, p3, p1 + p2 + p3)
+            }
+            p3*/
+        }
+    }
 }
 //-----------------------------------------------------
