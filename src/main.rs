@@ -82,6 +82,11 @@ fn main() {
     let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
     let result = min_cost_climbing_stairs(cost);
     println!("min_cost_climbing_stairs: {result}");
+
+    println!("------ 比特位计数 ------");
+    let n = 5;
+    let result = count_bits(n);
+    println!("count_bits({n}): {result:?}");
 }
 
 /// 交替合并字符串
@@ -410,5 +415,22 @@ fn tribonacci(n: i32) -> i32 {
 fn min_cost_climbing_stairs(cost: Vec<i32>) -> i32 {
     let (p1, p2) = (2..cost.len()).fold((cost[0], cost[1]), |(c1, c2), i| (c2, c1.min(c2) + cost[i]));
     p1.min(p2)
+}
+//-----------------------------------------------------
+
+/// 位运算
+// 输入：n = 5
+// 输出：[0,1,1,2,1,2]
+// 解释：
+// 0 --> 0
+// 1 --> 1
+// 2 --> 10
+// 3 --> 11
+// 4 --> 100
+// 5 --> 101
+fn count_bits(n: i32) -> Vec<i32> {
+    // count_ones() 方法:计算其二进制表示中1的个数
+    // count_ones()函数是std::u32::TrailingZeroBits trait的一部分，适用于所有(有/无符号)整数类型(包括u8 ~ u128 & i8 ~ i128)
+    (0..=n).map(|x| x.count_ones() as i32).collect()
 }
 //-----------------------------------------------------
