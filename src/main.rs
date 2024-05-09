@@ -87,6 +87,11 @@ fn main() {
     let n = 5;
     let result = count_bits(n);
     println!("count_bits({n}): {result:?}");
+
+    println!("------ 只出现一次的数字 ------");
+    let nums = vec![4, 1, 2, 1, 2];
+    let result = single_number(nums);
+    println!("single_number: {result}");
 }
 
 /// 交替合并字符串
@@ -432,5 +437,26 @@ fn count_bits(n: i32) -> Vec<i32> {
     // count_ones() 方法:计算其二进制表示中1的个数
     // count_ones()函数是std::u32::TrailingZeroBits trait的一部分，适用于所有(有/无符号)整数类型(包括u8 ~ u128 & i8 ~ i128)
     (0..=n).map(|x| x.count_ones() as i32).collect()
+}
+//-----------------------------------------------------
+
+// 题目：给你一个 非空 整数数组 nums ，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+// 假设数组中重复的元素为x，只出现一次的元素为y。
+// 将数组中的所有元素进行异或运算，由于x出现了两次，所以x和x异或的结果为0，而y只出现了一次，所以最后的结果就是y。
+/// 异或（XOR）运算问题。异或运算有一个重要的性质：任何数和0异或都等于它本身，任何数和其自身异或都等于0。
+fn single_number(nums: Vec<i32>) -> i32 {
+    /*let mut single = 0;
+    nums.iter().for_each(|num| single ^= num);
+    single*/
+
+    // reduce() 和 fold() 在功能上是相似的，但它们的初始值和参数的顺序是不同的。
+    // 两者都可以用来累积一个值，通过对集合中的元素应用某种操作。
+    // 对于 reduce() 方法，它接受一个二元操作函数，并将集合中的元素两两组合起来，直到只剩下一个元素。
+    // reduce() 不需要初始值，因为它使用集合中的第一个元素作为初始值。
+    // 注:reduce() 使用数组中的第一个元素作为初始值进行异或操作;如果数组为空，reduce 会返回一个 None，需要使用 unwrap() 来获取结果，这可能会导致运行时错误(如果数组为空)。
+    // 在这种情况下，reduce运行更高效
+    // nums.into_iter().reduce(|a, b| a ^ b).unwrap()
+
+    nums.iter().fold(0, |single, num| single ^ num)
 }
 //-----------------------------------------------------
