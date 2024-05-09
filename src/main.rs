@@ -76,6 +76,12 @@ fn main() {
     let n = 25;
     let result = tribonacci(n);
     println!("tribonacci({n}): {result}"); // 1389537
+
+    println!("------ 使用最小花费爬楼梯 ------");
+    // let cost = vec![10, 15, 20]; // 15
+    let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
+    let result = min_cost_climbing_stairs(cost);
+    println!("min_cost_climbing_stairs: {result}");
 }
 
 /// 交替合并字符串
@@ -397,5 +403,12 @@ fn tribonacci(n: i32) -> i32 {
             p3*/
         }
     }
+}
+//-----------------------------------------------------
+
+/// 动态规划
+fn min_cost_climbing_stairs(cost: Vec<i32>) -> i32 {
+    let (p1, p2) = (2..cost.len()).fold((cost[0], cost[1]), |(c1, c2), i| (c2, c1.min(c2) + cost[i]));
+    p1.min(p2)
 }
 //-----------------------------------------------------
