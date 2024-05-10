@@ -1,7 +1,9 @@
+use std::cell::RefCell;
 use std::cmp;
 use std::collections::{HashMap, HashSet};
+use std::rc::Rc;
 
-use leet_code::{ListNode, RecentCounter};
+use leet_code::{ListNode, RecentCounter, TreeNode};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -125,6 +127,28 @@ fn main() {
             node.print_list();
         }
     }
+
+    println!("------ 二叉树的最大深度 ------");
+    let root = Rc::new(RefCell::new(TreeNode::new(3)));
+    root.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(9))));
+    root.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(20))));
+    if let Some(left_node) = root.borrow_mut().right.as_mut() {
+        left_node.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(15))));
+    }
+    root.borrow_mut().right.as_mut().unwrap().borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(7))));
+    // 作用同上
+    /*let mut rt = TreeNode::new(3);
+    let left = TreeNode::new(9);
+    let mut right = TreeNode::new(20);
+    let right_left = TreeNode::new(15);
+    let right_right = TreeNode::new(7);
+    rt.left = Some(Rc::new(RefCell::new(left)));
+    rt.right = Some(Rc::new(RefCell::new(right)));
+    right.left = Some(Rc::new(RefCell::new(right_left)));
+    right.right = Some(Rc::new(RefCell::new(right_right)));*/
+
+    let result = TreeNode::max_depth(Some(root));
+    println!("max_depth: {result}");
 
 }
 
