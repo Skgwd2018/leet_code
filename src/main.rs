@@ -1,6 +1,8 @@
 use std::cmp;
 use std::collections::{HashMap, HashSet};
 
+use leet_code::RecentCounter;
+
 fn main() {
     println!("------ 交替合并字符串 ------");
     let word1 = String::from("abcde");
@@ -92,6 +94,17 @@ fn main() {
     let nums = vec![4, 1, 2, 1, 2];
     let result = single_number(nums);
     println!("single_number: {result}");
+
+    println!("------ 最近的请求次数(头尾高效操作的队列) ------");
+    let mut obj = RecentCounter::new();
+    let ret_1 = obj.ping(1);
+    println!("ping: {ret_1}");
+    let ret_2 = obj.ping(100);
+    println!("ping: {ret_2}");
+    let ret_3 = obj.ping(3001);
+    println!("ping: {ret_3}");
+    let ret_4 = obj.ping(3002);
+    println!("ping: {ret_4}");
 }
 
 /// 交替合并字符串
@@ -351,7 +364,17 @@ fn find_difference(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<Vec<i32>> {
     // 使用 map() 方法来克隆每个元素。map() 方法接受一个闭包，该闭包对迭代器中的每个元素进行转换。
     // 在这里，闭包 |&x| x 实际上并没有改变元素，因为它只是借用并返回了元素本身。
     // 因此，这里的 map 操作实际上并没有做额外的工作，它只是简单地返回了元素的引用
-    vec![set1.difference(&set2).cloned().collect(), set2.difference(&set1).map(|&x| x).collect()]
+    // vec![set1.difference(&set2).cloned().collect(), set2.difference(&set1).map(|&x| x).collect()]
+
+    // .copied() 是一个用于复制迭代器中原始元素值的适配器。.copied()的作用和上面的.map(|&x| x)是一样的
+    // 它通常用于原始元素是 Copy trait 的实现者的情况，这意味着这些元素可以通过简单的位复制来复制，而不是通过调用 clone 方法。
+    // 这通常比 clone() 克隆更高效，因为位复制通常比调用 clone 方法更快。
+    // .cloned() 用于克隆实现了 Clone trait 的元素。
+    // .copied() 用于复制实现了 Copy trait 的元素，这通常比克隆更高效。
+    // 在选择使用哪个适配器时:
+    // 如果元素是 Copy 的，那么使用 .copied() 通常是更好的选择。
+    // 如果元素不是 Copy 的但实现了 Clone，那么你应该使用 .cloned()。
+    vec![set1.difference(&set2).copied().collect(), set2.difference(&set1).copied().collect()]
 }
 //-----------------------------------------------------
 
