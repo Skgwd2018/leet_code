@@ -1,7 +1,7 @@
 use std::cmp;
 use std::collections::{HashMap, HashSet};
 
-use leet_code::RecentCounter;
+use leet_code::{ListNode, RecentCounter};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -105,6 +105,27 @@ fn main() {
     println!("ping: {ret_3}");
     let ret_4 = obj.ping(3002);
     println!("ping: {ret_4}");
+
+    println!("------ 反转链表 ------");
+    let mut node1 = ListNode::new(1);
+    let mut node2 = ListNode::new(2);
+    let mut node3 = ListNode::new(3);
+    let mut node4 = ListNode::new(4);
+    let node5 = ListNode::new(5);
+    node4.set_next(Some(Box::new(node5)));
+    node3.set_next(Some(Box::new(node4)));
+    node2.set_next(Some(Box::new(node3)));
+    node1.set_next(Some(Box::new(node2)));
+    node1.print_list();
+    println!("------ rev ------");
+    let node_rev = ListNode::reverse_list(Some(Box::new(node1.clone())));
+    match node_rev {
+        None => {}
+        Some(node) => {
+            node.print_list();
+        }
+    }
+
 }
 
 /// 交替合并字符串
