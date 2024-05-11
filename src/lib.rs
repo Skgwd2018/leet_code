@@ -85,9 +85,14 @@ impl ListNode {
         let mut curr = Some(self);
         while let Some(node) = curr {
             print!("{} ", node.val);
-            curr = node.next.as_ref().map(|x| &**x);
+            // curr = node.next.as_ref().map(|x| &**x);
+            // as_ref(): as_ref() 返回对 Box 内部数据的引用，对Option<Box<T>> 返回 Option<&T> 类型。(得到的是对 Box 内部数据的引用，而不是对 Box 自身的引用)
+            // 如果 Option 是 Some(box)，则返回 Some(&*box)（即 box 的解引用引用）;如果 Option 是 None，则返回 None。返回 &T 类型
+            curr = node.next.as_deref(); //作用同上
+            // .as_deref():返回对 Box 本身的引用，是 Option<Box<T>> 的方法，它返回 Option<&Box<T>>。(得到的是对 Box 自身的引用，而不是对 Box 内部数据的引用)
+            // 如果 Option 是 Some(box)，则返回一个指向 box 内部数据的引用 即Some(&box<T>);如果 Option 是 None，则返回 None。返回 &Box<T> 类型
         }
-        print!("\n");
+        println!();
     }
 }
 //-----------------------------------------------------
