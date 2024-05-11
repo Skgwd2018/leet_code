@@ -133,15 +133,15 @@ fn main() {
     root.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(9))));
     root.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(20))));
     if let Some(left_node) = root.borrow_mut().right.as_mut() {
-        left_node.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(15))));
+        left_node.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(17))));
     }
-    root.borrow_mut().right.as_mut().unwrap().borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(7))));
+    root.borrow_mut().right.as_mut().unwrap().borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(36))));
     // 作用同上,前提是TreeNode要实现 Clone trait,不建议使用这种方式操作(阅读困难)
     let mut rt = TreeNode::new(4);
     let left = TreeNode::new(9);
     let mut right = TreeNode::new(22);
-    let right_left = TreeNode::new(15);
-    let right_right = TreeNode::new(7);
+    let right_left = TreeNode::new(17);
+    let right_right = TreeNode::new(36);
     rt.left = Some(Rc::new(RefCell::new(left)));
     right.left = Some(Rc::new(RefCell::new(right_left)));
     right.right = Some(Rc::new(RefCell::new(right_right)));
@@ -151,8 +151,13 @@ fn main() {
     println!("max_depth: {result}");
 
     println!("------ 叶子相似的树 ------");
-    let result = TreeNode::leaf_similar(Some(Rc::new(RefCell::new(rt))), Some(root));
+    let result = TreeNode::leaf_similar(Some(Rc::new(RefCell::new(rt))), Some(root.clone()));
     println!("leaf_similar: {result}");
+
+    println!("------ 二叉搜索树(BST)中的搜索 ------");
+    let val = 20;
+    let result = TreeNode::search_bst(Some(root), val);
+    println!("search_bst: {result:?}");
 
 }
 

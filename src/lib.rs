@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::cmp;
 use std::collections::VecDeque;
 use std::rc::Rc;
 
@@ -156,7 +157,7 @@ impl TreeNode {
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
         // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数，并且可以访问其包含作用域中的变量。
         // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数，它们可以像其他值一样传递。闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
-        fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
+        /*fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
             if let Some(node) = node {
                 let left = node.borrow_mut().left.take();
                 let right = node.borrow_mut().right.take();
@@ -168,21 +169,21 @@ impl TreeNode {
                 pre_order(left, values);
                 pre_order(right, values);
             }
-        }
+        }*/
 
         let (mut values1, mut values2) = (Vec::new(), Vec::new());
-        pre_order(root1, &mut values1);
-        pre_order(root2, &mut values2);
-        // 这种局部函数的实现方式性能比下面的dfs()方法的实现方式高，其实是相差在比较函数的耗时
-        // Self::dfs(root1, &mut values1);
-        // Self::dfs(root2, &mut values2);
+        // pre_order(root1, &mut values1);
+        // pre_order(root2, &mut values2);
+        // 这种局部函数的实现方式性能比下面的dfs()方法的实现方式高,但是.take()会取走值(即修改了节点),比较函数的耗时也会长一点
+        Self::dfs(root1, &mut values1);
+        Self::dfs(root2, &mut values2);
 
         values1 == values2
     }
 
     // DFS是深度优先搜索（Depth first search），是用递归进行搜索，尽可能深的搜索每一个节点。
     // 可以理解为不撞墙不回头，主要用于解决一些树的遍历和图的遍历问题。由于是通过递归实现，时间复杂度较高，一般用于数据较小的情况。
-    /*fn dfs(root: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<Rc<RefCell<TreeNode>>>) {
+    fn dfs(root: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<Rc<RefCell<TreeNode>>>) {
         if let Some(node) = root {
             let left = &node.borrow().left;
             let right = &node.borrow().right;
@@ -193,6 +194,37 @@ impl TreeNode {
                 Self::dfs(right.clone(), values);
             }
         }
-    }*/
+    }
+
+    /// 二叉搜索树（BST）中搜索一个特定的值
+    // BST的特性，即对于树中的每个节点，其左子节点的值都小于该节点的值，而右子节点的值都大于该节点的值。
+    // 根据这个特性，可以从根节点开始，如果当前节点的值等于目标值，则返回当前节点;
+    // 如果目标值小于当前节点的值，则递归地在左子树中搜索;如果目标值大于当前节点的值，则递归地在右子树中搜索。
+    pub fn search_bst(root: Option<Rc<RefCell<TreeNode>>>, val: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        // 递归搜索
+        /*match root {
+            None => None,
+            Some(node) => {
+                let node_val = node.borrow().val;
+                match node_val.cmp(&val) {
+                    cmp::Ordering::Equal => return Some(node),
+                    cmp::Ordering::Greater => Self::search_bst(node.borrow().left.clone(), val),
+                    cmp::Ordering::Less => Self::search_bst(node.borrow().right.clone(), val),
+                }
+            }
+        }*/
+
+        // 循环搜索,相比上面内存消耗更小，执行效率更高一点
+        let mut node = root;
+        while let Some(curr_node) = node {
+            let cur_val = curr_node.borrow().val;
+            match cur_val.cmp(&val) {
+                cmp::Ordering::Equal => return Some(curr_node),
+                cmp::Ordering::Greater => node = curr_node.borrow().left.clone(),
+                cmp::Ordering::Less => node = curr_node.borrow().right.clone(),
+            };
+        }
+        None
+    }
 }
 //-----------------------------------------------------
