@@ -108,7 +108,7 @@ impl ListNode {
 // Cell只能用于实现Copy trait的类型，因为Cell的值在赋值时可以进行复制。而RefCell则可以用于非Copy trait类型，因为它的值在赋值时不会进行复制
 
 /// 二叉树节点
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct TreeNode {
     pub val: i32,
     pub left: Option<Rc<RefCell<TreeNode>>>,
@@ -116,6 +116,12 @@ pub struct TreeNode {
 }
 
 impl TreeNode {
+    // 在Rust中，#[inline]属性是一个提示给编译器的，建议它尽可能内联指定的函数或方法。
+    // 内联是将函数体直接插入到调用该函数的地方，而不是进行常规的函数调用。这有助于减少函数调用的开销，但可能会增加生成的代码的大小。
+    // #[inline]属性主要用于优化那些频繁调用的小函数，或者是那些对性能有严格要求的代码。然而，编译器并不一定会遵循这个提示，它会在权衡代码大小和性能之后做出决策。
+    // 注:过度使用内联可能会导致生成的代码过大，反而降低缓存效率，甚至影响性能。#[inline]应该谨慎使用，并且通常只在确定某个函数应该被内联的情况下使用。
+    // 其实Rust编译器有自己的内联策略，它会自动决定哪些函数应该被内联。这意味着，即使你不使用#[inline]属性，编译器也可能会自动内联一些函数。
+    // 总结: #[inline]是一个优化提示，它告诉编译器可能希望某个函数被内联。最终是否内联这个函数，还是由编译器根据代码的具体情况来决定的。
     #[inline]
     pub fn new(val: i32) -> Self {
         TreeNode { val, left: None, right: None }
@@ -143,5 +149,50 @@ impl TreeNode {
             }
         }
     }
+
+    /// 叶值序列相似的树
+    pub fn leaf_similar(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> bool {
+        // 函数内部定义的函数称为闭包（Closure）或局部函数（Local Function）。
+        // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
+        // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数，并且可以访问其包含作用域中的变量。
+        // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数，它们可以像其他值一样传递。闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
+        fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
+            if let Some(node) = node {
+                let left = node.borrow_mut().left.take();
+                let right = node.borrow_mut().right.take();
+                // 判断是否是最底部的节点
+                if left.is_none() && right.is_none() {
+                    values.push(node.borrow().val);
+                }
+
+                pre_order(left, values);
+                pre_order(right, values);
+            }
+        }
+
+        let (mut values1, mut values2) = (Vec::new(), Vec::new());
+        pre_order(root1, &mut values1);
+        pre_order(root2, &mut values2);
+        // 这种局部函数的实现方式性能比下面的dfs()方法的实现方式高，其实是相差在比较函数的耗时
+        // Self::dfs(root1, &mut values1);
+        // Self::dfs(root2, &mut values2);
+
+        values1 == values2
+    }
+
+    // DFS是深度优先搜索（Depth first search），是用递归进行搜索，尽可能深的搜索每一个节点。
+    // 可以理解为不撞墙不回头，主要用于解决一些树的遍历和图的遍历问题。由于是通过递归实现，时间复杂度较高，一般用于数据较小的情况。
+    /*fn dfs(root: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<Rc<RefCell<TreeNode>>>) {
+        if let Some(node) = root {
+            let left = &node.borrow().left;
+            let right = &node.borrow().right;
+            if left.is_none() && right.is_none() {
+                values.push(Rc::clone(&node));
+            } else {
+                Self::dfs(left.clone(), values);
+                Self::dfs(right.clone(), values);
+            }
+        }
+    }*/
 }
 //-----------------------------------------------------

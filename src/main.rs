@@ -136,19 +136,23 @@ fn main() {
         left_node.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(15))));
     }
     root.borrow_mut().right.as_mut().unwrap().borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(7))));
-    // 作用同上
-    /*let mut rt = TreeNode::new(3);
+    // 作用同上,前提是TreeNode要实现 Clone trait,不建议使用这种方式操作(阅读困难)
+    let mut rt = TreeNode::new(4);
     let left = TreeNode::new(9);
-    let mut right = TreeNode::new(20);
+    let mut right = TreeNode::new(22);
     let right_left = TreeNode::new(15);
     let right_right = TreeNode::new(7);
     rt.left = Some(Rc::new(RefCell::new(left)));
-    rt.right = Some(Rc::new(RefCell::new(right)));
     right.left = Some(Rc::new(RefCell::new(right_left)));
-    right.right = Some(Rc::new(RefCell::new(right_right)));*/
+    right.right = Some(Rc::new(RefCell::new(right_right)));
+    rt.right = Some(Rc::new(RefCell::new(right.clone())));
 
-    let result = TreeNode::max_depth(Some(root));
+    let result = TreeNode::max_depth(Some(root.clone()));
     println!("max_depth: {result}");
+
+    println!("------ 叶子相似的树 ------");
+    let result = TreeNode::leaf_similar(Some(Rc::new(RefCell::new(rt))), Some(root));
+    println!("leaf_similar: {result}");
 
 }
 
