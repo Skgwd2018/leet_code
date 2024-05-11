@@ -76,6 +76,11 @@ fn main() {
     let result = unique_occurrences(arr);
     println!("unique_occurrences: {result}");
 
+    println!("------ 猜数字大小 ------");
+    let n = 10;
+    let pick_num = guess_number(n);
+    println!("guessNumber: {pick_num}");
+
     println!("------ 第N个泰波那契数 ------");
     let n = 25;
     let result = tribonacci(n);
@@ -158,7 +163,6 @@ fn main() {
     let val = 20;
     let result = TreeNode::search_bst(Some(root), val);
     println!("search_bst: {result:?}");
-
 }
 
 /// 交替合并字符串
@@ -460,6 +464,51 @@ fn unique_occurrences(arr: Vec<i32>) -> bool {
     // 如果所有出现次数都成功插入到 occurrences 中，那么 all() 方法将返回 true。
     // 如果有任何出现次数已经存在于 occurrences 中，all() 方法将立刻返回 false。
     count_map.into_iter().all(|entry| occurrences.insert(entry.1))
+}
+//-----------------------------------------------------
+
+/// 猜数字大小(二分法查找问题)
+// 题目要求:数字范围是[1,n]
+fn guess_number(n: i32) -> i32 {
+    /*let mut low = 1;
+    let mut high = n;
+    while low <= high {
+        let mid = low + (high - low) / 2;
+        let result = guess(mid);
+
+        match result {
+            -1 => high = mid - 1,
+            1 => low = mid + 1,
+            0 => return mid,
+            _ => panic!("Error"),
+        }
+    }
+    panic!("Error")*/
+
+    let (mut low, mut result) = (1, n);
+    while low < result {
+        let mid = low + (result - low) / 2;
+        match guess(mid) {
+            1 => low = mid + 1,
+            0 => {
+                result = mid;
+                break;
+            }
+            _ => result = mid,
+        }
+    }
+    result
+}
+
+// 题目提供的
+fn guess(num: i32) -> i32 {
+    // 这里应该是调用实际的猜数字接口的逻辑，但在这只是模拟一下
+    // 假设选中的数字是某个固定的值，比如7
+    match num.cmp(&7) {
+        cmp::Ordering::Equal => 0,
+        cmp::Ordering::Greater => -1,
+        cmp::Ordering::Less => 1,
+    }
 }
 //-----------------------------------------------------
 
