@@ -470,21 +470,6 @@ fn unique_occurrences(arr: Vec<i32>) -> bool {
 /// 猜数字大小(二分法查找问题)
 // 题目要求:数字范围是[1,n]
 fn guess_number(n: i32) -> i32 {
-    /*let mut low = 1;
-    let mut high = n;
-    while low <= high {
-        let mid = low + (high - low) / 2;
-        let result = guess(mid);
-
-        match result {
-            -1 => high = mid - 1,
-            1 => low = mid + 1,
-            0 => return mid,
-            _ => panic!("Error"),
-        }
-    }
-    panic!("Error")*/
-
     let (mut low, mut result) = (1, n);
     while low < result {
         let mid = low + (result - low) / 2;
@@ -497,6 +482,7 @@ fn guess_number(n: i32) -> i32 {
             _ => result = mid,
         }
     }
+
     result
 }
 
