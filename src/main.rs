@@ -10,19 +10,19 @@ fn main() {
     let word1 = String::from("abcde");
     let word2 = String::from("xyz");
     let result = merge_alternately(word1, word2);
-    println!("merge_alternately: {result}");
+    println!("merge_alternately: {result}"); // axbyczde
 
     println!("------ 字符串的最大公因子 ------");
     let str1 = String::from("ABABAB");
     let str2 = String::from("AB");
     let result = gcd_of_strings(str1, str2);
-    println!("gcd_of_strings: {result}");
+    println!("gcd_of_strings: {result}"); // AB
 
     println!("------ 拥有最多糖果的孩子 ------");
     let candies = vec![2, 3, 5, 1, 3];
     let extra_candies = 3;
     let result = kids_with_candies(candies, extra_candies);
-    println!("kids_with_candies: {:?}", result);
+    println!("kids_with_candies: {:?}", result); // [true, true, true, false, true]
 
     println!("------ 种花问题 ------");
     // let flowerbed = vec![1, 0, 0, 0, 0, 1];
@@ -30,88 +30,74 @@ fn main() {
     // let flowerbed = vec![0, 1, 0];
     let n = 2;
     let result = can_place_flowers(flowerbed, n);
-    println!("can_place_flowers {n}: {}", result);
+    println!("can_place_flowers {n}: {}", result); // true
 
     println!("------ 反转字符串中的元音字母 ------");
     let s = "leetcode".to_string();
     // let s = "hello".to_string();
     let result = reverse_vowels(s);
-    println!("reverse_vowels: {}", result);
+    println!("reverse_vowels: {}", result); // leotcede
+
+    //----------------------------
 
     println!("------ 移动零 ------");
     let mut nums = vec![0, 1, 0, 3, 12];
     // let mut nums = vec![4, 1, 5, 3, 12];
-    move_zeroes(&mut nums);
+    move_zeroes(&mut nums); // [1, 3, 12, 0, 0]
 
     println!("------ 判断子序列 ------");
     let s = "ace";
     let t = "abcde";
-    println!("Is '{}' a sub of '{}'? {}", s, t, is_subsequence(s.to_string(), t.to_string()));
+    println!("Is '{}' a sub of '{}'? {}", s, t, is_subsequence(s.to_string(), t.to_string())); // true
+
+    //----------------------------
 
     println!("------ 子数组最大平均数 ------");
     let nums = vec![1, 12, -5, -6, 50, 3];
     let k = 4;
     let result = find_max_average(nums, k);
-    println!("find_max_average: {result}");
+    println!("find_max_average: {result}"); // 12.75
+
+    //----------------------------
 
     println!("------ 找到最高海拔 ------");
     let gain = vec![-5, 1, 5, 0, -7];
     // let gain = vec![-4, -3, -2, -1, 4, 3, 2];
     let result = largest_altitude(gain);
-    println!("largest_altitude: {result}");
+    println!("largest_altitude: {result}"); // 1
 
     println!("------ 寻找数组的中心下标 ------");
     let nums = vec![1, 7, 3, 6, 5, 6];
     let result = pivot_index(nums);
-    println!("pivot_index: {result}");
+    println!("pivot_index: {result}"); // 3
+
+    //----------------------------
 
     println!("------ 找出两数组的不同 ------");
     let nums1 = vec![1, 2, 3, 3];
     let nums2 = vec![1, 2, 1, 2, 4];
     let result = find_difference(nums1, nums2);
-    println!("find_difference: {result:?}");
+    println!("find_difference: {result:?}"); // [[3], [4]]
 
     println!("------ 独一无二的出现次数 ------");
     let arr = vec![1, 2, 2, 1, 1, 3];
     let result = unique_occurrences(arr);
-    println!("unique_occurrences: {result}");
+    println!("unique_occurrences: {result}"); // true
 
-    println!("------ 猜数字大小 ------");
-    let n = 10;
-    let pick_num = guess_number(n);
-    println!("guessNumber: {pick_num}");
-
-    println!("------ 第N个泰波那契数 ------");
-    let n = 25;
-    let result = tribonacci(n);
-    println!("tribonacci({n}): {result}"); // 1389537
-
-    println!("------ 使用最小花费爬楼梯 ------");
-    // let cost = vec![10, 15, 20]; // 15
-    let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
-    let result = min_cost_climbing_stairs(cost);
-    println!("min_cost_climbing_stairs: {result}");
-
-    println!("------ 比特位计数 ------");
-    let n = 5;
-    let result = count_bits(n);
-    println!("count_bits({n}): {result:?}");
-
-    println!("------ 只出现一次的数字 ------");
-    let nums = vec![4, 1, 2, 1, 2];
-    let result = single_number(nums);
-    println!("single_number: {result}");
+    //----------------------------
 
     println!("------ 最近的请求次数(头尾高效操作的队列) ------");
     let mut obj = RecentCounter::new();
     let ret_1 = obj.ping(1);
-    println!("ping: {ret_1}");
+    println!("ping: {ret_1}");        // 1
     let ret_2 = obj.ping(100);
-    println!("ping: {ret_2}");
+    println!("ping: {ret_2}");        // 2
     let ret_3 = obj.ping(3001);
-    println!("ping: {ret_3}");
+    println!("ping: {ret_3}");        // 3
     let ret_4 = obj.ping(3002);
-    println!("ping: {ret_4}");
+    println!("ping: {ret_4}");        // 3
+
+    //----------------------------
 
     println!("------ 反转链表 ------");
     let mut node1 = ListNode::new(1);
@@ -123,15 +109,17 @@ fn main() {
     node3.set_next(Some(Box::new(node4)));
     node2.set_next(Some(Box::new(node3)));
     node1.set_next(Some(Box::new(node2)));
-    node1.print_list();
+    node1.print_list(); // 1 2 3 4 5
     println!("------ rev ------");
     let node_rev = ListNode::reverse_list(Some(Box::new(node1.clone())));
     match node_rev {
         None => {}
         Some(node) => {
-            node.print_list();
+            node.print_list(); // 5 4 3 2 1
         }
     }
+
+    //----------------------------
 
     println!("------ 二叉树的最大深度 ------");
     let root = Rc::new(RefCell::new(TreeNode::new(3)));
@@ -153,16 +141,52 @@ fn main() {
     rt.right = Some(Rc::new(RefCell::new(right.clone())));
 
     let result = TreeNode::max_depth(Some(root.clone()));
-    println!("max_depth: {result}");
+    println!("max_depth: {result}"); // 3
 
     println!("------ 叶子相似的树 ------");
     let result = TreeNode::leaf_similar(Some(Rc::new(RefCell::new(rt))), Some(root.clone()));
-    println!("leaf_similar: {result}");
+    println!("leaf_similar: {result}"); // true
 
     println!("------ 二叉搜索树(BST)中的搜索 ------");
     let val = 20;
     let result = TreeNode::search_bst(Some(root), val);
-    println!("search_bst: {result:?}");
+    println!("search_bst: {result:?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
+
+    //----------------------------
+
+    println!("------ 猜数字大小 ------");
+    let n = 10;
+    let pick_num = guess_number(n);
+    println!("guessNumber: {pick_num}"); // 7
+
+    //----------------------------
+
+    println!("------ 第N个泰波那契数 ------");
+    let n = 25;
+    let result = tribonacci(n);
+    println!("tribonacci({n}): {result}"); // 1389537
+
+    println!("------ 使用最小花费爬楼梯 ------");
+    // let cost = vec![10, 15, 20]; // 15
+    let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
+    let result = min_cost_climbing_stairs(cost);
+    println!("min_cost_climbing_stairs: {result}"); // 6
+
+    //----------------------------
+
+    println!("------ 比特位计数 ------");
+    let n = 5;
+    let result = count_bits(n);
+    println!("count_bits({n}): {result:?}"); // [0, 1, 1, 2, 1, 2]
+
+    println!("------ 只出现一次的数字 ------");
+    let nums = vec![4, 1, 2, 1, 2];
+    let result = single_number(nums);
+    println!("single_number: {result}"); // 4
+
+    println!("----------------------------")
+
+
 }
 
 /// 交替合并字符串
