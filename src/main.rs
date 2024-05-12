@@ -184,8 +184,12 @@ fn main() {
     let result = single_number(nums);
     println!("single_number: {result}"); // 4
 
-    println!("----------------------------")
+    println!("\n----------------------------\n");
 
+    println!("------ 反转字符串中的单词 ------");
+    let s = "  a good   example ".to_string();
+    let result = reverse_words(s);
+    println!("reverse_words: {result}");
 }
 
 /// 交替合并字符串
@@ -593,5 +597,36 @@ fn single_number(nums: Vec<i32>) -> i32 {
     // nums.into_iter().reduce(|a, b| a ^ b).unwrap()
 
     nums.iter().fold(0, |single, num| single ^ num)
+}
+//-----------------------------------------------------
+
+// 给你一个字符串 s ，请你反转字符串中 单词 的顺序。
+// 单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。
+// 返回 单词 顺序颠倒且 单词 之间用单个空格连接的结果字符串。
+// 题目要求:输入的字符串s中可能会存在前导空格、尾随空格或者单词间的多个空格。返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。
+fn reverse_words(s: String) -> String {
+    /* let mut words: VecDeque<String> = VecDeque::new();
+    let mut curr_word = String::new();
+    for c in s.trim().chars() {
+        if c.is_whitespace() {
+            if !curr_word.is_empty() {
+                words.push_front(curr_word);
+                curr_word = String::new();
+            }
+        } else {
+            curr_word.push(c);
+        }
+    }
+    if !curr_word.is_empty() {
+        words.push_front(curr_word);
+    }
+    words.into_iter().collect::<Vec<_>>().join(" ") */
+
+    // .split_ascii_whitespace(): 将字符串s按照ASCII空白字符（如空格、制表符、换行符等）进行分割，返回一个迭代器，其中每个元素都是原始字符串中的一个单词
+    // .rev(): 将迭代器中所有元素的顺序反转
+    // ::<T> 是Rust中用于指定泛型参数或返回类型的语法，也被称为类型提示。此处用于告诉 collect() 方法要收集元素到一个 Vec<&str> 类型的向量中
+    // .collect::<Vec<&str>>(): 将反转后的迭代器元素收集到一个新的向量(Vec)中并指定了它的返回类型。且每个元素都是一个指向原始字符串中单词的切片（&str）
+    // .join(" "): 将向量(Vec)中的所有切片用空格连接起来，形成一个新的字符串
+    s.split_ascii_whitespace().rev().collect::<Vec<&str>>().join(" ")
 }
 //-----------------------------------------------------
