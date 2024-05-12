@@ -189,7 +189,15 @@ fn main() {
     println!("------ 反转字符串中的单词 ------");
     let s = "  a good   example ".to_string();
     let result = reverse_words(s);
-    println!("reverse_words: {result}");
+    println!("reverse_words: {result}"); // example good a
+
+    println!("------ 压缩字符串 ------");
+    let mut chars = vec!['a', 'a', 'b', 'b', 'c', 'c', 'c'];
+    // let mut chars = vec!['a'];
+    // let mut chars = vec!['a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'];
+    let result = compress(&mut chars);
+    println!("compress: {result}");
+
 }
 
 /// 交替合并字符串
@@ -628,5 +636,44 @@ fn reverse_words(s: String) -> String {
     // .collect::<Vec<&str>>(): 将反转后的迭代器元素收集到一个新的向量(Vec)中并指定了它的返回类型。且每个元素都是一个指向原始字符串中单词的切片（&str）
     // .join(" "): 将向量(Vec)中的所有切片用空格连接起来，形成一个新的字符串
     s.split_ascii_whitespace().rev().collect::<Vec<&str>>().join(" ")
+}
+//-----------------------------------------------------
+
+// 题目要求:chars不为空
+/// 压缩字符串
+fn compress(chars: &mut Vec<char>) -> i32 {
+    let n = chars.len();
+    if n == 1 {
+        return 1;
+    }
+
+    let mut idx = 0;
+    let mut count = 1;
+    for i in 1..n {
+        if chars[i - 1] == chars[i] {
+            count += 1;
+        } else {
+            chars[idx] = chars[i - 1];
+            idx += 1;
+            if count > 1 {
+                for c in count.to_string().chars() {
+                    chars[idx] = c;
+                    idx += 1;
+                }
+            }
+            count = 1;
+        }
+    }
+
+    chars[idx] = chars[n - 1];
+    idx += 1;
+    if count > 1 {
+        for c in count.to_string().chars() {
+            chars[idx] = c;
+            idx += 1;
+        }
+    }
+
+    idx as i32
 }
 //-----------------------------------------------------
