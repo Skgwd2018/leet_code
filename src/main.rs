@@ -28,7 +28,7 @@ fn main() {
     // let flowerbed = vec![1, 0, 0, 0, 0, 1];
     let flowerbed = vec![1, 0, 0, 0, 1, 0, 0];
     // let flowerbed = vec![0, 1, 0];
-    let n = 2;
+    let n = 3;
     let result = can_place_flowers(flowerbed, n);
     println!("can_place_flowers {n}: {}", result); // true
 
@@ -186,7 +186,6 @@ fn main() {
 
     println!("----------------------------")
 
-
 }
 
 /// 交替合并字符串
@@ -216,7 +215,6 @@ fn merge_alternately(word1: String, word2: String) -> String {
     for ch in word1.chars().skip(len2) {
         result.push(ch);
     }
-
     for ch in word2.chars().skip(len1) {
         result.push(ch);
     }
@@ -225,7 +223,6 @@ fn merge_alternately(word1: String, word2: String) -> String {
 }
 //-----------------------------------------------------
 
-// 字符串的最大公因子
 fn can_divide(s1: &str, s2: &str) -> bool {
     // .chunks_exact(s2.len()) 将 s1 的字节切片分割成长度为 s2.len() 的块。
     // 如果 s1 的长度不是 s2.len() 的整数倍，这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0，所以这里不会有问题。
@@ -236,17 +233,17 @@ fn can_divide(s1: &str, s2: &str) -> bool {
 
 /// 字符串的最大公因子
 fn gcd_of_strings(str1: String, str2: String) -> String {
+    // 题目要求:字符串中的字符全是字母
     let len1 = str1.len();
     let len2 = str2.len();
 
     // 求两个字符串长度的最大公约数
-    let gec_len = (1..cmp::min(len1, len2) + 1).rev()
+    let gec_len = (1..=cmp::min(len1, len2)).rev()
         .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
 
     // let cd1 = can_divide(&str1, &str1[0..gec_len]);
     // let cd2 = can_divide(&str2, &str1[0..gec_len]);
     // println!("cd1: {cd1}, cd2: {cd2}");
-
     if can_divide(&str1, &str1[0..gec_len]) && can_divide(&str2, &str1[0..gec_len]) {
         return str1[0..gec_len].to_string();
     }
@@ -255,14 +252,14 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
 }
 //-----------------------------------------------------
 
+// 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
 fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
-    // 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
     let max_candies = *candies.iter().max().unwrap_or(&0);
 
     // .iter(): 遍历向量中的每一个元素。迭代器是一个可以记住遍历的位置并在之后再次访问这些位置的对象。
     // .enumerate(): 这个方法附加在迭代器之后，它会改变迭代器产生的内容。
     // 原本迭代器只产生向量中的元素，但调用enumerate()后，迭代器现在产生的是元组(Tuple),
-    // 每个元组包含两个元素：第一个是元素的索引(从0开始)，第二个是元素的值。
+    // 每个元组包含两个元素: 第一个是元素的索引(从0开始)，第二个是元素的值。
     /*for (i, &candy) in candies.iter().enumerate() {
         if candy + extra_candies >= *max_candies {
             result[i] = true;
@@ -277,6 +274,7 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
 }
 //-----------------------------------------------------
 
+// 题目要求:每朵花的旁边都不能种花，所以种花必须是间隔种1朵
 // n: 是否可以种的花数量
 fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
     let len = flowerbed.len();
@@ -301,6 +299,7 @@ fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
 }
 //-----------------------------------------------------
 
+/// 是否是元音字母
 fn is_vowel(c: char) -> bool {
     matches!(c, 'a' | 'e' | 'i' | 'o' | 'u' | 'A' | 'E' | 'I' | 'O' | 'U')
 }
