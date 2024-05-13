@@ -210,6 +210,12 @@ fn main() {
     let result = max_vowels(s, k);
     println!("max_vowels: {result}");
 
+    println!("------ 确定两个字符串是否接近 ------");
+    let word1 = "cabbba".to_string();
+    let word2 = "abbccc".to_string();
+    let result = close_strings(word1, word2);
+    println!("close_strings: {result}");
+
 }
 
 /// 交替合并字符串
@@ -728,7 +734,7 @@ fn max_vowels(s: String, k: i32) -> i32 {
 
     let mut r = k;
     // 计算第一个区间元音数
-    let mut vowels = (&s[..k]).iter().map(|&x| is_vowel(x)).sum::<i32>();
+    let mut vowels = (s[..k]).iter().map(|&x| is_vowel(x)).sum::<i32>();
     let mut max_vowels = vowels;
     while r < s.len() {
         // 滑动窗口操作
@@ -739,5 +745,37 @@ fn max_vowels(s: String, k: i32) -> i32 {
     }
 
     max_vowels
+}
+//-----------------------------------------------------
+
+fn close_strings(word1: String, word2: String) -> bool {
+    if word1.len() != word2.len() { return false; }
+
+    let mut word1_cnt = [0; 26];
+    // 显式循环: 编译器可能更容易对其进行优化，因为它直接反映了循环的意图，没有额外的抽象层。
+    /*for c in word1.as_bytes() {
+        word1_cnt[(c - b'a') as usize] += 1;
+    }*/
+    // 迭代器链: 利用了 Rust 的迭代器抽象，使得代码更加函数式。
+    // 虽然迭代器链提供了更多的灵活性(即可以很容易地添加额外的操作到链中)，但也可能引入一些微小的运行时开销，因为每次调用迭代器方法时都可能涉及到一些额外的函数调用。
+    // 在某些情况下，编译器可能不如处理显式循环那样优化迭代器链。
+    // 总结：迭代器链方式的内存消耗会相对较少，显式循环的运行会较快，但差异非常微小
+    word1.as_bytes().iter().for_each(|c| word1_cnt[(c - b'a') as usize] += 1);
+    let mut word2_cnt = [0; 26];
+    word2.as_bytes().iter().for_each(|c| word2_cnt[(c - b'a') as usize] += 1);
+
+    for i in 0..26 {
+        if (word1_cnt[i] == 0) != (word2_cnt[i] == 0) {
+            return false;
+        }
+    }
+
+    // sort: 对切片进行稳定的排序，即如果两个元素相等，它们在排序后的相对顺序会保持不变。
+    // 由于它保证了稳定性，所以通常比 sort_unstable 慢一些，因为它需要额外的内存来保持元素的相对顺序。
+    // sort_unstable: 对切片进行排序，如果两个元素相等，它们在排序后的相对顺序可能会改变。
+    // 由于它不需要保证稳定性，所以通常比 sort 快一些，因为它可以采用更高效的排序算法。
+    word1_cnt.sort_unstable();
+    word2_cnt.sort_unstable();
+    word1_cnt == word2_cnt
 }
 //-----------------------------------------------------
