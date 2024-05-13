@@ -204,6 +204,12 @@ fn main() {
     let max_area = max_area(height);
     println!("Max water: {max_area}");
 
+    println!("------ 定长子串中元音的最大数目 ------");
+    let s = "abciiidef".to_string();
+    let k = 3;
+    let result = max_vowels(s, k);
+    println!("max_vowels: {result}");
+
 }
 
 /// 交替合并字符串
@@ -704,5 +710,34 @@ fn max_area(height: Vec<i32>) -> i32 {
     }
 
     max_area
+}
+//-----------------------------------------------------
+
+// 题目要求:s 由小写英文字母组成且非空
+fn max_vowels(s: String, k: i32) -> i32 {
+    let k = k as usize;
+    if s.len() < k { return 0; }
+    // let s = s.chars().collect::<Vec<char>>();
+    let s = s.as_bytes(); // 这个效率更高
+    let is_vowel = |x| {
+        match x {
+            b'a' | b'e' | b'i' | b'o' | b'u' => 1,
+            _ => 0
+        }
+    };
+
+    let mut r = k;
+    // 计算第一个区间元音数
+    let mut vowels = (&s[..k]).iter().map(|&x| is_vowel(x)).sum::<i32>();
+    let mut max_vowels = vowels;
+    while r < s.len() {
+        // 滑动窗口操作
+        vowels += is_vowel(s[r]);
+        vowels -= is_vowel(s[r - k]);
+        max_vowels = max_vowels.max(vowels);
+        r += 1;
+    }
+
+    max_vowels
 }
 //-----------------------------------------------------
