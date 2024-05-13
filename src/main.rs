@@ -198,6 +198,12 @@ fn main() {
     let result = compress(&mut chars);
     println!("compress: {result}");
 
+    println!("------ 盛最多水的容器 ------");
+    let height = vec![1, 8, 6, 2, 5, 4, 8, 3, 7];
+    // let height = vec![1, 1];
+    let max_area = max_area(height);
+    println!("Max water: {max_area}");
+
 }
 
 /// 交替合并字符串
@@ -675,5 +681,28 @@ fn compress(chars: &mut Vec<char>) -> i32 {
     }
 
     idx as i32
+}
+//-----------------------------------------------------
+
+fn max_area(height: Vec<i32>) -> i32 {
+    // 双指针操作
+    let mut left = 0;
+    let mut right = height.len() - 1;
+    let mut max_area = 0;
+    while left < right {
+        // let curr_area = cmp::min(height[left], height[right]) * (right - left) as i32;
+        // max_area = cmp::max(curr_area, max_area);
+        // 这两种操作方式通常会内联调用且性能非常接近，建议使用下面的方式(易读)
+        let curr_area = height[left].min(height[right]) * (right - left) as i32;
+        max_area = max_area.max(curr_area);
+
+        if height[left] < height[right] {
+            left += 1;
+        } else {
+            right -= 1;
+        }
+    }
+
+    max_area
 }
 //-----------------------------------------------------
