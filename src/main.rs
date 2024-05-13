@@ -208,13 +208,19 @@ fn main() {
     let s = "abciiidef".to_string();
     let k = 3;
     let result = max_vowels(s, k);
-    println!("max_vowels: {result}");
+    println!("max_vowels: {result}"); // 3
 
     println!("------ 确定两个字符串是否接近 ------");
     let word1 = "cabbba".to_string();
     let word2 = "abbccc".to_string();
     let result = close_strings(word1, word2);
     println!("close_strings: {result}");
+
+    println!("------ 从字符串中移除星号 ------");
+    let s = "leet**cod*e".to_string(); // lecoe
+    // let s = String::from("erase*****"); // ""
+    let result = remove_stars(s);
+    println!("remove_stars: {result}");
 
 }
 
@@ -724,7 +730,7 @@ fn max_vowels(s: String, k: i32) -> i32 {
     let k = k as usize;
     if s.len() < k { return 0; }
     // let s = s.chars().collect::<Vec<char>>();
-    let s = s.as_bytes(); // 这个效率更高
+    let s = s.as_bytes(); // 操作byte效率更高
     let is_vowel = |x| {
         match x {
             b'a' | b'e' | b'i' | b'o' | b'u' => 1,
@@ -777,5 +783,30 @@ fn close_strings(word1: String, word2: String) -> bool {
     word1_cnt.sort_unstable();
     word2_cnt.sort_unstable();
     word1_cnt == word2_cnt
+}
+//-----------------------------------------------------
+
+// 给你一个包含若干星号 * 的字符串 s 。
+// 在一步操作中，你可以：选中 s 中的一个星号。
+// 移除星号 左侧 最近的那个 非星号 字符，并移除该星号自身。返回移除 所有 星号之后的字符串。
+fn remove_stars(s: String) -> String {
+    // 栈操作
+    let mut stack = Vec::new();
+    /*for c in s.chars() {
+        match c {
+            '*' => if stack.pop().is_some() {},
+            _ => stack.push(c),
+        }
+    }
+    stack.iter().collect::<String>()*/
+    // 操作byte效率更高,且简单场合中if else 的运行效率比 match 高
+    for &b in s.as_bytes() {
+        if b == b'*' {
+            stack.pop().unwrap();
+        } else {
+            stack.push(b);
+        }
+    }
+    String::from_utf8(stack).unwrap()
 }
 //-----------------------------------------------------
