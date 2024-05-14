@@ -196,13 +196,13 @@ fn main() {
     // let mut chars = vec!['a'];
     // let mut chars = vec!['a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'];
     let result = compress(&mut chars);
-    println!("compress: {result}");
+    println!("compress: {result}"); // 6  ['a', '2', 'b', '2', 'c', '3']
 
     println!("------ 盛最多水的容器 ------");
     let height = vec![1, 8, 6, 2, 5, 4, 8, 3, 7];
     // let height = vec![1, 1];
     let max_area = max_area(height);
-    println!("Max water: {max_area}");
+    println!("Max water: {max_area}"); // 49
 
     println!("------ 定长子串中元音的最大数目 ------");
     let s = "abciiidef".to_string();
@@ -214,13 +214,19 @@ fn main() {
     let word1 = "cabbba".to_string();
     let word2 = "abbccc".to_string();
     let result = close_strings(word1, word2);
-    println!("close_strings: {result}");
+    println!("close_strings: {result}"); // true
 
     println!("------ 从字符串中移除星号 ------");
     let s = "leet**cod*e".to_string(); // lecoe
     // let s = String::from("erase*****"); // ""
     let result = remove_stars(s);
     println!("remove_stars: {result}");
+
+    println!("------ 字符串解码 ------");
+    let s = "3[a12[c]]".to_string();  // accaccacc
+    // let s = "3[a]2[bc]".to_string(); // aaabcbc
+    let result = decode_string(s);
+    println!("decode_string: {result}");
 
 }
 
@@ -808,5 +814,49 @@ fn remove_stars(s: String) -> String {
         }
     }
     String::from_utf8(stack).unwrap()
+}
+//-----------------------------------------------------
+
+// 题目要求:原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入
+//         s 中所有整数的取值范围为 [1, 300]
+fn decode_string(s: String) -> String {
+    // 栈操作
+    let mut stack = Vec::new();
+    let mut curr_num = 0;
+    let mut curr_str = String::new();
+    // let (mut curr_num, mut curr_str) = (0, String::new()); // 内存比较(无区别)
+
+    // "3[a12[c]]" ----> "accaccacc"
+    for c in s.chars() {
+        match c {
+            '0'..='9' => {
+                // curr_num = curr_num * 10 + (c as u8 - '0' as u8) as usize; // '0' as u8 是 48
+                curr_num = curr_num * 10 + (c as usize - '0' as usize);
+            }
+            '[' => {
+                stack.push((curr_str, curr_num));
+                curr_str = String::new();
+                // 这个操作创建了一个新的空字符串，并将curr_str的引用更新为指向这个新字符串。
+                // 这涉及到内存分配（尽管分配的是一个非常小的字符串），并且如果之前的String是堆上分配的，那么它的内存也会被回收。
+                // 这种方式的优点是它确保了curr_str不再保留任何不必要的内存，但缺点是涉及到内存分配和可能的垃圾回收，这通常比简单的标记为空要慢一些。
+
+                // curr_str.clear();
+                // 这个操作仅仅将字符串的内部缓冲区标记为空，它并不会释放分配的内存。
+                // 即如果字符串之前占用了大量内存，那么即使调用clear之后，该内存仍然被String保留。
+                // 这样做的优点是操作很快，因为不涉及任何内存分配或释放。
+                // 如果之后String又需要存储数据，它可以在已经分配的内存上进行操作，这通常比重新分配内存要快。
+                curr_num = 0;
+            }
+            ']' => {
+                if let Some((prev_str, count)) = stack.pop() {
+                    let repeated_str = curr_str.repeat(count); // 重复curr_str字符串count次
+                    curr_str = prev_str + &repeated_str;
+                }
+            }
+            _ => curr_str.push(c),
+        }
+    }
+
+    curr_str
 }
 //-----------------------------------------------------
