@@ -112,7 +112,7 @@ fn main() {
     node1.print_list(); // 1 2 3 4 5
     println!("------ rev ------");
     let node_rev = ListNode::reverse_list(Some(Box::new(node1.clone())));
-    match node_rev {
+    match node_rev.clone() {
         None => {}
         Some(node) => {
             node.print_list(); // 5 4 3 2 1
@@ -227,6 +227,13 @@ fn main() {
     // let s = "3[a]2[bc]".to_string(); // aaabcbc
     let result = decode_string(s);
     println!("decode_string: {result}");
+
+    println!("------ 删除链表的中间节点 ------");
+    let node_head = ListNode::delete_middle(node_rev);
+    match node_head {
+        None => {}
+        Some(node) => node.print_list(),
+    }
 
 }
 

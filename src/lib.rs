@@ -52,6 +52,7 @@ pub struct ListNode {
 }
 
 impl ListNode {
+    #[inline]
     pub fn new(val: i32) -> Self {
         ListNode { val, next: None }
     }
@@ -78,6 +79,52 @@ impl ListNode {
         }
 
         prev
+    }
+
+    /// 删除链表的中间节点
+    // 题目要求:链表中节点的数目范围[1, 105]
+    pub fn delete_middle(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        /*let mut prev = std::ptr::null_mut();
+        let mut slow = &mut head as *mut Option<Box<ListNode>>;
+        let mut fast = &head;
+        while fast.is_some() && fast.as_ref().unwrap().next.is_some() {
+            fast = &fast.as_ref().unwrap().next.as_ref().unwrap().next;
+            prev = slow;
+            slow = unsafe {
+                &mut slow.as_mut().unwrap().as_mut().unwrap().next as *mut Option<Box<ListNode>>
+            };
+        }
+        unsafe {
+            match prev.as_mut() {
+                Some(prev) => prev.as_mut().unwrap().next = slow.as_mut().unwrap().as_mut().unwrap().next.take(),
+                None => return None,
+            }
+        }
+        head*/
+
+        let (mut count, mut ptr) = (0, &head);
+        // 遍历链表
+        while ptr.is_some() {
+            count += 1;
+            ptr = &ptr.as_ref().unwrap().next;
+        }
+
+        let mut temp_head = Box::new(ListNode { val: 0, next: head });
+        let mut i = 0;
+        let mut curr = temp_head.as_mut();
+        while let Some(node_next) = curr.next.take() {
+            if i == count / 2 {
+                curr.next = node_next.next;
+                break;
+            } else {
+                curr.next = Some(node_next);
+                curr = curr.next.as_mut().unwrap();
+            }
+
+            i += 1;
+        }
+
+        temp_head.next
     }
 
     /// 遍历链表
