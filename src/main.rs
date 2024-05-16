@@ -149,7 +149,7 @@ fn main() {
 
     println!("------ 二叉搜索树(BST)中的搜索 ------");
     let val = 20;
-    let result = TreeNode::search_bst(Some(root), val);
+    let result = TreeNode::search_bst(Some(root.clone()), val);
     println!("search_bst: {result:?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
 
     //----------------------------
@@ -241,6 +241,10 @@ fn main() {
         None => {}
         Some(node) => node.print_list(),
     }
+
+    println!("----- 统计二叉树中好节点的数目 ------");
+    let result = TreeNode::good_nodes(Some(root));
+    println!("good_nodes: {result}");
     
 }
 

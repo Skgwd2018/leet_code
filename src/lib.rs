@@ -224,7 +224,7 @@ impl TreeNode {
         TreeNode { val, left: None, right: None }
     }
 
-    /// 最大深度(深度优先搜索)
+    /// 最大深度(深度优先搜索问题)
     // 二叉树的 最大深度 是指从根节点到最远叶子节点的最长路径上的节点数。
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         // 递归操作
@@ -239,7 +239,7 @@ impl TreeNode {
                 // 如果Option是Some(value)，那么to_owned()会返回该值的克隆；如果Option是None，则to_owned()会返回None。
                 // Rc<T>的clone方法实现的是引用计数加1的操作，这是一个快速的、O(1)复杂度的操作。
                 // 因此，无论是clone()还是to_owned()，都需要对Rc<RefCell<TreeNode>>进行克隆，性能上非常接近。
-                1 + std::cmp::max(
+                1 + cmp::max(
                     Self::max_depth(node.borrow().left.to_owned()),
                     Self::max_depth(node.borrow().right.to_owned()),
                 )
@@ -247,7 +247,7 @@ impl TreeNode {
         }
     }
 
-    /// 叶值序列相似的树
+    /// 叶值序列相似的树(深度优先搜索问题)
     pub fn leaf_similar(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> bool {
         // 函数内部定义的函数称为闭包（Closure）或局部函数（Local Function）。
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
@@ -276,7 +276,6 @@ impl TreeNode {
 
         values1 == values2
     }
-
     // DFS是深度优先搜索（Depth first search），是用递归进行搜索，尽可能深的搜索每一个节点。
     // 可以理解为不撞墙不回头，主要用于解决一些树的遍历和图的遍历问题。由于是通过递归实现，时间复杂度较高，一般用于数据较小的情况。
     fn dfs(root: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<Rc<RefCell<TreeNode>>>) {
@@ -322,5 +321,27 @@ impl TreeNode {
         }
         None
     }
+
+    /// 统计二叉树中好节点的数目(深度优先搜索问题)
+    // 即从根节点开始遍历到某个节点，并且始终保持当前遍历到的节点的值是非递减的，那么该节点就是一个好节点。
+    // 根节点一定是好节点，例如：3 -> 4 -> 5, 3个节点都是好节点，3 -> 1 -> 3, 则3和3都是好节点，1不是;
+    pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        // i32::MIN 是 i32 类型的一个常量，表示 i32 类型可以表示的最小值,用来确保在遍历树的根节点之前，没有节点的值会大于这个初始值
+        Self::dfs2(root, i32::MIN)
+    }
+    fn dfs2(node: Option<Rc<RefCell<TreeNode>>>, max_val: i32) -> i32 {
+        match node {
+            None => 0,
+            Some(node) => {
+                let node = node.borrow();
+                // let count = if node.val >= max_val { 1 } else { 0 };
+                let count = (node.val >= max_val) as i32;
+                let max_val = node.val.max(max_val);
+
+                count + Self::dfs2(node.left.clone(), max_val) + Self::dfs2(node.right.clone(), max_val)
+            }
+        }
+    }
+
 }
 //-----------------------------------------------------
