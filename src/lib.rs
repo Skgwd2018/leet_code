@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp;
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 use std::rc::Rc;
 
 /// 计算特定时间范围内最近的请求
@@ -177,11 +177,13 @@ impl ListNode {
         while let Some(node) = curr {
             print!("{} ", node.val);
             // curr = node.next.as_ref().map(|x| &**x);
-            // as_ref(): as_ref() 返回对 Box 内部数据的引用，对Option<Box<T>> 返回 Option<&T> 类型。(得到的是对 Box 内部数据的引用，而不是对 Box 自身的引用)
+            // .as_ref() 用于获取值的引用, 返回 Option<&T> 类型，(得到的是对 Rc 内部数据的引用，而不是对 Rc 自身的引用),即是 &T
+            // .as_ref(): as_ref() 返回对 Box 内部数据的引用，对Option<Box<T>> 返回 Option<&T> 类型。(得到的是对 Box 内部数据的引用，而不是对 Box 自身的引用)
             // 如果 Option 是 Some(box)，则返回 Some(&*box)（即 box 的解引用引用）;如果 Option 是 None，则返回 None。返回 &T 类型
             curr = node.next.as_deref(); //作用同上
-            // .as_deref():返回对 Box 本身的引用，是 Option<Box<T>> 的方法，它返回 Option<&Box<T>>。(得到的是对 Box 自身的引用，而不是对 Box 内部数据的引用)
-            // 如果 Option 是 Some(box)，则返回一个指向 box 内部数据的引用 即Some(&box<T>);如果 Option 是 None，则返回 None。返回 &Box<T> 类型
+            // .as_deref() 用于获取原始类型的指针, 返回 Option<Option<*const T>> 类型，(得到的是对 Rc 自身的引用，而不是对 Rc 内部数据的引用),即是 &Rc<T>
+            // .as_deref():返回对 Box 本身的引用，是 Option<Box<T>> 的方法，它返回 Option<Option<*const T>>。(得到的是对 Box 自身的引用，而不是对 Box 内部数据的引用)
+            // 如果 Option<T> 是 Some(T)，则返回 Some(ptr)，其中 ptr 是 T 的原始指针；如果 Option<T> 是 None，则返回 None。返回 &Box<T> 类型
         }
         println!();
     }
@@ -343,5 +345,41 @@ impl TreeNode {
         }
     }
 
+    /// 二叉树路径总和Ⅲ(深度优先搜索问题,回溯操作)
+    // 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+    // 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> i32 {
+        let mut prefix_sum: HashMap<i64, i32> = HashMap::new();
+        // 由于可以选择完整的路径，因此要把0预先插入
+        prefix_sum.insert(0, 1);
+        match root {
+            None => 0,
+            Some(root) => Self::dfs3(root, 0, target_sum as i64, &mut prefix_sum),
+        }
+    }
+    fn dfs3(node: Rc<RefCell<TreeNode>>, curr_sum: i64, target_sum: i64, prefix_sum: &mut HashMap<i64, i32>) -> i32 {
+        let curr_sum = curr_sum + node.borrow().val as i64;
+        let mut count = 0;
+        // 以当前节点为终点，查找是否有满足要求的前缀和
+        if let Some(&val) = prefix_sum.get(&(curr_sum - target_sum)) {
+            count += val;
+        }
+
+        // .or_insert() 方法返回这个 key 的 value 的一个可变引用（&mut V）,就是将该key对应的value +1
+        // 当前前缀和计数+1
+        *prefix_sum.entry(curr_sum).or_insert(0) += 1;
+        // 继续向下搜索
+        if let Some(left) = node.borrow().left.clone() {
+            count += Self::dfs3(left, curr_sum, target_sum, prefix_sum);
+        }
+        if let Some(right) = node.borrow().right.clone() {
+            count += Self::dfs3(right, curr_sum, target_sum, prefix_sum);
+        }
+        // 回溯作用，即在处理完当前节点后，需要将curr_sum对应的值(路径数量)减一，以反映已经离开了这个节点，不再考虑从它开始的路径。
+        // 这是一个常见的技巧，用于在深度优先搜索中正确地更新状态。
+        *prefix_sum.entry(curr_sum).or_insert(0) -= 1;
+
+        count
+    }
 }
 //-----------------------------------------------------

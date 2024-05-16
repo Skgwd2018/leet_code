@@ -245,7 +245,48 @@ fn main() {
     println!("----- 统计二叉树中好节点的数目 ------");
     let result = TreeNode::good_nodes(Some(root));
     println!("good_nodes: {result}");
-    
+
+    println!("----- 二叉树路径总和Ⅲ ------");
+    let root = Some(Rc::new(RefCell::new(TreeNode {
+        val: 10,
+        left: Some(Rc::new(RefCell::new(TreeNode {
+            val: 5,
+            left: Some(Rc::new(RefCell::new(TreeNode {
+                val: 3,
+                left: Some(Rc::new(RefCell::new(TreeNode {
+                    val: 3,
+                    left: None,
+                    right: None,
+                }))),
+                right: Some(Rc::new(RefCell::new(TreeNode {
+                    val: -2,
+                    left: None,
+                    right: None,
+                }))),
+            }))),
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 2,
+                left: None,
+                right: Some(Rc::new(RefCell::new(TreeNode {
+                    val: 1,
+                    left: None,
+                    right: None,
+                }))),
+            }))),
+        }))),
+        right: Some(Rc::new(RefCell::new(TreeNode {
+            val: -3,
+            left: None,
+            right: Some(Rc::new(RefCell::new(TreeNode {
+                val: 11,
+                left: None,
+                right: None,
+            }))),
+        }))),
+    })));
+    let result = TreeNode::path_sum(root, 8);
+    println!("path_sum: {result}");
+
 }
 
 /// 交替合并字符串
