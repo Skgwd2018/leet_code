@@ -127,6 +127,50 @@ impl ListNode {
         temp_head.next
     }
 
+    /// 奇偶链表
+    // 给定单链表的头节点 head ，将所有索引为奇数的节点和索引为偶数的节点分别组合在一起，然后返回重新排序的列表。
+    // 第一个节点的索引被认为是 奇数 ， 第二个节点的索引为 偶数 ，以此类推。
+    // 请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。
+    // 输入: head = [2,1,3,5,6,4,7]
+    // 输出: [2,3,6,7,1,5,4]
+    pub fn odd_even_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        if head.is_none() {
+            return head;
+        }
+        // let mut odd = Some(Box::new(ListNode::new(0)));
+        let mut odd = None; // 内存消耗更低
+        let mut curr_odd = &mut odd;
+        let mut even = None;
+        let mut curr_even = &mut even;
+        let mut is_even = true;
+        // 区分奇偶位，然后分别加入两个链表
+        while let Some(mut curr) = head {
+            head = curr.next.take();
+            if is_even {
+                // 通过as_mut()获取curr_even的可变引用，然后unwrap()这个Option，假设它一定是Some。
+                // 接着设置当前curr_even指向的Option<Box<ListNode>>的next字段为Some(curr)。
+                // 即修改even链表，将当前的节点curr添加到even链表的末尾。
+                // curr_even.as_mut().unwrap().next = Some(curr);
+
+                // 通过解引用curr_even来修改它指向的Option<Box<ListNode>>。将curr_even设置为Some(curr)，
+                // 即让curr_even指向新的节点curr，而不是修改curr_even当前指向的节点的next字段。
+                *curr_even = Some(curr);
+                curr_even = &mut curr_even.as_mut().unwrap().next;
+            } else {
+                *curr_odd = Some(curr);
+                curr_odd = &mut curr_odd.as_mut().unwrap().next;
+            }
+
+            is_even = !is_even;
+        }
+
+        // 偶数位链表的末尾指向奇数位链表的头
+        // curr_even.as_mut().unwrap().next = odd.unwrap().next;
+        // even.unwrap().next
+        *curr_even = odd;
+        even
+    }
+
     /// 遍历链表
     pub fn print_list(&self) {
         let mut curr = Some(self);

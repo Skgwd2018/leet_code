@@ -230,11 +230,18 @@ fn main() {
 
     println!("------ 删除链表的中间节点 ------");
     let node_head = ListNode::delete_middle(node_rev);
-    match node_head {
+    match node_head.clone() {
         None => {}
         Some(node) => node.print_list(),
     }
 
+    println!("----- 奇偶链表 ------");
+    let odd_even_head = ListNode::odd_even_list(node_head);
+    match odd_even_head {
+        None => {}
+        Some(node) => node.print_list(),
+    }
+    
 }
 
 /// 交替合并字符串
