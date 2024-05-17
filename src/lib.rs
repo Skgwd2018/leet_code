@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::cmp;
+use std::cmp::{self, Ordering};
 use std::collections::{HashMap, VecDeque};
 use std::fmt::Debug;
 use std::mem::swap;
@@ -318,12 +318,52 @@ impl TreeNode {
         while let Some(curr_node) = node {
             let cur_val = curr_node.borrow().val;
             match cur_val.cmp(&val) {
-                cmp::Ordering::Equal => return Some(curr_node),
-                cmp::Ordering::Greater => node = curr_node.borrow().left.clone(),
-                cmp::Ordering::Less => node = curr_node.borrow().right.clone(),
+                Ordering::Equal => return Some(curr_node),
+                Ordering::Greater => node = curr_node.borrow().left.clone(),
+                Ordering::Less => node = curr_node.borrow().right.clone(),
             };
         }
         None
+    }
+
+    /// 删除二叉搜索树中的节点
+    // 给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。
+    // 返回二叉搜索树（有可能被更新）的根节点的引用。
+    pub fn delete_node(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        fn dfs5(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
+            // if root.is_none() { return None; }
+            root.as_ref()?; // 同上
+            let mut node = root.as_ref().unwrap().borrow_mut();
+            // 递归查找与key值相同的节点，同时设置左、右节点等于返回的子树
+            match node.val.cmp(&key) {
+                Ordering::Greater => node.left = dfs5(node.left.take(), key),
+                Ordering::Less => node.right = dfs5(node.right.take(), key),
+                Ordering::Equal => {
+                    // 找到目标节点，分别处理以下4种情况:
+                    // 节点只有右子树，返回右子树;
+                    // 节点只有左子树，返回左子树;
+                    // 节点同时有左、右子树，找到右子树的最小值的节点，将该节点的左子树设置为当前及节点的左子树，返回当前节点的右子树;
+                    // 节点没有左、右节点，返回None;
+                    return match (node.left.is_none(), node.right.is_none()) {
+                        (true, false) => node.right.take(),
+                        (false, true) => node.left.take(),
+                        (false, false) => {
+                            let mut min_code = node.right.clone().unwrap();
+                            while min_code.borrow_mut().left.is_some() {
+                                let t = min_code.borrow_mut().left.clone();
+                                min_code = t.unwrap();
+                            }
+                            min_code.borrow_mut().left = node.left.take();
+                            node.right.take()
+                        }
+                        _ => None,
+                    };
+                }
+            };
+            root.clone()
+        }
+
+        dfs5(root, key)
     }
 
     /// 统计二叉树中好节点的数目(深度优先搜索问题)
@@ -469,6 +509,5 @@ impl TreeNode {
 
         result
     }
-
 }
 //-----------------------------------------------------

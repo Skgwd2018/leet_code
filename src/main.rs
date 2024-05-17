@@ -152,6 +152,10 @@ fn main() {
     let result = TreeNode::search_bst(Some(root.clone()), val);
     println!("search_bst: {result:?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
 
+    println!("----- 删除二叉搜索树中的节点 ------");
+    let result = TreeNode::delete_node(Some(root.clone()), val);
+    println!("delete_node: {result:?}");
+
     //----------------------------
 
     println!("------ 猜数字大小 ------");
@@ -294,6 +298,8 @@ fn main() {
     println!("----- 最大层内元素和 ------");
     let result = TreeNode::max_level_sum(root);
     println!("max_level_sum: {result}");
+
+
 
 }
 
