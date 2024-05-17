@@ -1,6 +1,8 @@
 use std::cell::RefCell;
 use std::cmp;
 use std::collections::{HashMap, VecDeque};
+use std::fmt::Debug;
+use std::mem::swap;
 use std::rc::Rc;
 
 /// 计算特定时间范围内最近的请求
@@ -426,5 +428,47 @@ impl TreeNode {
         // 对于每一层，只保留最右侧的节点值，因为后面的节点会覆盖前面的节点值。当遍历完成时，result 向量将包含从右侧可见的所有节点值。
         result
     }
+
+    /// 最大层内元素和(广度优先搜索)
+    // 给你一个二叉树的根节点 root。设根节点位于二叉树的第 1 层，而根节点的子节点位于第 2 层，依此类推。
+    // 请返回层内元素之和 最大 的那几层（可能只有一层）的层号，并返回其中 最小 的那个。
+    pub fn max_level_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        if root.is_none() { return 0; }
+        // result: 用于存储最大层级和对应的层级。
+        // curr_sum: 用于计算当前层级的和。
+        // curr_level: 用于记录当前处理的层级。
+        // maximum: 用于记录当前已知的最大层级和。
+        let (mut result, mut curr_sum, mut curr_level, mut maximum) = (0, 0, 1, i32::MIN);
+        // queue 和 next: 这两个队列用于实现广度优先搜索（BFS）。queue 用于存储当前层级的节点，而 next 用于存储下一层级的节点。
+        // 使用两个队列 queue 和 next 来交替存储当前层级和下一层级的节点。queue 初始时只包含根节点。
+        let (mut queue, mut next) = (VecDeque::new(), VecDeque::new());
+        queue.push_back(root.unwrap());
+
+        while let Some(curr_node) = queue.pop_front() {
+            curr_sum += curr_node.as_ref().borrow().val;
+            if curr_node.as_ref().borrow().left.is_some() {
+                next.push_back(curr_node.as_ref().borrow().left.as_ref().unwrap().clone());
+            }
+            if curr_node.as_ref().borrow().right.is_some() {
+                next.push_back(curr_node.as_ref().borrow().right.as_ref().unwrap().clone());
+            }
+
+            // 层级切换操作
+            // 当 queue 为空时，表示当前层级的所有节点已经处理完毕，需要切换到下一层级
+            if queue.is_empty() {
+                // 交换 queue 和 next，使得 queue 指向下一层级的节点，而 next 清空准备存储下一批节点
+                swap(&mut queue, &mut next);
+                if curr_sum > maximum {
+                    maximum = curr_sum;
+                    result = curr_level;
+                }
+                curr_level += 1;
+                curr_sum = 0;
+            }
+        }
+
+        result
+    }
+
 }
 //-----------------------------------------------------

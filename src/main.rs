@@ -288,8 +288,12 @@ fn main() {
     println!("path_sum: {result}"); // 3
 
     println!("----- 二叉树的右视图 ------");
-    let result = TreeNode::right_side_view(root);
+    let result = TreeNode::right_side_view(root.clone());
     println!("right_side_view: {result:?}"); // [10, -3, 11, 1]
+
+    println!("----- 最大层内元素和 ------");
+    let result = TreeNode::max_level_sum(root);
+    println!("max_level_sum: {result}");
 
 }
 
