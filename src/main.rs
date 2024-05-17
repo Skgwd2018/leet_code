@@ -226,25 +226,25 @@ fn main() {
     let s = "3[a12[c]]".to_string();  // accaccacc
     // let s = "3[a]2[bc]".to_string(); // aaabcbc
     let result = decode_string(s);
-    println!("decode_string: {result}");
+    println!("decode_string: {result}"); // accccccccccccaccccccccccccacccccccccccc
 
     println!("------ 删除链表的中间节点 ------");
     let node_head = ListNode::delete_middle(node_rev);
     match node_head.clone() {
         None => {}
         Some(node) => node.print_list(),
-    }
+    } // 5 4 2 1
 
     println!("----- 奇偶链表 ------");
     let odd_even_head = ListNode::odd_even_list(node_head);
     match odd_even_head {
         None => {}
         Some(node) => node.print_list(),
-    }
+    } // 5 2 4 1
 
     println!("----- 统计二叉树中好节点的数目 ------");
     let result = TreeNode::good_nodes(Some(root));
-    println!("good_nodes: {result}");
+    println!("good_nodes: {result}"); // 4
 
     println!("----- 二叉树路径总和Ⅲ ------");
     let root = Some(Rc::new(RefCell::new(TreeNode {
@@ -284,8 +284,12 @@ fn main() {
             }))),
         }))),
     })));
-    let result = TreeNode::path_sum(root, 8);
-    println!("path_sum: {result}");
+    let result = TreeNode::path_sum(root.clone(), 8);
+    println!("path_sum: {result}"); // 3
+
+    println!("----- 二叉树的右视图 ------");
+    let result = TreeNode::right_side_view(root);
+    println!("right_side_view: {result:?}"); // [10, -3, 11, 1]
 
 }
 

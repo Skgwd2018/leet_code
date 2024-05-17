@@ -381,5 +381,50 @@ impl TreeNode {
 
         count
     }
+
+    /// 右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
+    // 给定一个二叉树的 根节点root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+    pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        // 深度优先搜索
+        /*fn dfs4(root: &TreeNode, result: &mut Vec<i32>, deep: usize) {
+            if deep > result.len() {
+                result.push(root.val)
+            }
+            if let Some(right) = root.right.as_ref() {
+                let node = right.borrow();
+                dfs4(&node, result, deep + 1);
+            }
+            if let Some(left) = root.left.as_ref() {
+                let node = left.borrow();
+                dfs4(&node, result, deep + 1);
+            }
+        }
+        if root.is_none() { return vec![]; }
+        let mut result = Vec::with_capacity(8);
+        dfs4(&root.unwrap().borrow(), &mut result, 1);
+        result*/
+
+        // 广度优先搜索
+        let mut result = vec![];
+        let mut dequeue = VecDeque::new(); // 用于bfs遍历
+        dequeue.push_back((root, 0));
+        while let Some((node, depth)) = dequeue.pop_front() {
+            if let Some(node) = node {
+                let node = node.borrow();
+                // 检查 result 的长度是否小于当前深度加1。如果是，即到达了新的层级，直接将当前节点的值推入 result;
+                // 如果 result 向量的长度不小于当前深度加1，即已经在当前层级有了一个节点值。由于是从右侧查看，所以当前节点的值将替换掉之前存储的该层级的节点值。
+                if result.len() < depth + 1 {
+                    result.push(node.val)
+                } else {
+                    result[depth] = node.val;
+                }
+                // 将当前节点的左子节点和右子节点（如果存在的话）以及它们的深度（当前深度加1）压入队列的尾部，以便在下一次循环中处理。
+                dequeue.push_back((node.left.clone(), depth + 1));
+                dequeue.push_back((node.right.clone(), depth + 1));
+            }
+        }
+        // 对于每一层，只保留最右侧的节点值，因为后面的节点会覆盖前面的节点值。当遍历完成时，result 向量将包含从右侧可见的所有节点值。
+        result
+    }
 }
 //-----------------------------------------------------
