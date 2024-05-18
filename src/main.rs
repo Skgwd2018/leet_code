@@ -310,7 +310,11 @@ fn main() {
     let result = nearest_exit(maze, entrance);
     println!("nearest_exit: {result}");
 
-    // println!("----- 数组中的第k个最大元素 ------");
+    println!("----- 数组中的第k个最大元素 ------");
+    let nums = vec![3, 2, 1, 5, 6, 4];
+    // let nums = vec![3, 2, 3, 1, 2, 4, 5, 5, 6];
+    let result = find_kth_largest(nums, 2);
+    println!("find_kth_largest: {result}"); // 5
 
     // println!("----- 无限集中的最小数字 ------");
 
@@ -1076,5 +1080,16 @@ fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     }
 
     -1
+}
+//-----------------------------------------------------
+
+/// 数组中的第k个最大元素(例：k=1(即最大的元素))
+fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
+    // 要找的是第 k 大的元素，所以目标位置是排序后的数组长度减去 k
+    let target_pos = nums.len() - k as usize;
+    // select_nth_unstable() 从重新排序的切片中返回一个三元组：索引前的子切片的引用、索引处的元素的引用 和 索引后的子切片的引用。
+    // 注:select_nth_unstable() 方法可能并不会保持原始数组的排序，它只是一个快速选择算法的实现，用于在未排序的数组中查找第 n 个最小元素。
+    // 如果你的目的是查找第 k 大的元素，且不在乎算法是否保持排序。
+    *nums.select_nth_unstable(target_pos).1
 }
 //-----------------------------------------------------
