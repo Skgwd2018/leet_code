@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::rc::Rc;
 
 use leet_code::{ListNode, RecentCounter, TreeNode};
@@ -299,8 +299,18 @@ fn main() {
     let result = TreeNode::max_level_sum(root);
     println!("max_level_sum: {result}");
 
+    println!("----- 重新规划路线(深度优先搜索) ------");
+    let connections = vec![vec![0, 1], vec![1, 3], vec![2, 3], vec![4, 0], vec![4, 5]];
+    let result = min_reorder(6, connections);
+    println!("min_reorder: {result}");
 
+    // println!("----- 迷宫中离入口最近的出口(广度优先搜索) ------");
 
+    // println!("----- 数组中的第k个最大元素 ------");
+
+    // println!("----- 无限集中的最小数字 ------");
+
+    // println!("----- 雇佣k位工人的总代价 ------");
 }
 
 /// 交替合并字符串
@@ -931,5 +941,37 @@ fn decode_string(s: String) -> String {
     }
 
     curr_str
+}
+//-----------------------------------------------------
+
+/// 重新规划路线(深度优先搜索)
+// n 座城市，从 0 到 n-1 编号，其间共有 n-1 条路线。因此，要想在两座不同城市之间旅行只有唯一一条路线可供选择（路线网形成一颗树）。
+// 去年，交通运输部决定重新规划路线，以改变交通拥堵的状况。
+// 路线用 connections 表示，其中 connections[i] = [a, b] 表示从城市 a 到 b 的一条有向路线。
+// 今年，城市 0 将会举办一场大型比赛，很多游客都想前往城市 0 。
+// 请你帮助重新规划路线方向，使每个城市都可以访问城市 0 。返回需要变更方向的最小路线数。
+// 题目数据 保证 每个城市在重新规划路线方向后都能到达城市 0
+// n = 6, connections: [[0,1],[1,3],[2,3],[4,0],[4,5]]
+fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
+    let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
+    for e in connections.iter() {
+        let a = e[0] as usize;
+        let b = e[1] as usize;
+        g[a].push((b as i32, 1));
+        g[b].push((a as i32, 0));
+    }
+
+    fn dfs(a: usize, fa: i32, g: &Vec<Vec<(i32, i32)>>) -> i32 {
+        let mut result = 0;
+        for &(b, c) in g[a].iter() {
+            if b != fa {
+                result += c + dfs(b as usize, a as i32, g);
+            }
+        }
+
+        result
+    }
+
+    dfs(0, -1, &g)
 }
 //-----------------------------------------------------
