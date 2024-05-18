@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp;
-use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::collections::{HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
 use leet_code::{ListNode, RecentCounter, TreeNode};
@@ -304,7 +304,11 @@ fn main() {
     let result = min_reorder(6, connections);
     println!("min_reorder: {result}");
 
-    // println!("----- 迷宫中离入口最近的出口(广度优先搜索) ------");
+    println!("----- 迷宫中离入口最近的出口(广度优先搜索) ------");
+    let maze = vec![vec!['+', '+', '.', '+'], vec!['.', '.', '.', '+'], vec!['+', '+', '+', '.']];
+    let entrance = vec![1, 2];
+    let result = nearest_exit(maze, entrance);
+    println!("nearest_exit: {result}");
 
     // println!("----- 数组中的第k个最大元素 ------");
 
@@ -973,5 +977,104 @@ fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
     }
 
     dfs(0, -1, &g)
+}
+//-----------------------------------------------------
+
+//  BinaryHeap(二叉堆)主要特性:
+// 1.自动排序：当你向堆中插入元素时，堆会自动重新排序以确保堆的性质（父节点的值总是大于或等于（最大堆）或小于或等于（最小堆）其子节点的值）得到维护。
+// 2.快速访问最高（或最低）优先级元素：堆的根节点（在 BinaryHeap 中，这通常是第一个元素）总是具有最高（或最低，取决于堆的类型）的优先级。因此，你可以快速地获取或删除这个元素。
+// 3.性能：插入和删除堆顶元素的平均时间复杂度是 O(log n)，其中 n 是堆中元素的数量。这使得 BinaryHeap 在处理大量数据时非常高效。
+// 4.泛型：BinaryHeap 是泛型的，这意味着你可以用它来存储任何实现了 Ord trait（即可以排序）的类型。
+
+/// 迷宫出口(bfs广度优先搜索)
+// maze[i][j] 要么是 '.' ，要么是 '+'
+/*fn nearest_exit(maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+    let dir = [-1, 0, 1, 0, -1]; // 方向
+    let entrance = (entrance[0], entrance[1]); // 入口位置
+    let mut maze = maze;
+    let n = maze.len() as i32;
+    let m = maze[0].len() as i32;
+    // BinaryHeap(二叉堆)，主要用于处理那些需要优先队列特性的场景。
+    // 二叉堆通常用于实现优先队列，其中每个元素都有一个“优先级”，并且队列按照优先级（而不是元素插入的顺序）来对元素进行排序。
+    let mut fifo = std::collections::BinaryHeap::new();
+    // 将入口位置及其步数（0）推入 fifo 队列
+    fifo.push((0, entrance));
+
+    // 优先级由 cnt（即从入口开始到当前单元格的步数）决定，用作路径长度的计数器
+    while let Some((cnt, curr)) = fifo.pop() {
+        // 尝试往4个方向移动
+        for i in 0..4 {
+            let x = curr.0 + dir[i];
+            let y = curr.1 + dir[i + 1];
+            // 如果移动后的位置在迷宫范围外，且当前位置不是入口，则返回当前步数的相反数（因为步数是从0开始的，所以其相反数实际上是负的路径长度，表示无法找到出口）。
+            // 如果当前位置是入口，则继续处理其他方向。
+            if x < 0 || x >= n || y < 0 || y >= m {
+                if curr != entrance { return -cnt; } else { continue; }
+            }
+            let (xx, yy) = (x as usize, y as usize);
+            // 如果移动后的位置在迷宫范围内且是可通过的（即字符为 '.'），则将该位置推入队列，并将其步数减1（表示离入口更近了一步）。
+            // 同时，将已访问的单元格标记为 '+'，以避免重复访问
+            if maze[xx][yy] == '.' {
+                fifo.push((cnt - 1, (x, y)));
+                maze[xx][yy] = '+';
+            }
+        }
+    }
+
+    -1
+}*/
+fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+    let mut clones = VecDeque::from_iter([(entrance[0] as usize, entrance[1] as usize)]);
+    maze[entrance[0] as usize][entrance[1] as usize] = 'x';
+    let mut n_step = 0;
+    let mut n_this_clone = 1;
+    let mut n_next_clone = 0;
+
+    while let Some((i, j)) = clones.pop_front() {
+        if i > 0 && maze[i - 1][j] == '.' {
+            if i == 1 || j == 0 || j == maze[i].len() - 1 {
+                return n_step + 1;
+            }
+            maze[i - 1][j] = 'x';
+            clones.push_back((i - 1, j));
+            n_next_clone += 1;
+        }
+
+        if i + 1 < maze.len() && maze[i + 1][j] == '.' {
+            if i + 1 == maze.len() - 1 || j == 0 || j == maze[i].len() - 1 {
+                return n_step + 1;
+            }
+            maze[i + 1][j] = 'x';
+            clones.push_back((i + 1, j));
+            n_next_clone += 1;
+        }
+
+        if j > 0 && maze[i][j - 1] == '.' {
+            if j - 1 == 0 || i == 0 || i == maze.len() - 1 {
+                return n_step + 1;
+            }
+            maze[i][j - 1] = 'x';
+            clones.push_back((i, j - 1));
+            n_next_clone += 1;
+        }
+
+        if j + 1 < maze[i].len() && maze[i][j + 1] == '.' {
+            if j + 1 == maze[i].len() - 1 || i == 0 || i == maze.len() - 1 {
+                return n_step + 1;
+            }
+            maze[i][j + 1] = 'x';
+            clones.push_back((i, j + 1));
+            n_next_clone += 1;
+        }
+
+        n_this_clone -= 1;
+        if n_this_clone == 0 {
+            n_this_clone = n_next_clone;
+            n_next_clone = 0;
+            n_step += 1;
+        }
+    }
+
+    -1
 }
 //-----------------------------------------------------
