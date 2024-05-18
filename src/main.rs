@@ -3,7 +3,7 @@ use std::cmp;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
-use leet_code::{ListNode, RecentCounter, TreeNode};
+use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, TreeNode};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -316,7 +316,11 @@ fn main() {
     let result = find_kth_largest(nums, 2);
     println!("find_kth_largest: {result}"); // 5
 
-    // println!("----- 无限集中的最小数字 ------");
+    println!("----- 无限集中的最小数字(堆/优先队列) ------");
+    let mut obj = SmallestInfiniteSet::new();
+    let ret_1 = obj.pop_smallest();
+    obj.add_back(2);
+    println!("pop_smallest: {ret_1}");
 
     // println!("----- 雇佣k位工人的总代价 ------");
 }

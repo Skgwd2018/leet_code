@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::cmp::{self, Ordering};
-use std::collections::{HashMap, VecDeque};
+use std::collections::{BTreeSet, HashMap, VecDeque};
 use std::fmt::Debug;
 use std::mem::swap;
 use std::rc::Rc;
@@ -509,6 +509,91 @@ impl TreeNode {
 
         result
     }
+}
+//-----------------------------------------------------
 
+/// 无限集合
+// 使用堆(优先队列解决问题)
+// 由于题目要求一个包含所有正整数的无限集合，所有值存储起来很费内存。
+// 可以使用一个指针来代替，表示后续所有连续正整数的起点，而新加入的更小的值，如果是集合不再连续，可以存储在一个最小堆中，极大减少内存。
+// 判断最小堆是否为空，是则返回堆中最小值，否则使用指针所表示的值，并使指针后移一位
+// 加入的值是否使指针连续，是则指针前移，否则
+// 判断加入值是否小于当前断点，并且不在堆中，是则加入堆中
+/*pub struct SmallestInfiniteSet {
+    smallest: i32,
+    heap: BinaryHeap<Reverse<i32>>,
+}
+
+impl SmallestInfiniteSet {
+    // 题目要求:现有一个包含所有正整数的集合 [1, 2, 3, 4, 5, ...] 。无限集合
+    // 1 <= num <= 1000
+    pub fn new() -> Self {
+        /*let mut heap = BinaryHeap::new();
+        for i in 1..=1000 {
+            heap.push(Reverse(i));
+        }
+        SmallestInfiniteSet { heap }*/
+        SmallestInfiniteSet { smallest: 1, heap: BinaryHeap::new() }
+    }
+
+    pub fn pop_smallest(&mut self) -> i32 {
+        // self.heap.pop().unwrap().0
+        match self.heap.pop() {
+            Some(Reverse(min_value)) => min_value,
+            None => {
+                self.smallest += 1;
+                self.smallest - 1
+            }
+        }
+    }
+
+    pub fn add_back(&mut self, num: i32) {
+        /*if self.heap.iter().find(|&&x| x == Reverse(num)).is_none() {
+            self.heap.push(Reverse(num));
+        }*/
+        if num + 1 == self.smallest {
+            self.smallest -= 1;
+        } else if num + 1 < self.smallest && !self.heap.iter().any(|&x| x == Reverse(num)) {
+            self.heap.push(Reverse(num));
+        }
+    }
+}*/
+
+// BTreeSet 主要特点:
+// 1.有序：BTreeSet 会自动对其元素进行排序。当你遍历集合时，元素会按照升序排列。
+// 2.不重复：与所有集合类型一样，BTreeSet 不允许重复的元素。
+// 3.快速查找：由于基于 B 树实现，BTreeSet 提供了快速的查找、插入和删除操作。
+// 注意：BTreeSet 的排序是基于元素的默认排序。对于自定义类型，可能需要实现 Ord trait 来定义如何排序这些元素。
+
+pub struct SmallestInfiniteSet {
+    point: i32,
+    set: BTreeSet<i32>,
+}
+
+impl SmallestInfiniteSet {
+    // 题目要求:现有一个包含所有正整数的集合 [1, 2, 3, 4, 5, ...] 。无限集合
+    // 1 <= num <= 1000
+    pub fn new() -> Self {
+        Self { point: 1, set: BTreeSet::new() }
+    }
+
+    pub fn pop_smallest(&mut self) -> i32 {
+        match self.set.iter().next() {
+            Some(&value) => {
+                self.set.remove(&value);
+                value
+            }
+            None => {
+                self.point += 1;
+                self.point - 1
+            }
+        }
+    }
+
+    pub fn add_back(&mut self, num: i32) {
+        if num < self.point {
+            self.set.insert(num);
+        }
+    }
 }
 //-----------------------------------------------------
