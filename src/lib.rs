@@ -528,16 +528,10 @@ impl SmallestInfiniteSet {
     // 题目要求:现有一个包含所有正整数的集合 [1, 2, 3, 4, 5, ...] 。无限集合
     // 1 <= num <= 1000
     pub fn new() -> Self {
-        /*let mut heap = BinaryHeap::new();
-        for i in 1..=1000 {
-            heap.push(Reverse(i));
-        }
-        SmallestInfiniteSet { heap }*/
         SmallestInfiniteSet { smallest: 1, heap: BinaryHeap::new() }
     }
 
     pub fn pop_smallest(&mut self) -> i32 {
-        // self.heap.pop().unwrap().0
         match self.heap.pop() {
             Some(Reverse(min_value)) => min_value,
             None => {
@@ -548,9 +542,6 @@ impl SmallestInfiniteSet {
     }
 
     pub fn add_back(&mut self, num: i32) {
-        /*if self.heap.iter().find(|&&x| x == Reverse(num)).is_none() {
-            self.heap.push(Reverse(num));
-        }*/
         if num + 1 == self.smallest {
             self.smallest -= 1;
         } else if num + 1 < self.smallest && !self.heap.iter().any(|&x| x == Reverse(num)) {
