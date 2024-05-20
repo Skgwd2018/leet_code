@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::cmp;
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::cmp::Reverse;
+use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
 use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, TreeNode};
@@ -322,7 +323,12 @@ fn main() {
     obj.add_back(2);
     println!("pop_smallest: {ret_1}");
 
-    // println!("----- 雇佣k位工人的总代价 ------");
+    println!("----- 雇佣k位工人的总代价 ------");
+    let costs = vec![17, 12, 10, 2, 7, 2, 11, 20, 8];
+    let k = 3;
+    let candidates = 4;
+    let result = total_cost(costs, k, candidates);
+    println!("total_cost: {result}");
 }
 
 /// 交替合并字符串
@@ -1095,5 +1101,50 @@ fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
     // 注:select_nth_unstable() 方法可能并不会保持原始数组的排序，它只是一个快速选择算法的实现，用于在未排序的数组中查找第 n 个最小元素。
     // 如果你的目的是查找第 k 大的元素，且不在乎算法是否保持排序。
     *nums.select_nth_unstable(target_pos).1
+}
+//-----------------------------------------------------
+
+/// 堆/优先队列
+// 题目:给你一个下标从 0 开始的整数数组 costs ，其中 costs[i] 是雇佣第 i 位工人的代价。
+// 同时给你两个整数 k 和 candidates 。我们想根据以下规则恰好雇佣 k 位工人：
+// 总共进行 k 轮雇佣，且每一轮恰好雇佣一位工人。
+// 在每一轮雇佣中，从最前面 candidates 和最后面 candidates 人中选出代价最小的一位工人，如果有多位代价相同且最小的工人，选择下标更小的一位工人。
+// 比方说，costs = [3,2,7,7,1,2] 且 candidates = 2 ，第一轮雇佣中，我们选择第 4 位工人，因为他的代价最小 [3,2,7,7,1,2] 。
+// 第二轮雇佣，我们选择第 1 位工人，因为他们的代价与第 4 位工人一样都是最小代价，而且下标更小，[3,2,7,7,2] 。注意每一轮雇佣后，剩余工人的下标可能会发生变化。
+// 如果剩余员工数目不足 candidates 人，那么下一轮雇佣他们中代价最小的一人，如果有多位代价相同且最小的工人，选择下标更小的一位工人。
+// 一位工人只能被选择一次。
+// 返回雇佣恰好 k 位工人的总代价。
+fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
+    let n = costs.len();
+    let k = k as usize;
+    let candidates = candidates as usize;
+    if 2 * candidates + k > n {
+        costs.select_nth_unstable(k - 1);
+        return costs.iter().take(k).map(|&x| x as i64).sum();
+    }
+
+    let (mut prev, mut suff) = (BinaryHeap::new(), BinaryHeap::new());
+    // Reverse 逆序存储成本值，可以使 BinaryHeap 按照降序的方式排列，从而可以从堆的顶部取出最大的成本值
+    for i in 0..candidates {
+        prev.push(Reverse(costs[i])); // 前 candidates 个成本值放入 prev 堆中，并逆序放入（通过 Reverse 结构）
+        suff.push(Reverse(costs[n - 1 - i])); // 最后 candidates 个成本值放入 suff 堆中，并逆序放入
+    }
+    // 双指针操作
+    let (mut i, mut j) = (candidates, n - candidates - 1);
+    (0..k).map(|_| {
+        // 由于前面的Reverse是逆序排列，所有此处的peek()取出的是最小值
+        let (p, s) = (prev.peek().unwrap().0, suff.peek().unwrap().0);
+        if p <= s {
+            prev.pop();
+            prev.push(Reverse(costs[i]));
+            i += 1;
+            p as i64
+        } else {
+            suff.pop();
+            suff.push(Reverse(costs[j]));
+            j -= 1;
+            s as i64
+        }
+    }).sum()
 }
 //-----------------------------------------------------
