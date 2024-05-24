@@ -338,9 +338,14 @@ fn main() {
     println!("successful_pairs: {result:?}");
 
     println!("----- 寻找峰值元素 ------");
-    let nums = vec![1, 6, 7, 5, 8, 8, 8, 6];
+    let nums = vec![1, 6, 7, 5, 6, 8, 8, 8];
     let result = find_peak_element(nums);
     println!("find_peak_element: {result}");
+
+    println!("----- 电话号码的字母组合 ------");
+    let digits = String::from("23");
+    let result = letter_combinations(digits);
+    println!("letter_combinations: {result:?}");
 }
 
 /// 交替合并字符串
@@ -1193,5 +1198,46 @@ fn find_peak_element(nums: Vec<i32>) -> i32 {
     // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等，则返回最后一个元素。如果迭代器为空，则返回None。
     // max_by_key(|(_, &v)| v) 元组的第一个元素（即索引），并返回元组的第二个元素（即值）的引用。
     nums.iter().enumerate().max_by_key(|(_, &v)| v).unwrap().0 as i32
+}
+//-----------------------------------------------------
+
+/// 回溯问题
+fn letter_combinations(digits: String) -> Vec<String> {
+    let mut result: Vec<String> = Vec::new();
+    let mut value: Vec<char> = Vec::new();
+    match digits.is_empty() {
+        true => (),
+        false => get_letters(&digits, 0, &mut value, &mut result),
+    }
+
+    result
+}
+
+/// backtrack(回溯操作)
+fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, result: &mut Vec<String>) {
+    if index >= digits.len() {
+        let s = String::from_iter(value.iter());
+        result.push(s);
+        return;
+    }
+    // .iter().nth(n) 返回迭代器的第n个元素
+    // 注:所有前面的元素以及返回的元素都将从迭代器中消耗掉。即前面的元素将被丢弃，并且在同一迭代器上多次调用第n（0）个元素将返回不同的元素。
+    let dig_list = match digits.chars().nth(index).unwrap() {
+        '2' => vec!['a', 'b', 'c'],
+        '3' => vec!['d', 'e', 'f'],
+        '4' => vec!['g', 'h', 'i'],
+        '5' => vec!['j', 'k', 'l'],
+        '6' => vec!['m', 'n', 'o'],
+        '7' => vec!['p', 'q', 'r', 's'],
+        '8' => vec!['t', 'u', 'v'],
+        '9' => vec!['w', 'x', 'y', 'z'],
+        _ => vec![]
+    };
+
+    for c in dig_list {
+        value.push(c);
+        get_letters(&digits, index + 1, value, result);
+        value.pop();
+    }
 }
 //-----------------------------------------------------
