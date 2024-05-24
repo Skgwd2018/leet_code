@@ -336,6 +336,11 @@ fn main() {
     let success = 7;
     let result = successful_pairs(spells, potions, success);
     println!("successful_pairs: {result:?}");
+
+    println!("----- 寻找峰值元素 ------");
+    let nums = vec![1, 6, 7, 5, 8, 8, 8, 6];
+    let result = find_peak_element(nums);
+    println!("find_peak_element: {result}");
 }
 
 /// 交替合并字符串
@@ -1168,5 +1173,25 @@ fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Ve
     // let v = [1, 2, 3, 3, 5, 6, 7];
     // let i = v.partition_point(|&x| x < 5);  // 4, 注：目前只提供 < 操作
     spells.iter().map(|&x| (n - potions.partition_point(|&p| (x as i64) * (p as i64) < success)) as i32).collect()
+}
+//-----------------------------------------------------
+
+/// 寻找峰值元素(二分法查找)
+// 峰值元素是指其值严格大于左右相邻值的元素。
+// 给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
+fn find_peak_element(nums: Vec<i32>) -> i32 {
+    /*let (mut left, mut right) = (0, nums.len() - 1);
+    while left < right {
+        let middle = left + (right - left >> 1);
+        match nums[middle] > nums[middle + 1] {
+            true => right = middle,
+            false => left = middle + 1,
+        }
+    }
+    left as i32*/
+
+    // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等，则返回最后一个元素。如果迭代器为空，则返回None。
+    // max_by_key(|(_, &v)| v) 元组的第一个元素（即索引），并返回元组的第二个元素（即值）的引用。
+    nums.iter().enumerate().max_by_key(|(_, &v)| v).unwrap().0 as i32
 }
 //-----------------------------------------------------
