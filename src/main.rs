@@ -354,6 +354,24 @@ fn main() {
     println!("----- 多米诺和托米诺平铺 ------");
     let result = num_tilings(3);
     println!("num_tilings: {result}"); // 5
+
+    println!("----- 不同路径 ------");
+    let result = unique_paths(3, 7);
+    println!("unique_paths: {result}"); // 28
+
+    // println!("----- 最长公共子序列 ------");
+
+    // println!("----- 买卖股票的最佳时机含手续费 ------");
+
+    // println!("----- 实现Trie(前缀树) ------");
+
+    // println!("----- 搜索推荐系统 ------");
+
+    // println!("----- 无重叠区间 ------");
+
+    // println!("----- 每日温度 ------");
+
+    // println!("----- 股票价格跨度 ------");
 }
 
 /// 交替合并字符串
@@ -1286,5 +1304,30 @@ fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
 // 平铺指的是每个正方形都必须有瓷砖覆盖。两个平铺不同，当且仅当面板上有四个方向上的相邻单元中的两个，使得恰好有一个平铺有一个瓷砖占据两个正方形。
 fn num_tilings(n: i32) -> i32 {
     (1..n).fold((0, 1, 1, 1e9 as i32 + 7), |(a, b, c, m), _| (b, c, (2 * c % m + a) % m, m)).2
+}
+//-----------------------------------------------------
+
+/// 不同路径(动态规划_多维),矩阵dp空间优化
+// 一个机器人位于一个 m x n 网格的最左上角（标记为 “Start” ）。
+// 机器人每次只能向下或者向右移动一步。机器人试图达到网格的最右下角（标记为 “Finish” ）。
+// 问总共有多少条不同的路径？
+fn unique_paths(m: i32, n: i32) -> i32 {
+    // dp关系: dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+
+    /*let n = n as usize;
+    let mut dp = vec![1; n];
+    for _ in 1..(m as usize) {
+        dp[0] = 1;
+        for j in 1..n {
+            dp[j] += dp[j - 1];
+        }
+    }
+    dp[n - 1]*/
+
+    // let (m, n) = (m as u64, n as u64);
+    // (1..m.min(n)).fold(1, |acc, x| acc * (m + n - 1 - x) / x) as i32
+
+    let n = n as u64 - 1;
+    (1..m as u64).fold(1, |cnt, x| cnt * (n + x) / x) as i32
 }
 //-----------------------------------------------------
