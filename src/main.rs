@@ -329,6 +329,13 @@ fn main() {
     let candidates = 4;
     let result = total_cost(costs, k, candidates);
     println!("total_cost: {result}");
+
+    println!("----- 咒语和药水的成功对数 ------");
+    let spells = vec![5, 1, 3];
+    let potions = vec![1, 2, 3, 4, 5];
+    let success = 7;
+    let result = successful_pairs(spells, potions, success);
+    println!("successful_pairs: {result:?}");
 }
 
 /// 交替合并字符串
@@ -1132,7 +1139,6 @@ fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
     // 双指针操作
     let (mut i, mut j) = (candidates, n - candidates - 1);
     (0..k).map(|_| {
-        // 由于前面的Reverse是逆序排列，所有此处的peek()取出的是最小值
         let (p, s) = (prev.peek().unwrap().0, suff.peek().unwrap().0);
         if p <= s {
             prev.pop();
@@ -1146,5 +1152,21 @@ fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
             s as i64
         }
     }).sum()
+}
+//-----------------------------------------------------
+
+/// 成功对数(二分法查找)
+fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Vec<i32> {
+    potions.sort_unstable(); // 升序排列
+    let n = potions.len();
+    /*for i in spells.into_iter().map(|x| i64::from(x)) {
+        let count = n - potions.partition_point(|&y| i * i64::from(y) < success);
+        result.push(count as i32);
+    }*/
+    // partition_point() 内部使用 binary_search_by 进行查找
+    // potions.partition_point() 返回符合条件的元素数量
+    // let v = [1, 2, 3, 3, 5, 6, 7];
+    // let i = v.partition_point(|&x| x < 5);  // 4, 注：目前只提供 < 操作
+    spells.iter().map(|&x| (n - potions.partition_point(|&p| (x as i64) * (p as i64) < success)) as i32).collect()
 }
 //-----------------------------------------------------
