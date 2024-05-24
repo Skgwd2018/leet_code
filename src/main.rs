@@ -346,6 +346,10 @@ fn main() {
     let digits = String::from("23");
     let result = letter_combinations(digits);
     println!("letter_combinations: {result:?}");
+
+    println!("----- 组合总和 Ⅲ ------");
+    let result = combination_sum3(3, 9);
+    println!("combination_sum3: {result:?}");
 }
 
 /// 交替合并字符串
@@ -1239,5 +1243,35 @@ fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, result: &mu
         get_letters(&digits, index + 1, value, result);
         value.pop();
     }
+}
+//-----------------------------------------------------
+
+// 找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：
+// 只使用数字1到9
+// 每个数字 最多使用一次
+// 返回 所有可能的有效组合的列表 。该列表不能包含相同的组合两次，组合可以以任何顺序返回。
+fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
+    // 回溯函数:实现回溯算法。回溯算法常用于解决组合问题，它通过递归和剪枝的方式找出所有可能的解。
+    fn backtrace(result: &mut Vec<Vec<i32>>, curr: &mut Vec<i32>, i: i32, k: i32, n: i32) {
+        let c = k - curr.len() as i32;
+        // 剪枝条件:用于提前终止递归,这个条件基于组合数学中的公式，用于确定当前情况下是否还有可能找到一个满足条件的组合。
+        if n < 0 || n > (i * 2 - c + 1) * c / 2 { return; }
+        // 递归终止条件
+        if c == 0 {
+            result.push(curr.clone());
+            return;
+        }
+        // 回溯过程
+        for j in (1..=i).rev() {
+            if j < c { break; }
+            curr.push(j);
+            backtrace(result, curr, j - 1, k, n - j);
+            curr.pop();
+        }
+    }
+
+    let mut result = vec![];
+    backtrace(&mut result, &mut vec![], 9, k, n);
+    result
 }
 //-----------------------------------------------------
