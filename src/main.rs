@@ -298,18 +298,18 @@ fn main() {
 
     println!("----- 最大层内元素和 ------");
     let result = TreeNode::max_level_sum(root);
-    println!("max_level_sum: {result}");
+    println!("max_level_sum: {result}"); // 3
 
     println!("----- 重新规划路线(深度优先搜索) ------");
     let connections = vec![vec![0, 1], vec![1, 3], vec![2, 3], vec![4, 0], vec![4, 5]];
     let result = min_reorder(6, connections);
-    println!("min_reorder: {result}");
+    println!("min_reorder: {result}"); // 3
 
     println!("----- 迷宫中离入口最近的出口(广度优先搜索) ------");
     let maze = vec![vec!['+', '+', '.', '+'], vec!['.', '.', '.', '+'], vec!['+', '+', '+', '.']];
     let entrance = vec![1, 2];
     let result = nearest_exit(maze, entrance);
-    println!("nearest_exit: {result}");
+    println!("nearest_exit: {result}"); // 1
 
     println!("----- 数组中的第k个最大元素 ------");
     let nums = vec![3, 2, 1, 5, 6, 4];
@@ -321,35 +321,39 @@ fn main() {
     let mut obj = SmallestInfiniteSet::new();
     let ret_1 = obj.pop_smallest();
     obj.add_back(2);
-    println!("pop_smallest: {ret_1}");
+    println!("pop_smallest: {ret_1}"); // 1
 
     println!("----- 雇佣k位工人的总代价 ------");
     let costs = vec![17, 12, 10, 2, 7, 2, 11, 20, 8];
     let k = 3;
     let candidates = 4;
     let result = total_cost(costs, k, candidates);
-    println!("total_cost: {result}");
+    println!("total_cost: {result}"); // 11
 
     println!("----- 咒语和药水的成功对数 ------");
     let spells = vec![5, 1, 3];
     let potions = vec![1, 2, 3, 4, 5];
     let success = 7;
     let result = successful_pairs(spells, potions, success);
-    println!("successful_pairs: {result:?}");
+    println!("successful_pairs: {result:?}"); // [4, 0, 3]
 
     println!("----- 寻找峰值元素 ------");
     let nums = vec![1, 6, 7, 5, 6, 8, 8, 8];
     let result = find_peak_element(nums);
-    println!("find_peak_element: {result}");
+    println!("find_peak_element: {result}"); // 7
 
     println!("----- 电话号码的字母组合 ------");
     let digits = String::from("23");
     let result = letter_combinations(digits);
-    println!("letter_combinations: {result:?}");
+    println!("letter_combinations: {result:?}"); // ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
 
     println!("----- 组合总和 Ⅲ ------");
     let result = combination_sum3(3, 9);
-    println!("combination_sum3: {result:?}");
+    println!("combination_sum3: {result:?}"); // [[6, 2, 1], [5, 3, 1], [4, 3, 2]]
+
+    println!("----- 多米诺和托米诺平铺 ------");
+    let result = num_tilings(3);
+    println!("num_tilings: {result}"); // 5
 }
 
 /// 交替合并字符串
@@ -1273,5 +1277,14 @@ fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
     let mut result = vec![];
     backtrace(&mut result, &mut vec![], 9, k, n);
     result
+}
+//-----------------------------------------------------
+
+/// 多米诺和托米诺平铺(动态规划_一维)
+// 有两种形状的瓷砖：一种是 2 x 1 的多米诺形，另一种是形如 "L" 的托米诺形。两种形状都可以旋转。
+// 给定整数 n ，返回可以平铺 2 x n 的面板的方法的数量。返回对 10的9次方 + 7 取模 的值。
+// 平铺指的是每个正方形都必须有瓷砖覆盖。两个平铺不同，当且仅当面板上有四个方向上的相邻单元中的两个，使得恰好有一个平铺有一个瓷砖占据两个正方形。
+fn num_tilings(n: i32) -> i32 {
+    (1..n).fold((0, 1, 1, 1e9 as i32 + 7), |(a, b, c, m), _| (b, c, (2 * c % m + a) % m, m)).2
 }
 //-----------------------------------------------------
