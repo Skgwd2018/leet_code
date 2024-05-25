@@ -384,7 +384,12 @@ fn main() {
     let ret_3 = obj.starts_with(prefix);
     println!("ret_2: {ret_2}, ret_3: {ret_3}");
 
-    // println!("----- 搜索推荐系统 ------");
+    println!("----- 搜索推荐系统 ------");
+    let products = vec!["mobile".to_string(), "mouse".to_string(), "moneypot".to_string(),
+                        "monitor".to_string(), "mousepad".to_string()];
+    let search_word = "mouse".to_string();
+    let result = suggested_products(products, search_word);
+    println!("suggested_products: {result:?}");
 
     // println!("----- 无重叠区间 ------");
 
@@ -1399,5 +1404,31 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
 // 注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
 fn max_profit(prices: Vec<i32>, fee: i32) -> i32 {
     prices.iter().fold((0, -prices[0]), |(sell, buy), p| (sell.max(buy + p - fee), buy.max(sell - p))).0
+}
+//-----------------------------------------------------
+
+/// 推荐商品(字典树)
+// 给你一个商品数组 products 和一个字符串 searchWord ，products  数组中每个商品都是一个字符串。
+// 请你设计一个推荐系统，在依次输入单词 searchWord 的每一个字母后，推荐 products 数组中前缀与 searchWord 相同的最多三个产品。
+// 如果前缀相同的可推荐产品超过三个，请按字典序返回最小的三个。
+// 请你以二维数组的形式，返回在输入 searchWord 每个字母后相应的推荐商品的列表。
+fn suggested_products(mut products: Vec<String>, search_word: String) -> Vec<Vec<String>> {
+    let mut result = vec![];
+    products.sort_unstable();
+    // 遍历搜索词的所有可能前缀
+    for i in 1..=search_word.len() {
+        // .retain() 方法用于过滤集合（如向量、切片等）中的元素。即只保留满足特定条件的元素
+        // 遍历集合中的每个元素，并根据提供的闭包（或函数）的返回值来决定是否保留该元素。如果闭包返回 true，则保留;如果返回 false，则不要。
+        // retain() 方法的一个重要特性是就地操作，即直接在原始向量上修改元素，而不是创建一个新的向量。
+        // 这通常比创建一个新向量更高效，尤其是当处理大型数据集时。然而，调用 retain() 后，原始向量将被修改，可能不再包含之前所有的元素。
+        // 注意:由于 retain() 方法可能会改变向量的长度，因此调用 retain() 之后，任何依赖于原始向量长度的代码都应该小心处理。
+        // 此外，如果闭包内部使用了向量的引用或迭代器，并且这些引用或迭代器在 retain() 调用期间可能变得无效，可能会导致未定义的行为.
+        // 此处由于闭包只使用了字符串的本地副本，因此没有这个问题
+        products.retain(|s| s.starts_with(search_word.get(0..i).unwrap()));
+        // 对于过滤后的 products 向量，使用 iter().take(3).cloned().collect() 获取前三个元素（如果存在的话）并将其添加到 result 向量中。
+        result.push(products.iter().take(3).cloned().collect());
+    }
+
+    result
 }
 //-----------------------------------------------------
