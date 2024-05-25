@@ -363,7 +363,17 @@ fn main() {
     let result = longest_common_subsequence("abcde".to_string(), "ace".to_string());
     println!("longest_common_subsequence: {result}");
 
-    // println!("----- 买卖股票的最佳时机含手续费 ------");
+    println!("----- 买卖股票的最佳时机含手续费 ------");
+    let prices = vec![1, 3, 2, 8, 4, 9];
+    let fee = 2;
+    // 解释：能够达到的最大利润:
+    // 在此处买入 prices[0] = 1
+    // 在此处卖出 prices[3] = 8
+    // 在此处买入 prices[4] = 4
+    // 在此处卖出 prices[5] = 9
+    // 总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8
+    let result = max_profit(prices, fee);
+    println!("max_profit: {result}");
 
     // println!("----- 实现Trie(前缀树) ------");
 
@@ -1362,5 +1372,15 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
         })
     });
     dp[m - 1][n - 1]
+}
+//-----------------------------------------------------
+
+/// 动态规划(最大收益问题)
+// 给定一个整数数组 prices，其中 prices[i]表示第 i 天的股票价格 ；整数 fee 代表了交易股票的手续费用。
+// 你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+// 返回获得利润的最大值。
+// 注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+fn max_profit(prices: Vec<i32>, fee: i32) -> i32 {
+    prices.iter().fold((0, -prices[0]), |(sell, buy), p| (sell.max(buy + p - fee), buy.max(sell - p))).0
 }
 //-----------------------------------------------------
