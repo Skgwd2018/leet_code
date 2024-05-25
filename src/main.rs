@@ -359,7 +359,9 @@ fn main() {
     let result = unique_paths(3, 7);
     println!("unique_paths: {result}"); // 28
 
-    // println!("----- 最长公共子序列 ------");
+    println!("----- 最长公共子序列 ------");
+    let result = longest_common_subsequence("abcde".to_string(), "ace".to_string());
+    println!("longest_common_subsequence: {result}");
 
     // println!("----- 买卖股票的最佳时机含手续费 ------");
 
@@ -1329,5 +1331,36 @@ fn unique_paths(m: i32, n: i32) -> i32 {
 
     let n = n as u64 - 1;
     (1..m as u64).fold(1, |cnt, x| cnt * (n + x) / x) as i32
+}
+//-----------------------------------------------------
+
+/// 动态规划
+// 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+// 一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+// 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+// 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
+fn longest_common_subsequence(text1: String, text2: String) -> i32 {
+    /*let (m, n) = (text1.len(), text2.len());
+    // 因为dp[i][j] 是表示下标(i-1, j-1) 的 最长公共子序列，所以i/j == 0 都是无意义的,可以初始化为0
+    let mut dp = vec![vec![0; n + 1]; m + 1];
+    // 状态转移
+    for (i, c1) in text1.chars().enumerate() {
+        for (j, c2) in text2.chars().enumerate() {
+            dp[i + 1][j + 1] = (dp[i][j] + (c1 == c2) as i32).max(dp[i][j + 1].max(dp[i + 1][j]));
+        }
+    }
+    dp[m][n]*/
+
+    let (m, n) = (text1.len() + 1, text2.len() + 1);
+    let mut dp = vec![vec![0; n]; m];
+    (1..m).for_each(|i| {
+        (1..n).for_each(|j| {
+            dp[i][j] = match text1.bytes().nth(i - 1) == text2.bytes().nth(j - 1) {
+                true => dp[i - 1][j - 1] + 1,
+                false => (dp[i - 1][j]).max(dp[i][j - 1]),
+            }
+        })
+    });
+    dp[m - 1][n - 1]
 }
 //-----------------------------------------------------
