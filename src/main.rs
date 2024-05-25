@@ -396,7 +396,10 @@ fn main() {
     let result = erase_overlap_intervals(intervals);
     println!("erase_overlap_intervals: {result}");
 
-    // println!("----- 每日温度 ------");
+    println!("----- 每日温度 ------");
+    let temperatures = vec![73, 74, 75, 71, 69, 72, 76, 73];
+    let result = daily_temperatures(temperatures);
+    println!("daily_temperatures: {result:?}");
 
     // println!("----- 股票价格跨度 ------");
 }
@@ -1470,5 +1473,27 @@ fn erase_overlap_intervals(mut intervals: Vec<Vec<i32>>) -> i32 {
     }
 
     count
+}
+//-----------------------------------------------------
+
+/// 每日温度(单调栈问题)
+// 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。
+// 如果气温在这之后都不会升高，请在该位置用 0 来代替。
+// 输入: temperatures = [73,74,75,71,69,72,76,73]
+// 输出: [1,1,4,2,1,1,0,0]
+fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
+    let mut answer = vec![0; temperatures.len()];
+    let mut stack = Vec::new();
+    for (i, &t) in temperatures.iter().enumerate() {
+        // *stack.last().unwrap()
+        // stack[stack.len() - 1] 这个运行会稍微快
+        while !stack.is_empty() && t > temperatures[stack[stack.len() - 1]] {
+            let j = stack.pop().unwrap();
+            answer[j] = (i - j) as i32;
+        }
+        stack.push(i);
+    }
+
+    answer
 }
 //-----------------------------------------------------
