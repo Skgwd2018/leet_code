@@ -588,3 +588,67 @@ impl SmallestInfiniteSet {
     }
 }
 //-----------------------------------------------------
+
+/// 前缀树
+/// Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。
+/// 这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+#[derive(Default)]
+pub struct Trie {
+    is_end: bool,
+    child: [Option<Box<Trie>>; 26],
+}
+
+// Trie trie = new Trie();
+// trie.insert("apple");
+// trie.search("apple");   // 返回 True
+// trie.search("app");     // 返回 False
+// trie.startsWith("app"); // 返回 True
+// trie.insert("app");
+// trie.search("app");     // 返回 True
+
+impl Trie {
+    /// 初始化前缀树对象
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// 向前缀树中插入字符串 word
+    pub fn insert(&mut self, word: String) {
+        /*let mut curr = self;
+        for i in word.bytes().map(|b| (b - b'a') as usize) {
+            curr = curr.child[i].get_or_insert_with(|| Default::default());
+        }
+        curr.is_end = true;*/
+
+        word.into_bytes().into_iter().map(|b| (b - b'a') as usize)
+            .fold(self, |node, i| node.child[i].get_or_insert_with(Default::default))
+            .is_end = true
+    }
+
+    ///  如果字符串 word 在前缀树中,返回 true(即，在检索之前已经插入);否则返回 false
+    pub fn search(&self, word: String) -> bool {
+        let mut curr = self;
+        for i in word.bytes().map(|b| (b - b'a') as usize) {
+            match &curr.child[i] {
+                None => return false,
+                Some(n) => curr = n,
+            }
+        }
+
+        curr.is_end
+    }
+
+    /// 如果之前已经插入的字符串 word 的前缀之一为 prefix,返回 true;否则返回 false
+    pub fn starts_with(&self, prefix: String) -> bool {
+        let mut curr = self;
+        for i in prefix.bytes().map(|b| (b - b'a') as usize) {
+            match &curr.child[i] {
+                None => return false,
+                Some(n) => curr = n,
+            }
+        }
+
+        true
+    }
+}
+//-----------------------------------------------------

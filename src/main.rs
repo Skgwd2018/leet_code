@@ -4,7 +4,7 @@ use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
-use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, TreeNode};
+use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, TreeNode, Trie};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -375,7 +375,14 @@ fn main() {
     let result = max_profit(prices, fee);
     println!("max_profit: {result}");
 
-    // println!("----- 实现Trie(前缀树) ------");
+    println!("----- 实现Trie(前缀树) ------");
+    let mut obj = Trie::new();
+    let word = "apple".to_string();
+    obj.insert(word.clone());
+    let ret_2 = obj.search(word);
+    let prefix = "app".to_string();
+    let ret_3 = obj.starts_with(prefix);
+    println!("ret_2: {ret_2}, ret_3: {ret_3}");
 
     // println!("----- 搜索推荐系统 ------");
 
@@ -1274,7 +1281,7 @@ fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, result: &mu
 
     for c in dig_list {
         value.push(c);
-        get_letters(&digits, index + 1, value, result);
+        get_letters(digits, index + 1, value, result);
         value.pop();
     }
 }
@@ -1365,7 +1372,17 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
     let mut dp = vec![vec![0; n]; m];
     (1..m).for_each(|i| {
         (1..n).for_each(|j| {
-            dp[i][j] = match text1.bytes().nth(i - 1) == text2.bytes().nth(j - 1) {
+            // text1.bytes().nth(i - 1)
+            // text1.as_bytes().get(i - 1).copied()
+            // text1.bytes()会返回一个迭代器，它逐个产生text1中每个字符的字节表示。.nth(i - 1)方法会尝试获取迭代器中第i - 1个元素的值。如果i - 1超出了迭代器的范围，它将返回None。
+            // text1.as_bytes()会返回一个指向字符串内部字节数组的切片（slice），这个切片是原始字符串的直接视图，没有额外的迭代器开销。
+            // get(i - 1)方法会尝试获取切片中索引为i - 1的元素的可变引用，如果这个索引是有效的，那么它就会返回一个指向该元素的引用。
+            // .copied()会将这个引用转换为对应元素的值（如果存在的话），并产生一个Option<u8>
+            // 在性能上，text1.as_bytes().get(i - 1).copied()通常会比text1.bytes().nth(i - 1)更快，
+            // 因为as_bytes()是直接访问字符串的内部数据，而bytes()则需要在每次调用时生成一个新的迭代器。
+            // 迭代器每次调用nth()时都需要从当前位置开始重新计算到目标位置，这增加了额外的开销。
+            // 因此可能的话，应该优先使用text1.as_bytes().get(i - 1).copied()来访问字符串的字节。
+            dp[i][j] = match text1.as_bytes().get(i - 1).copied() == text2.as_bytes().get(j - 1).copied() {
                 true => dp[i - 1][j - 1] + 1,
                 false => (dp[i - 1][j]).max(dp[i][j - 1]),
             }
