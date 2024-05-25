@@ -556,6 +556,7 @@ impl SmallestInfiniteSet {
 // 3.快速查找：由于基于 B 树实现，BTreeSet 提供了快速的查找、插入和删除操作。
 // 注意：BTreeSet 的排序是基于元素的默认排序。对于自定义类型，可能需要实现 Ord trait 来定义如何排序这些元素。
 
+#[derive(Default)]
 pub struct SmallestInfiniteSet {
     point: i32,
     set: BTreeSet<i32>,
@@ -649,6 +650,36 @@ impl Trie {
         }
 
         true
+    }
+}
+//-----------------------------------------------------
+
+/// 股票跨度
+#[derive(Default)]
+pub struct StockSpanner {
+    stack: Vec<(i32, i32)>,
+    curr_day: i32,
+}
+
+impl StockSpanner {
+    pub fn new() -> Self {
+        Self {
+            // 这样无需判断栈为空的情况
+            stack: vec![(-1, i32::MAX)],
+            // 第一个 next 调用算作第 0 天
+            curr_day: -1,
+        }
+    }
+
+    pub fn next(&mut self, price: i32) -> i32 {
+        while price >= self.stack.last().unwrap().1 {
+            self.stack.pop(); // 栈顶数据后面不会再用到了，因为 price 更大
+        }
+        self.curr_day += 1;
+        let answer = self.curr_day - self.stack.last().unwrap().0;
+        self.stack.push((self.curr_day, price));
+
+        answer
     }
 }
 //-----------------------------------------------------

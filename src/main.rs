@@ -4,7 +4,7 @@ use std::cmp::Reverse;
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
-use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, TreeNode, Trie};
+use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
 
 fn main() {
     println!("------ 交替合并字符串 ------");
@@ -361,7 +361,7 @@ fn main() {
 
     println!("----- 最长公共子序列 ------");
     let result = longest_common_subsequence("abcde".to_string(), "ace".to_string());
-    println!("longest_common_subsequence: {result}");
+    println!("longest_common_subsequence: {result}"); // 3
 
     println!("----- 买卖股票的最佳时机含手续费 ------");
     let prices = vec![1, 3, 2, 8, 4, 9];
@@ -373,7 +373,7 @@ fn main() {
     // 在此处卖出 prices[5] = 9
     // 总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8
     let result = max_profit(prices, fee);
-    println!("max_profit: {result}");
+    println!("max_profit: {result}"); // 8
 
     println!("----- 实现Trie(前缀树) ------");
     let mut obj = Trie::new();
@@ -382,26 +382,44 @@ fn main() {
     let ret_2 = obj.search(word);
     let prefix = "app".to_string();
     let ret_3 = obj.starts_with(prefix);
-    println!("ret_2: {ret_2}, ret_3: {ret_3}");
+    println!("ret_2: {ret_2}, ret_3: {ret_3}"); // true, true
 
     println!("----- 搜索推荐系统 ------");
     let products = vec!["mobile".to_string(), "mouse".to_string(), "moneypot".to_string(),
                         "monitor".to_string(), "mousepad".to_string()];
     let search_word = "mouse".to_string();
     let result = suggested_products(products, search_word);
-    println!("suggested_products: {result:?}");
+    println!("suggested_products: {result:?}"); // [["mobile", "moneypot", "monitor"], ["mobile", "moneypot", "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse", "mousepad"]]
 
     println!("----- 无重叠区间 ------");
     let intervals = vec![vec![1, 2], vec![2, 3], vec![3, 4], vec![1, 3]];
     let result = erase_overlap_intervals(intervals);
-    println!("erase_overlap_intervals: {result}");
+    println!("erase_overlap_intervals: {result}"); // 1
 
-    println!("----- 每日温度 ------");
+    println!("----- 每日温度(单调栈) ------");
     let temperatures = vec![73, 74, 75, 71, 69, 72, 76, 73];
     let result = daily_temperatures(temperatures);
-    println!("daily_temperatures: {result:?}");
+    println!("daily_temperatures: {result:?}"); // [1, 1, 4, 2, 1, 1, 0, 0]
 
-    // println!("----- 股票价格跨度 ------");
+    println!("----- 股票价格跨度(单调栈) ------");
+    // 设计一个算法收集某些股票的每日报价，并返回该股票当日价格的 跨度 。
+    // 当日股票价格的 跨度 被定义为股票价格小于或等于今天价格的最大连续日数（从今天开始往回数，包括今天）。
+    // 例如，如果未来 7 天股票的价格是 [100,80,60,70,60,75,85]，那么股票跨度将是 [1,1,1,2,1,4,6] 。
+    let mut stock_spanner = StockSpanner::new();
+    let ret_1 = stock_spanner.next(100);
+    println!("stock_spanner.next(100): {ret_1}");  // 1
+    let ret_1 = stock_spanner.next(80);
+    println!("stock_spanner.next(80): {ret_1}");   // 1
+    let ret_1 = stock_spanner.next(60);
+    println!("stock_spanner.next(60): {ret_1}");   // 1
+    let ret_1 = stock_spanner.next(70);
+    println!("stock_spanner.next(70): {ret_1}");   // 2
+    let ret_1 = stock_spanner.next(60);
+    println!("stock_spanner.next(60): {ret_1}");   // 1
+    let ret_1 = stock_spanner.next(75);
+    println!("stock_spanner.next(75): {ret_1}");   // 4
+    let ret_1 = stock_spanner.next(85);
+    println!("stock_spanner.next(85): {ret_1}");   // 6
 }
 
 /// 交替合并字符串
