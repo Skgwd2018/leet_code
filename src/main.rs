@@ -1,6 +1,5 @@
 use std::cell::RefCell;
-use std::cmp;
-use std::cmp::Reverse;
+use std::cmp::{self, Reverse};
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
@@ -938,7 +937,7 @@ fn max_vowels(s: String, k: i32) -> i32 {
 
     let mut r = k;
     // 计算第一个区间元音数
-    let mut vowels = (s[..k]).iter().map(|&x| is_vowel(x)).sum::<i32>();
+    let mut vowels = s[..k].iter().map(|&x| is_vowel(x)).sum::<i32>();
     let mut max_vowels = vowels;
     while r < s.len() {
         // 滑动窗口操作
@@ -1413,7 +1412,7 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
             // 因此可能的话，应该优先使用text1.as_bytes().get(i - 1).copied()来访问字符串的字节。
             dp[i][j] = match text1.as_bytes().get(i - 1).copied() == text2.as_bytes().get(j - 1).copied() {
                 true => dp[i - 1][j - 1] + 1,
-                false => (dp[i - 1][j]).max(dp[i][j - 1]),
+                false => dp[i - 1][j].max(dp[i][j - 1]),
             }
         })
     });
@@ -1458,10 +1457,10 @@ fn suggested_products(mut products: Vec<String>, search_word: String) -> Vec<Vec
 //-----------------------------------------------------
 
 /// 无重叠区间(区间集合问题)
-// 给定一个区间的集合 intervals,其中 intervals[i] = [start, end] .返回 需要移除区间的最小数量，使剩余区间互不重叠
-// 输入: intervals = [[1,2],[2,3],[3,4],[1,3]]
+// 给定一个区间的集合 intervals,其中 intervals[i] = [start, end] 返回 需要移除区间的最小数量,使剩余区间互不重叠
+// 输入: intervals = [[1, 2], [2, 3], [3, 4], [1, 3]]
 // 输出: 1
-// 解释: 移除 [1,3] 后，剩下的区间没有重叠。
+// 解释: 移除 [1, 3] 后,剩下的区间没有重叠。
 fn erase_overlap_intervals(mut intervals: Vec<Vec<i32>>) -> i32 {
     // Vec::is_empty() 通常会比 Vec::len() == 0 执行效率稍微快
     if intervals.len() < 2 { return 0; }
@@ -1470,35 +1469,40 @@ fn erase_overlap_intervals(mut intervals: Vec<Vec<i32>>) -> i32 {
     // println!("sort_unstable ----> {intervals:?}"); // [[1, 2], [1, 3], [2, 3], [3, 4]]
     intervals.sort_unstable_by_key(|v| v[1]);
     // println!("sort_unstable_by_key ----> {intervals:?}"); // [[1, 2], [2, 3], [1, 3], [3, 4]]
-    // sort_unstable() 方法对 intervals 向量进行不稳定的就地排序。
-    // 它按照元素的自然顺序（对于 Vec<Vec<i32>> 类型，就是按照每个子向量的第一个元素，即 v[0]，进行比较）进行排序。
+    // sort_unstable() 方法对 intervals 进行不稳定的就地排序。
+    // 它按照元素的自然顺序（对于 Vec<Vec<i32>> 类型，就是按照每个子vec的第一个元素，即 v[0]，进行比较）进行排序。
     // 不稳定排序意味着相等的元素在排序后的相对顺序可能发生变化。
-    // intervals 调用 sort_unstable()，它会按照每个子向量的第一个元素进行排序。
+    // intervals 调用 sort_unstable()，它会按照每个子vec的第一个元素进行排序。
     // 如果 intervals 包含 [[1, 3], [2, 4], [1, 2]]，排序后的结果可能是 [[1, 3], [1, 2], [2, 4]]（注意 [1, 3] 和 [1, 2] 的顺序可能互换，因为排序是不稳定的）。
     // sort_unstable_by_key() 方法允许你提供一个闭包（函数对象），它用于提取排序时要使用的键。
-    // 在这个例子中，闭包 |v| v[1] 表示每个子向量的第二个元素（即 v[1]）将用作排序的键。
-    // intervals 调用 sort_unstable_by_key(|v| v[1])，它会按照每个子向量的第二个元素进行排序。
-    // 如果 intervals 包含 [[1, 3], [2, 4], [1, 2]]，排序后的结果将是 [[1, 2], [1, 3], [2, 4]]，因为排序是基于每个子向量的第二个元素进行的。
+    // 在例子中，闭包 |v| v[1] 表示每个子vec的第二个元素（即 v[1]）将用作排序的键。
+    // intervals 调用 sort_unstable_by_key(|v| v[1])，它会按照每个子vec的第二个元素进行排序。
+    // 如果 intervals 包含 [[1, 3], [2, 4], [1, 2]]，排序后的结果将是 [[1, 2], [1, 3], [2, 4]]，因为排序是基于每个子vec的第二个元素进行的。
 
     let mut count = 0;
     let mut end = intervals[0][1];
-    for i in 1..intervals.len() {
-        if intervals[i][0] >= end {
-            end = intervals[i][1];
-        } else {
-            count += 1;
-        }
+    for v in intervals.iter().skip(1) {
+        if v[0] >= end { end = v[1]; } else { count += 1; }
     }
 
     count
 }
 //-----------------------------------------------------
 
-/// 每日温度(单调栈问题)
-// 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。
+// 单调栈（monotone stack）是一种数据结构，其特性是栈内元素（从栈底到栈顶）是单调递增或单调递减的。
+// 当新的元素入栈时，会移除栈顶破坏单调性的元素，以确保栈内元素保持单调性。这些出栈的元素在后续操作中不会再次入栈。
+// 由于每个元素至多入栈和出栈各一次，因此单调栈的维护时间复杂度是O(n)。
+// 单调栈有两种类型：单调递增栈和单调递减栈。单调递增栈意味着栈内元素从栈底到栈顶是递增的，而单调递减栈则是递减的。
+// 单调栈常用于解决一些需要找到某个元素左边或右边第一个比它大或小的问题，
+// 例如:柱状图中最大的矩形、最长递增子序列等问题。它也可以用于优化某些动态规划问题的求解过程。
+// 特别是在解决一些涉及数组或序列的问题时。单调栈的应用广泛，通过合理的设计和使用，可以有效地提高算法的效率。
+// 需要注意的是，单调栈中存储的元素可以是数组的值，也可以是数组的下标。
+
+/// 每日温度(单调栈(monotone stack))
+// 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer,其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。
 // 如果气温在这之后都不会升高，请在该位置用 0 来代替。
-// 输入: temperatures = [73,74,75,71,69,72,76,73]
-// 输出: [1,1,4,2,1,1,0,0]
+// 输入: temperatures = [73, 74, 75, 71, 69, 72, 76, 73]  // 8
+// 输出:                [1, 1, 4, 2, 1, 1, 0, 0]
 fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
     let mut answer = vec![0; temperatures.len()];
     let mut stack = Vec::new();

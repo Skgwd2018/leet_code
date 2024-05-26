@@ -6,6 +6,7 @@ use std::mem::swap;
 use std::rc::Rc;
 
 /// 计算特定时间范围内最近的请求
+#[derive(Default)]
 pub struct RecentCounter {
     // VecDeque 与 Vec 的区别
     // 1.高效的两端操作:允许在队列的前端和后端进行高效的插入和删除操作。
@@ -36,12 +37,6 @@ impl RecentCounter {
         }
 
         self.requests.len() as i32
-    }
-}
-
-impl Default for RecentCounter {
-    fn default() -> Self {
-        Self::new()
     }
 }
 //-----------------------------------------------------
@@ -555,7 +550,6 @@ impl SmallestInfiniteSet {
 // 2.不重复：与所有集合类型一样，BTreeSet 不允许重复的元素。
 // 3.快速查找：由于基于 B 树实现，BTreeSet 提供了快速的查找、插入和删除操作。
 // 注意：BTreeSet 的排序是基于元素的默认排序。对于自定义类型，可能需要实现 Ord trait 来定义如何排序这些元素。
-
 #[derive(Default)]
 pub struct SmallestInfiniteSet {
     point: i32,
