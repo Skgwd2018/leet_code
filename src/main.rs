@@ -336,7 +336,7 @@ fn main() {
     let result = successful_pairs(spells, potions, success);
     println!("successful_pairs: {result:?}"); // [4, 0, 3]
 
-    println!("----- 寻找峰值元素 ------");
+    println!("----- 寻找峰值元素的索引 ------");
     let nums = vec![1, 6, 7, 5, 6, 8, 8, 8];
     let result = find_peak_element(nums);
     println!("find_peak_element: {result}"); // 7
@@ -766,7 +766,7 @@ fn tribonacci(n: i32) -> i32 {
         _ => tribonacci(n - 1) + tribonacci(n - 2) + tribonacci(n - 3),
     }*/
 
-    // 动态规划（Dynamic Programming, DP）来避免重复计算。
+    // 动态规划（Dynamic Programming,DP）来避免重复计算。
     // 动态规划是一种算法设计技术，用于解决具有重叠子问题和最优子结构特性的问题。
     // 对于泰波那契数列，你可以使用动态规划来存储已经计算过的值，从而避免重复计算。
     match n {
@@ -1240,16 +1240,16 @@ fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
 
 /// 成功对数(二分法查找)
 fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Vec<i32> {
-    potions.sort_unstable(); // 升序排列
+    potions.sort_unstable(); // 默认升序排列
     let n = potions.len();
     /*for i in spells.into_iter().map(|x| i64::from(x)) {
-        let count = n - potions.partition_point(|&y| i * i64::from(y) < success);
+        let count = n - potions.partition_point(|&p| i * i64::from(p) < success);
         result.push(count as i32);
     }*/
     // partition_point() 内部使用 binary_search_by 进行查找
     // potions.partition_point() 返回符合条件的元素数量
     // let v = [1, 2, 3, 3, 5, 6, 7];
-    // let i = v.partition_point(|&x| x < 5);  // 4, 注：目前只提供 < 操作
+    // let i = v.partition_point(|&x| x < 5);  // 4, 注:目前只提供 < 操作
     spells.iter().map(|&x| (n - potions.partition_point(|&p| (x as i64) * (p as i64) < success)) as i32).collect()
 }
 //-----------------------------------------------------
@@ -1258,19 +1258,25 @@ fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Ve
 // 峰值元素是指其值严格大于左右相邻值的元素。
 // 给你一个整数数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
 fn find_peak_element(nums: Vec<i32>) -> i32 {
-    /*let (mut left, mut right) = (0, nums.len() - 1);
+    // 双指针
+    let (mut left, mut right) = (0, nums.len() - 1);
+    // 二分搜索
     while left < right {
-        let middle = left + (right - left >> 1);
+        // (right - left >> 1) 将这个宽度右移一位，相当于将宽度除以2(在二进制中,右移一位等同于除以2的整数部分).
+        // 这里的作用是找到搜索范围的中间点，同时避免了整数除法运算，从而提高了效率。
+        let middle = left + (right - left >> 1); // 计算中间索引
         match nums[middle] > nums[middle + 1] {
             true => right = middle,
             false => left = middle + 1,
         }
     }
-    left as i32*/
+    // 当left和right相等，此时就找到了峰值元素的索引。
+    left as i32
 
-    // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等，则返回最后一个元素。如果迭代器为空，则返回None。
+    // 解法二:
+    // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等,则返回最后一个元素。如果迭代器为空,则返回None。
     // max_by_key(|(_, &v)| v) 元组的第一个元素（即索引），并返回元组的第二个元素（即值）的引用。
-    nums.iter().enumerate().max_by_key(|(_, &v)| v).unwrap().0 as i32
+    // nums.iter().enumerate().max_by_key(|(_, &v)| v).unwrap().0 as i32
 }
 //-----------------------------------------------------
 
@@ -1287,14 +1293,17 @@ fn letter_combinations(digits: String) -> Vec<String> {
 }
 
 /// backtrack(回溯操作)
+// digits:输入的字符串, index:当前的索引, value:用于存储当前字母组合的Vec<char>, result:用于存储所有结果的Vec<String>
 fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, result: &mut Vec<String>) {
     if index >= digits.len() {
-        let s = String::from_iter(value.iter());
+        let s = String::from_iter(value.iter()); // 将一个字符迭代器转换为一个字符串
+        // let value = vec!['a', 'b', 'c'];
+        // let s = String::from_iter(value.iter()); // "abc"
         result.push(s);
         return;
     }
     // .iter().nth(n) 返回迭代器的第n个元素
-    // 注:所有前面的元素以及返回的元素都将从迭代器中消耗掉。即前面的元素将被丢弃，并且在同一迭代器上多次调用第n（0）个元素将返回不同的元素。
+    // 注:所有前面的元素以及返回的元素都将从迭代器中消耗掉。即前面的元素将被丢弃，并且在同一迭代器上多次调用第n(0)个元素将返回不同的元素。
     let dig_list = match digits.chars().nth(index).unwrap() {
         '2' => vec!['a', 'b', 'c'],
         '3' => vec!['d', 'e', 'f'],
@@ -1316,11 +1325,15 @@ fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, result: &mu
 //-----------------------------------------------------
 
 // 找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：
-// 只使用数字1到9
-// 每个数字 最多使用一次
-// 返回 所有可能的有效组合的列表 。该列表不能包含相同的组合两次，组合可以以任何顺序返回。
+// 只使用数字[1, 9] 且 每个数字最多使用一次
+// 返回 所有可能的有效组合的列表。该列表不能包含相同的组合两次，组合可以以任何顺序返回。
 fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
     // 回溯函数:实现回溯算法。回溯算法常用于解决组合问题，它通过递归和剪枝的方式找出所有可能的解。
+    /// result:用于存储所有满足条件的组合的向量。
+    ///   curr:当前正在构建的组合。
+    ///      i:当前可选取的最大正整数。
+    ///      k:还需要找出多少个正整数。
+    ///      n:当前组合还需要凑足的和。
     fn backtrace(result: &mut Vec<Vec<i32>>, curr: &mut Vec<i32>, i: i32, k: i32, n: i32) {
         let c = k - curr.len() as i32;
         // 剪枝条件:用于提前终止递归,这个条件基于组合数学中的公式，用于确定当前情况下是否还有可能找到一个满足条件的组合。
@@ -1346,7 +1359,7 @@ fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
 //-----------------------------------------------------
 
 /// 多米诺和托米诺平铺(动态规划_一维)
-// 有两种形状的瓷砖：一种是 2 x 1 的多米诺形，另一种是形如 "L" 的托米诺形。两种形状都可以旋转。
+// 有两种形状的瓷砖:一种是 2 x 1 的多米诺形，另一种是形如 "L" 的托米诺形。两种形状都可以旋转。
 // 给定整数 n ，返回可以平铺 2 x n 的面板的方法的数量。返回对 10的9次方 + 7 取模 的值。
 // 平铺指的是每个正方形都必须有瓷砖覆盖。两个平铺不同，当且仅当面板上有四个方向上的相邻单元中的两个，使得恰好有一个平铺有一个瓷砖占据两个正方形。
 fn num_tilings(n: i32) -> i32 {
@@ -1354,28 +1367,42 @@ fn num_tilings(n: i32) -> i32 {
 }
 //-----------------------------------------------------
 
-/// 不同路径(动态规划_多维),矩阵dp空间优化
+/// 不同路径(动态规划_多维_网格路径),矩阵dp空间优化
 // 一个机器人位于一个 m x n 网格的最左上角（标记为 “Start” ）。
 // 机器人每次只能向下或者向右移动一步。机器人试图达到网格的最右下角（标记为 “Finish” ）。
 // 问总共有多少条不同的路径？
 fn unique_paths(m: i32, n: i32) -> i32 {
+    // 动态规划方法:这里利用了问题的子问题重叠性质，通过计算并保存子问题的解来避免重复计算，从而提高了效率。
+    // 对于较大的 m 和 n 值，这种方法比直接计算组合数更加高效。
     // dp关系: dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
-
-    /*let n = n as usize;
+    let n = n as usize;
+    // 初始化一个长度为 n 的一维数组 dp，其中 dp[j] 表示到达第 j 列的最后一行（即第 m-1 行）有多少种不同的路径。
+    // 由于只能向右或向下移动，到达第一行的每个点都只有一条路径（即一直向右移动），所以 dp 数组的所有元素初始值都设为 1。
     let mut dp = vec![1; n];
-    for _ in 1..(m as usize) {
+    // 通过两层循环来计算到达每个点的不同路径数。
+    // 外层循环遍历每一行（从第 1 行到第 m-1 行），内层循环遍历每一列（从第 1 列到第 n-1 列）。
+    // 对于每个点 (i, j)，其路径数等于其上方点 (i-1, j) 的路径数加上其左方点 (i, j-1) 的路径数，即 dp[j] = dp[j] + dp[j - 1]。
+    // 注:第一列的每个点的路径数始终为 1（因为只能一直向下移动），所以在内层循环开始前，先将 dp[0] 设为 1。
+    /*for _ in 1..(m as usize) {
         dp[0] = 1;
-        for j in 1..n {
-            dp[j] += dp[j - 1];
-        }
-    }
-    dp[n - 1]*/
+        for j in 1..n { dp[j] += dp[j - 1]; }
+    }*/
+    // 注:使用for_each可能会略微增加一些额外的开销，因为闭包的创建和调用通常会比直接的for循环略慢。
+    // 但这个差异通常是非常小的，除非在性能非常关键的场景下，否则这种差异通常可以忽略不计。
+    // 此外，Rust编译器的优化器也会对这两种形式进行相似的优化，使得它们在实际运行时的性能非常接近。
+    (1..m as usize).for_each(|_| {
+        dp[0] = 1;
+        (1..n).for_each(|j| dp[j] += dp[j - 1]);
+    });
+    dp[n - 1]
 
-    // let (m, n) = (m as u64, n as u64);
-    // (1..m.min(n)).fold(1, |acc, x| acc * (m + n - 1 - x) / x) as i32
-
-    let n = n as u64 - 1;
-    (1..m as u64).fold(1, |cnt, x| cnt * (n + x) / x) as i32
+    // 解法二:
+    // 当 m 和 n 值较小时采用计算组合数方式更高效。
+    // 使用数学公式计算组合数学中的组合数（Combination）。
+    // 从 (0, 0) 到 (m-1, n-1) 的路径，总共需要走 m+n-2 步，其中 m-1 步是向右，n-1 步是向下。
+    // 因此，问题转化为从 m+n-2 步中选择 m-1 步向右走，剩下的自然是向下走。
+    // let n = n as u64 - 1;
+    // (1..m as u64).fold(1, |cnt, x| cnt * (n + x) / x) as i32
 }
 //-----------------------------------------------------
 
@@ -1386,7 +1413,7 @@ fn unique_paths(m: i32, n: i32) -> i32 {
 // 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
 fn longest_common_subsequence(text1: String, text2: String) -> i32 {
     /*let (m, n) = (text1.len(), text2.len());
-    // 因为dp[i][j] 是表示下标(i-1, j-1) 的 最长公共子序列，所以i/j == 0 都是无意义的,可以初始化为0
+    // 因为dp[i][j] 是表示下标(i-1, j-1) 的 最长公共子序列，由于 i / j == 0 都是无意义的,可以初始化为0
     let mut dp = vec![vec![0; n + 1]; m + 1];
     // 状态转移
     for (i, c1) in text1.chars().enumerate() {
