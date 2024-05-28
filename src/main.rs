@@ -1009,14 +1009,14 @@ fn remove_stars(s: String) -> String {
 }
 //-----------------------------------------------------
 
-// 题目要求:原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入
+// 题目要求:原始数据不包含数字,所有的数字只表示重复的次数 k,例:不会出现像 3a 或 2[4] 的输入
 //         s 中所有整数的取值范围为 [1, 300]
 fn decode_string(s: String) -> String {
     // 栈操作
     let mut stack = Vec::new();
     let mut curr_num = 0;
     let mut curr_str = String::new();
-    // let (mut curr_num, mut curr_str) = (0, String::new()); // 内存比较(无区别)
+    // let (mut curr_num, mut curr_str) = (0, String::new()); // 内存比较(完全相同)
 
     // "3[a12[c]]" ----> "accaccacc"
     for c in s.chars() {
@@ -1028,15 +1028,15 @@ fn decode_string(s: String) -> String {
             '[' => {
                 stack.push((curr_str, curr_num));
                 curr_str = String::new();
-                // 这个操作创建了一个新的空字符串，并将curr_str的引用更新为指向这个新字符串。
-                // 这涉及到内存分配（尽管分配的是一个非常小的字符串），并且如果之前的String是堆上分配的，那么它的内存也会被回收。
+                // 这个操作创建了一个新的空字符串,并将curr_str的引用更新为指向这个新字符串。
+                // 这涉及到内存分配(尽管分配的是一个非常小的字符串)，并且如果之前的String是堆上分配的，那么它的内存也会被回收。
                 // 这种方式的优点是它确保了curr_str不再保留任何不必要的内存，但缺点是涉及到内存分配和可能的垃圾回收，这通常比简单的标记为空要慢一些。
 
                 // curr_str.clear();
-                // 这个操作仅仅将字符串的内部缓冲区标记为空，它并不会释放分配的内存。
-                // 即如果字符串之前占用了大量内存，那么即使调用clear之后，该内存仍然被String保留。
+                // 这个操作仅仅将字符串的内部缓冲区标记为空,它并不会释放分配的内存。
+                // 即如果字符串之前占用了大量内存,那么即使调用clear()之后,该内存仍然被String保留。
                 // 这样做的优点是操作很快，因为不涉及任何内存分配或释放。
-                // 如果之后String又需要存储数据，它可以在已经分配的内存上进行操作，这通常比重新分配内存要快。
+                // 如果之后String又需要存储数据,它可以在已经分配的内存上进行操作,这通常比重新分配内存要快。
                 curr_num = 0;
             }
             ']' => {
@@ -1054,18 +1054,17 @@ fn decode_string(s: String) -> String {
 //-----------------------------------------------------
 
 /// 重新规划路线(深度优先搜索)
-// n 座城市，从 0 到 n-1 编号，其间共有 n-1 条路线。因此，要想在两座不同城市之间旅行只有唯一一条路线可供选择（路线网形成一棵树）。
+// n 座城市,从 0 到 n-1 编号,其间共有 n-1 条路线。因此，要想在两座不同城市之间旅行只有唯一一条路线可供选择(路线网形成一棵树)。
 // 去年，交通运输部决定重新规划路线，以改变交通拥堵的状况。
 // 路线用 connections 表示，其中 connections[i] = [a, b] 表示从城市 a 到 b 的一条有向路线。
 // 今年，城市 0 将会举办一场大型比赛，很多游客都想前往城市 0 。
 // 请你帮助重新规划路线方向，使每个城市都可以访问城市 0 。返回需要变更方向的最小路线数。
-// 题目数据 保证 每个城市在重新规划路线方向后都能到达城市 0
-// n = 6, connections: [[0,1],[1,3],[2,3],[4,0],[4,5]]
+// 题目数据:保证每个城市在重新规划路线方向后都能到达城市 0
+// n = 6, connections: [[0,1], [1,3], [2,3], [4,0], [4,5]]
 fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
     let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
     for e in connections.iter() {
-        let a = e[0] as usize;
-        let b = e[1] as usize;
+        let (a, b) = (e[0] as usize, e[1] as usize);
         g[a].push((b as i32, 1));
         g[b].push((a as i32, 0));
     }
@@ -1086,49 +1085,50 @@ fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
 //-----------------------------------------------------
 
 //  BinaryHeap(二叉堆)主要特性:
-// 1.自动排序：当你向堆中插入元素时，堆会自动重新排序以确保堆的性质（父节点的值总是大于或等于（最大堆）或小于或等于（最小堆）其子节点的值）得到维护。
-// 2.快速访问最高（或最低）优先级元素：堆的根节点（在 BinaryHeap 中，这通常是第一个元素）总是具有最高（或最低，取决于堆的类型）的优先级。因此，你可以快速地获取或删除这个元素。
-// 3.性能：插入和删除堆顶元素的平均时间复杂度是 O(log n)，其中 n 是堆中元素的数量。这使得 BinaryHeap 在处理大量数据时非常高效。
-// 4.泛型：BinaryHeap 是泛型的，这意味着你可以用它来存储任何实现了 Ord trait（即可以排序）的类型。
+// 1.自动排序:当你向堆中插入元素时,堆会自动重新排序以确保堆的性质(父节点的值总是大于或等于（最大堆）或小于或等于（最小堆）其子节点的值)得到维护。
+// 2.快速访问最高（或最低）优先级元素:堆的根节点(在 BinaryHeap 中，这通常是第一个元素）总是具有最高（或最低，取决于堆的类型)的优先级。因此，可以快速地获取或删除这个元素。
+// 3.性能:插入和删除堆顶元素的平均时间复杂度是 O(log n)，其中 n 是堆中元素的数量。这使得 BinaryHeap 在处理大量数据时非常高效。
+// 4.泛型:BinaryHeap 是泛型的，即是可以用它来存储任何实现了 Ord trait(即可以排序)的类型。
 
-/// 迷宫出口(bfs广度优先搜索)
+/// 迷宫出口(BFS广度优先搜索)
 // maze[i][j] 要么是 '.' ，要么是 '+'
-/*fn nearest_exit(maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     let dir = [-1, 0, 1, 0, -1]; // 方向
     let entrance = (entrance[0], entrance[1]); // 入口位置
-    let mut maze = maze;
-    let n = maze.len() as i32;
-    let m = maze[0].len() as i32;
+    let n = maze.len() as i32;    // 行数
+    let m = maze[0].len() as i32; // 列数
     // BinaryHeap(二叉堆)，主要用于处理那些需要优先队列特性的场景。
-    // 二叉堆通常用于实现优先队列，其中每个元素都有一个“优先级”，并且队列按照优先级（而不是元素插入的顺序）来对元素进行排序。
-    let mut fifo = std::collections::BinaryHeap::new();
-    // 将入口位置及其步数（0）推入 fifo 队列
-    fifo.push((0, entrance));
+    // 二叉堆通常用于实现优先队列,其中每个元素都有一个“优先级”,并且队列按照优先级(而不是元素插入的顺序)来对元素进行排序。
+    let mut bh = BinaryHeap::new();
+    // 将入口位置及其步数 0 推入 bh 队列
+    bh.push((0, entrance));
 
-    // 优先级由 cnt（即从入口开始到当前单元格的步数）决定，用作路径长度的计数器
-    while let Some((cnt, curr)) = fifo.pop() {
+    // 优先级由 cnt(即从入口开始到当前单元格的步数) 决定,用作路径长度的计数器counter
+    while let Some((cnt, curr)) = bh.pop() {
         // 尝试往4个方向移动
         for i in 0..4 {
             let x = curr.0 + dir[i];
             let y = curr.1 + dir[i + 1];
-            // 如果移动后的位置在迷宫范围外，且当前位置不是入口，则返回当前步数的相反数（因为步数是从0开始的，所以其相反数实际上是负的路径长度，表示无法找到出口）。
-            // 如果当前位置是入口，则继续处理其他方向。
+            // 如果移动后的位置在迷宫范围外,且当前位置不是入口,则返回当前步数的相反数(因为步数是从0开始的,所以其相反数实际上是负的路径长度,表示无法找到出口)。
+            // 如果当前位置是入口,则继续处理其他方向。
             if x < 0 || x >= n || y < 0 || y >= m {
                 if curr != entrance { return -cnt; } else { continue; }
             }
             let (xx, yy) = (x as usize, y as usize);
-            // 如果移动后的位置在迷宫范围内且是可通过的（即字符为 '.'），则将该位置推入队列，并将其步数减1（表示离入口更近了一步）。
-            // 同时，将已访问的单元格标记为 '+'，以避免重复访问
+            // 如果移动后的位置在迷宫范围内且是可通过的(即字符为 '.'),则将该位置推入队列,并将其步数减1(表示离入口更近了一步)。
+            // 同时将已访问的单元格标记为 '+',以避免重复访问
             if maze[xx][yy] == '.' {
-                fifo.push((cnt - 1, (x, y)));
+                bh.push((cnt - 1, (x, y)));
                 maze[xx][yy] = '+';
             }
         }
     }
 
     -1
-}*/
-fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+}
+
+// 解法二:适合迷宫规模较小的情况
+fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     let mut clones = VecDeque::from_iter([(entrance[0] as usize, entrance[1] as usize)]);
     maze[entrance[0] as usize][entrance[1] as usize] = 'x';
     let mut n_step = 0;
@@ -1137,36 +1137,32 @@ fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
 
     while let Some((i, j)) = clones.pop_front() {
         if i > 0 && maze[i - 1][j] == '.' {
-            if i == 1 || j == 0 || j == maze[i].len() - 1 {
-                return n_step + 1;
-            }
+            if i == 1 || j == 0 || j == maze[i].len() - 1 { return n_step + 1; }
+
             maze[i - 1][j] = 'x';
             clones.push_back((i - 1, j));
             n_next_clone += 1;
         }
 
         if i + 1 < maze.len() && maze[i + 1][j] == '.' {
-            if i + 1 == maze.len() - 1 || j == 0 || j == maze[i].len() - 1 {
-                return n_step + 1;
-            }
+            if i + 1 == maze.len() - 1 || j == 0 || j == maze[i].len() - 1 { return n_step + 1; }
+
             maze[i + 1][j] = 'x';
             clones.push_back((i + 1, j));
             n_next_clone += 1;
         }
 
         if j > 0 && maze[i][j - 1] == '.' {
-            if j - 1 == 0 || i == 0 || i == maze.len() - 1 {
-                return n_step + 1;
-            }
+            if j - 1 == 0 || i == 0 || i == maze.len() - 1 { return n_step + 1; }
+
             maze[i][j - 1] = 'x';
             clones.push_back((i, j - 1));
             n_next_clone += 1;
         }
 
         if j + 1 < maze[i].len() && maze[i][j + 1] == '.' {
-            if j + 1 == maze[i].len() - 1 || i == 0 || i == maze.len() - 1 {
-                return n_step + 1;
-            }
+            if j + 1 == maze[i].len() - 1 || i == 0 || i == maze.len() - 1 { return n_step + 1; }
+
             maze[i][j + 1] = 'x';
             clones.push_back((i, j + 1));
             n_next_clone += 1;
