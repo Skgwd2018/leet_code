@@ -10,10 +10,10 @@ use std::rc::Rc;
 pub struct RecentCounter {
     // VecDeque 与 Vec 的区别
     // 1.高效的两端操作:允许在队列的前端和后端进行高效的插入和删除操作。
-    // 即可以使用栈一样在队列的任一端进行push和pop操作，这种特性使其在处理需要频繁在两端进行操作的场景时非常高效。
-    // 2.支持FIFO和FILO操作
-    // 3.支持随机访问:虽然VecDeque支持随机访问，但其性能略低于vector。
-    // 因为vector的元素是连续存储的，而VecDeque的元素则不是完全连续的，这可能会导致随机访问时性能稍差
+    //   即可以使用栈一样在队列的任一端进行 push 和 pop 操作,这种特性使其在处理需要频繁在两端进行操作的场景时非常高效。
+    // 2.支持 FIFO 和 FILO 操作
+    // 3.支持随机访问:虽然VecDeque支持随机访问,但其性能略低于vector。
+    //   因为vector的元素是连续存储的,而VecDeque的元素则不是完全连续的,这可能会导致随机访问时性能稍差
     requests: VecDeque<i32>,
 }
 
@@ -64,13 +64,13 @@ impl ListNode {
         let mut curr = head; // 当前节点
         while let Some(mut node) = curr {
             // Option<T>::take 方法用于获取并消耗 Option<T> 中的值，
-            // Option 是 Some(T)，则返回 T 并将 Option 设置为 None; Option 已经是 None，则不执行任何操作并返回 None
+            // Option 是 Some(T),则返回 T 并将 Option 设置为 None; Option 已经是 None，则不执行任何操作并返回 None
             // let next_node = node.next.take(); // 取走当前节点的next指针的值并设设置为None，并保存原来的值在next_node中
             // node.next = prev;  // 将当前节点的next指针指向前一个节点
             // prev = Some(node); // 然后将当前节点放入前一个节点中
             // curr = next_node;  // 再将下一个节点放入当前节点
             // 作用同上，效率更高
-            curr = node.next.take(); // 取走当前节点的next指针的值并设置为None，并保存原来的值在curr中
+            curr = node.next.take(); // 取走当前节点的next指针的值并设置为None,并保存原来的值在curr中
             node.next = prev;        // 然后将前一个节点放入下一个节点中
             prev = Some(node);       // 再将取出的当前节点的值放入前一个节点中
         }
@@ -99,6 +99,7 @@ impl ListNode {
         }
         head*/
 
+        // 解法二:
         let (mut count, mut ptr) = (0, &head);
         // 遍历链表
         while ptr.is_some() {
@@ -125,11 +126,11 @@ impl ListNode {
     }
 
     /// 奇偶链表
-    // 给定单链表的头节点 head ，将所有索引为奇数的节点和索引为偶数的节点分别组合在一起，然后返回重新排序的列表。
-    // 第一个节点的索引被认为是 奇数 ， 第二个节点的索引为 偶数 ，以此类推。
+    // 给定单链表的头节点 head,将所有索引为奇数的节点和索引为偶数的节点分别组合在一起,然后返回重新排序的列表。
+    // 第一个节点的索引被认为是 奇数,第二个节点的索引为 偶数,以此类推。
     // 请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。
     // 输入: head = [2,1,3,5,6,4,7]
-    // 输出: [2,3,6,7,1,5,4]
+    // 输出:        [2,3,6,7,1,5,4]
     pub fn odd_even_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         if head.is_none() {
             return head;
@@ -140,13 +141,13 @@ impl ListNode {
         let mut even = None;
         let mut curr_even = &mut even;
         let mut is_even = true;
-        // 区分奇偶位，然后分别加入两个链表
+        // 区分奇偶位,然后分别加入两个链表
         while let Some(mut curr) = head {
             head = curr.next.take();
             if is_even {
-                // 通过as_mut()获取curr_even的可变引用，然后unwrap()这个Option，假设它一定是Some。
+                // 通过as_mut()获取curr_even的可变引用,然后unwrap()这个Option,假设它一定是Some。
                 // 接着设置当前curr_even指向的Option<Box<ListNode>>的next字段为Some(curr)。
-                // 即修改even链表，将当前的节点curr添加到even链表的末尾。
+                // 即修改even链表,将当前的节点curr添加到even链表的末尾。
                 // curr_even.as_mut().unwrap().next = Some(curr);
 
                 // 通过解引用curr_even来修改它指向的Option<Box<ListNode>>。将curr_even设置为Some(curr)，
@@ -175,12 +176,12 @@ impl ListNode {
             print!("{} ", node.val);
             // curr = node.next.as_ref().map(|x| &**x);
             // .as_ref() 用于获取值的引用, 返回 Option<&T> 类型，(得到的是对 Rc 内部数据的引用，而不是对 Rc 自身的引用),即是 &T
-            // .as_ref(): as_ref() 返回对 Box 内部数据的引用，对Option<Box<T>> 返回 Option<&T> 类型。(得到的是对 Box 内部数据的引用，而不是对 Box 自身的引用)
+            // .as_ref():返回对 Box 内部数据的引用，对Option<Box<T>> 返回 Option<&T> 类型。(得到的是对 Box 内部数据的引用，而不是对 Box 自身的引用)
             // 如果 Option 是 Some(box)，则返回 Some(&*box)（即 box 的解引用引用）;如果 Option 是 None，则返回 None。返回 &T 类型
             curr = node.next.as_deref(); //作用同上
-            // .as_deref() 用于获取原始类型的指针, 返回 Option<Option<*const T>> 类型，(得到的是对 Rc 自身的引用，而不是对 Rc 内部数据的引用),即是 &Rc<T>
-            // .as_deref():返回对 Box 本身的引用，是 Option<Box<T>> 的方法，它返回 Option<Option<*const T>>。(得到的是对 Box 自身的引用，而不是对 Box 内部数据的引用)
-            // 如果 Option<T> 是 Some(T)，则返回 Some(ptr)，其中 ptr 是 T 的原始指针；如果 Option<T> 是 None，则返回 None。返回 &Box<T> 类型
+            // .as_deref() 用于获取原始类型的指针,返回 Option<Option<*const T>> 类型，(得到的是对 Rc 自身的引用，而不是对 Rc 内部数据的引用),即是 &Rc<T>
+            // .as_deref():返回对 Box 自身的引用,是 Option<Box<T>> 的方法,它返回 Option<Option<*const T>>。(得到的是对 Box 自身的引用，而不是对 Box 内部数据的引用)
+            // 如果 Option<T> 是 Some(T)，则返回 Some(ptr)，其中 ptr 是 T 的原始指针;如果 Option<T> 是 None,则返回 None。返回 &Box<T> 类型
         }
         println!();
     }
@@ -193,7 +194,7 @@ impl ListNode {
 // Rc通过在内部维护一个引用计数来实现共享所有权。每当一个新的Rc引用被创建时，引用计数就会增加。
 // 当Rc引用离开作用域或被丢弃时，引用计数就会减少。当引用计数变为零时，Rc将自动释放其管理的数据。
 // let five = Rc::new(5);
-// let shared_five = Rc::clone(&five);  此时 five 和 shared_five 共享同一份数据
+// let shared_five = Rc::clone(&five);  // 此时 five 和 shared_five 共享同一份数据
 
 // RefCell 用于在运行时检查借用规则，并允许在某些情况下绕过Rust的静态借用检查。
 // 即是在存在不可变引用的情况下，RefCell允许你获取可变引用，从而可以在不破坏Rust的安全性和所有权规则的前提下，
@@ -232,12 +233,12 @@ impl TreeNode {
             Some(node) => {
                 // node.borrow().left.to_owned() 相比 node.borrow().left.clone() 效率更高
                 // node.borrow().left.clone() 会调用Option和Rc<RefCell<T>>的clone方法，
-                // node.borrow().left.to_owned()会调用Option的cloned方法，然后返回一个新的Option，
+                // node.borrow().left.to_owned()会调用Option的cloned方法,然后返回一个新的Option，
                 // 其中的Rc<RefCell<TreeNode>>也是通过克隆得到的。
-                // to_owned(): 这是一个Option<T>的方法，它用于将Option<T>中的值转换为其拥有的版本。
-                // 如果Option是Some(value)，那么to_owned()会返回该值的克隆；如果Option是None，则to_owned()会返回None。
-                // Rc<T>的clone方法实现的是引用计数加1的操作，这是一个快速的、O(1)复杂度的操作。
-                // 因此，无论是clone()还是to_owned()，都需要对Rc<RefCell<TreeNode>>进行克隆，性能上非常接近。
+                // to_owned():这是一个Option<T>的方法,它用于将Option<T>中的值转换为其拥有的版本。
+                // 如果Option是Some(value),那么to_owned()会返回该值的克隆;如果Option是None,则to_owned()会返回None。
+                // Rc<T>的clone方法实现的是引用计数加1的操作,这是一个快速的、O(1)复杂度的操作。
+                // 因此,无论是 clone() 还是 to_owned(),都需要对Rc<RefCell<TreeNode>>进行克隆,性能上非常接近。
                 1 + cmp::max(
                     Self::max_depth(node.borrow().left.to_owned()),
                     Self::max_depth(node.borrow().right.to_owned()),
@@ -248,10 +249,11 @@ impl TreeNode {
 
     /// 叶值序列相似的树(深度优先搜索问题)
     pub fn leaf_similar(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        // 函数内部定义的函数称为闭包（Closure）或局部函数（Local Function）。
+        // 函数内部定义的函数称为闭包(Closure)或局部函数(Local Function)。
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
-        // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数，并且可以访问其包含作用域中的变量。
-        // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数，它们可以像其他值一样传递。闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
+        // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数,并且可以访问其包含作用域中的变量。
+        // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数,它们可以像其他值一样传递。
+        //     闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
         /*fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
             if let Some(node) = node {
                 let left = node.borrow_mut().left.take();
@@ -275,8 +277,8 @@ impl TreeNode {
 
         values1 == values2
     }
-    // DFS是深度优先搜索（Depth first search），是用递归进行搜索，尽可能深的搜索每一个节点。
-    // 可以理解为不撞墙不回头，主要用于解决一些树的遍历和图的遍历问题。由于是通过递归实现，时间复杂度较高，一般用于数据较小的情况。
+    // DFS是深度优先搜索(depth first search),是用递归进行搜索,尽可能深的搜索每一个节点。
+    // 可以理解为不撞墙不回头,主要用于解决一些树的遍历和图的遍历问题。由于是通过递归实现,时间复杂度较高,一般用于数据较小的情况。
     fn dfs(root: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<Rc<RefCell<TreeNode>>>) {
         if let Some(node) = root {
             let left = &node.borrow().left;
@@ -290,7 +292,7 @@ impl TreeNode {
         }
     }
 
-    /// 二叉搜索树（BST）中搜索一个特定的值
+    /// 二叉搜索树(BST)中搜索一个特定的值
     // BST的特性，即对于树中的每个节点，其左子节点的值都小于该节点的值，而右子节点的值都大于该节点的值。
     // 根据这个特性，可以从根节点开始，如果当前节点的值等于目标值，则返回当前节点;
     // 如果目标值小于当前节点的值，则递归地在左子树中搜索;如果目标值大于当前节点的值，则递归地在右子树中搜索。
@@ -308,7 +310,7 @@ impl TreeNode {
             }
         }*/
 
-        // 循环搜索,相比上面内存消耗更小，执行效率更高一点
+        // 循环搜索,相比上面内存消耗更小,执行效率更高一点
         let mut node = root;
         while let Some(curr_node) = node {
             let cur_val = curr_node.borrow().val;
@@ -322,14 +324,15 @@ impl TreeNode {
     }
 
     /// 删除二叉搜索树中的节点
-    // 给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。
-    // 返回二叉搜索树（有可能被更新）的根节点的引用。
+    // 给定一个二叉搜索树的根节点 root 和一个值 key,删除二叉搜索树中的 key 对应的节点,并保证二叉搜索树的性质不变。
+    // 返回二叉搜索树(有可能被更新)的根节点的引用。
     pub fn delete_node(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
+        // 局部函数(Local Function)
         fn dfs5(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
             // if root.is_none() { return None; }
             root.as_ref()?; // 同上
             let mut node = root.as_ref().unwrap().borrow_mut();
-            // 递归查找与key值相同的节点，同时设置左、右节点等于返回的子树
+            // 递归查找与key值相同的节点,同时设置左、右节点等于返回的子树
             match node.val.cmp(&key) {
                 Ordering::Greater => node.left = dfs5(node.left.take(), key),
                 Ordering::Less => node.right = dfs5(node.right.take(), key),
@@ -349,12 +352,14 @@ impl TreeNode {
                                 min_code = t.unwrap();
                             }
                             min_code.borrow_mut().left = node.left.take();
+
                             node.right.take()
                         }
                         _ => None,
                     };
                 }
             };
+
             root.clone()
         }
 
@@ -362,10 +367,10 @@ impl TreeNode {
     }
 
     /// 统计二叉树中好节点的数目(深度优先搜索问题)
-    // 即从根节点开始遍历到某个节点，并且始终保持当前遍历到的节点的值是非递减的，那么该节点就是一个好节点。
-    // 根节点一定是好节点，例如：3 -> 4 -> 5, 3个节点都是好节点，3 -> 1 -> 3, 则3和3都是好节点，1不是;
+    // 即从根节点开始遍历到某个节点,并且始终保持当前遍历到的节点的值是非递减的,那么该节点就是一个好节点。
+    // 根节点一定是好节点,例：3 -> 4 -> 5, 3个节点都是好节点，3 -> 1 -> 3, 则3和3都是好节点，1不是;
     pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-        // i32::MIN 是 i32 类型的一个常量，表示 i32 类型可以表示的最小值,用来确保在遍历树的根节点之前，没有节点的值会大于这个初始值
+        // i32::MIN 是 i32 类型的一个常量,表示 i32 类型可以表示的最小值,用来确保在遍历树的根节点之前,没有节点的值会大于这个初始值
         Self::dfs2(root, i32::MIN)
     }
     fn dfs2(node: Option<Rc<RefCell<TreeNode>>>, max_val: i32) -> i32 {
@@ -383,11 +388,11 @@ impl TreeNode {
     }
 
     /// 二叉树路径总和Ⅲ(深度优先搜索问题,回溯操作)
-    // 给定一个二叉树的根节点 root ，和一个整数 targetSum ，求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
-    // 路径 不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+    // 给定一个二叉树的根节点 root,和一个整数 targetSum,求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
+    // 路径 不需要从根节点开始,也不需要在叶子节点结束,但是路径方向必须是向下的(只能从父节点到子节点)。
     pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> i32 {
         let mut prefix_sum: HashMap<i64, i32> = HashMap::new();
-        // 由于可以选择完整的路径，因此要把0预先插入
+        // 由于可以选择完整的路径,因此要把0预先插入
         prefix_sum.insert(0, 1);
         match root {
             None => 0,
@@ -402,7 +407,7 @@ impl TreeNode {
             count += val;
         }
 
-        // .or_insert() 方法返回这个 key 的 value 的一个可变引用（&mut V）,就是将该key对应的value +1
+        // .or_insert() 方法返回这个 key 的 value 的一个可变引用(&mut V),就是将该key对应的value +1
         // 当前前缀和计数+1
         *prefix_sum.entry(curr_sum).or_insert(0) += 1;
         // 继续向下搜索
@@ -412,8 +417,8 @@ impl TreeNode {
         if let Some(right) = node.borrow().right.clone() {
             count += Self::dfs3(right, curr_sum, target_sum, prefix_sum);
         }
-        // 回溯作用，即在处理完当前节点后，需要将curr_sum对应的值(路径数量)减一，以反映已经离开了这个节点，不再考虑从它开始的路径。
-        // 这是一个常见的技巧，用于在深度优先搜索中正确地更新状态。
+        // 回溯作用,即在处理完当前节点后,需要将curr_sum对应的值(路径数量)减一,以反映已经离开了这个节点,不再考虑从它开始的路径。
+        // 常见的技巧，用于在深度优先搜索中正确地更新状态。
         *prefix_sum.entry(curr_sum).or_insert(0) -= 1;
 
         count
@@ -439,7 +444,7 @@ impl TreeNode {
         if root.is_none() { return vec![]; }
         let mut result = Vec::with_capacity(8);
         dfs4(&root.unwrap().borrow(), &mut result, 1);
-        result*/
+        result */
 
         // 广度优先搜索
         let mut result = vec![];
@@ -460,19 +465,19 @@ impl TreeNode {
                 dequeue.push_back((node.right.clone(), depth + 1));
             }
         }
-        // 对于每一层，只保留最右侧的节点值，因为后面的节点会覆盖前面的节点值。当遍历完成时，result 向量将包含从右侧可见的所有节点值。
+        // 对于每一层,只保留最右侧的节点值,因为后面的节点会覆盖前面的节点值.当遍历完成时,result 向量将包含从右侧可见的所有节点值。
         result
     }
 
     /// 最大层内元素和(广度优先搜索)
-    // 给你一个二叉树的根节点 root。设根节点位于二叉树的第 1 层，而根节点的子节点位于第 2 层，依此类推。
-    // 请返回层内元素之和 最大 的那几层（可能只有一层）的层号，并返回其中 最小 的那个。
+    // 给你一个二叉树的根节点 root。设根节点位于二叉树的第 1 层,而根节点的子节点位于第 2 层,依此类推。
+    // 请返回层内元素之和 最大 的那几层(可能只有一层)的层号，并返回其中 最小 的那个。
     pub fn max_level_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         if root.is_none() { return 0; }
-        // result: 用于存储最大层级和对应的层级。
-        // curr_sum: 用于计算当前层级的和。
-        // curr_level: 用于记录当前处理的层级。
-        // maximum: 用于记录当前已知的最大层级和。
+        // result:用于存储最大层级和对应的层级。
+        // curr_sum:用于计算当前层级的和。
+        // curr_level:用于记录当前处理的层级。
+        // maximum:用于记录当前已知的最大层级和。
         let (mut result, mut curr_sum, mut curr_level, mut maximum) = (0, 0, 1, i32::MIN);
         // queue 和 next: 这两个队列用于实现广度优先搜索（BFS）。queue 用于存储当前层级的节点，而 next 用于存储下一层级的节点。
         // 使用两个队列 queue 和 next 来交替存储当前层级和下一层级的节点。queue 初始时只包含根节点。
@@ -489,9 +494,9 @@ impl TreeNode {
             }
 
             // 层级切换操作
-            // 当 queue 为空时，表示当前层级的所有节点已经处理完毕，需要切换到下一层级
+            // 当 queue 为空时,表示当前层级的所有节点已经处理完毕,需要切换到下一层级
             if queue.is_empty() {
-                // 交换 queue 和 next，使得 queue 指向下一层级的节点，而 next 清空准备存储下一批节点
+                // 交换 queue 和 next,使得 queue 指向下一层级的节点,而 next 清空准备存储下一批节点
                 swap(&mut queue, &mut next);
                 if curr_sum > maximum {
                     maximum = curr_sum;
@@ -585,8 +590,8 @@ impl SmallestInfiniteSet {
 //-----------------------------------------------------
 
 /// 前缀树
-/// Trie（发音类似 "try"）或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。
-/// 这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+/// Trie(发音类似 "try")或者说 前缀树 是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。
+/// 这种数据结构有相当多的应用情景，例:自动补完和拼写检查。
 #[derive(Default)]
 pub struct Trie {
     is_end: bool,
@@ -603,21 +608,27 @@ pub struct Trie {
 
 impl Trie {
     /// 初始化前缀树对象
-    pub fn new() -> Self {
-        Self::default()
-    }
+    pub fn new() -> Self { Self::default() }
 
     /// 向前缀树中插入字符串 word
     pub fn insert(&mut self, word: String) {
-        /*let mut curr = self;
+        /* let mut curr = self;
         for i in word.bytes().map(|b| (b - b'a') as usize) {
-            curr = curr.child[i].get_or_insert_with(|| Default::default());
+            curr = curr.child[i].get_or_insert_with(Default::default);
         }
-        curr.is_end = true;*/
+        curr.is_end = true; */
 
-        word.into_bytes().into_iter().map(|b| (b - b'a') as usize)
+        // .bytes() 和 .as_bytes()
+        // 迭代方式:bytes() 返回一个迭代器，而 as_bytes() 返回一个字节切片。
+        // 用途:当你需要逐个处理字符串中的UTF-8字节时，可以使用 bytes()。
+        //     当你需要直接访问字符串的内部字节表示时(例如进行某种低级操作或检查)，可以使用 as_bytes()。
+        // 性能:as_bytes() 通常比 bytes() 快，因为它避免了迭代器的创建和逐个元素的生成。
+        //     但是，这种差异在大多数情况下可能并不显著，除非你正在处理大量数据或对性能有严格要求。
+        // 对于大多数实际场景种，使用引用(&b)或值(b)在这段代码中都不会产生明显的性能差异。特别是在处理像u8这样的小类型时。
+        // 只有在内存占用大的数据使用引用才会有性能提升
+        word.as_bytes().iter().map(|b| (b - b'a') as usize)
             .fold(self, |node, i| node.child[i].get_or_insert_with(Default::default))
-            .is_end = true
+            .is_end = true;
     }
 
     ///  如果字符串 word 在前缀树中,返回 true(即，在检索之前已经插入);否则返回 false
@@ -666,14 +677,13 @@ impl StockSpanner {
     }
 
     pub fn next(&mut self, price: i32) -> i32 {
-        while price >= self.stack.last().unwrap().1 {
-            self.stack.pop(); // 栈顶数据后面不会再用到了，因为 price 更大
-        }
+        // 栈顶数据后面不会再用到了,因为 price 更大
+        while price >= self.stack.last().unwrap().1 { self.stack.pop(); }
         self.curr_day += 1;
-        let answer = self.curr_day - self.stack.last().unwrap().0;
+        let result = self.curr_day - self.stack.last().unwrap().0;
         self.stack.push((self.curr_day, price));
 
-        answer
+        result
     }
 }
 //-----------------------------------------------------
