@@ -696,7 +696,7 @@ fn unique_occurrences(arr: Vec<i32>) -> bool {
     // all() 方法:用于检查迭代器中的所有元素是否都满足给定的条件.检查 count_map 中的每个出现次数(即值)是否都是唯一的。
     // 如果所有出现次数都成功插入到 occurrences 中,all() 方法将返回 true。
     // 如果有任何出现次数已经存在于 occurrences 中,all() 方法将立刻返回 false。
-    count_map.values().into_iter().all(|count| occurrences.insert(count))
+    count_map.values().all(|count| occurrences.insert(count))
 }
 //-----------------------------------------------------
 
