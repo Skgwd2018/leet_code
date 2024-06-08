@@ -15,7 +15,7 @@ fn main() {
     println!("------ 字符串的最大公因子(字符串,数学) ------");
     let str1 = String::from("ABABAB");
     let str2 = String::from("AB");
-    let result = gcd_of_strings(str1, str2);
+    let result = gcd_of_strings2(str1, str2);
     println!("gcd_of_strings: {result}"); // AB
 
     println!("------ 拥有最多糖果的孩子(数组) ------");
@@ -403,7 +403,6 @@ fn merge_alternately(word1: String, word2: String) -> String {
     let len1 = word1.chars().count();
     let len2 = word2.chars().count();
     let mut result = String::with_capacity(len1 + len2);
-
     // 使用zip()将两个等长的Vec组合成一个Vec,其中元素是一个元组,包含原来两个Vec中对应位置的元素。
     for (ch1, ch2) in word1.chars().zip(word2.chars()) {
         result.push(ch1);
@@ -422,17 +421,9 @@ fn merge_alternately(word1: String, word2: String) -> String {
 }
 //-----------------------------------------------------
 
-fn can_divide(s1: &str, s2: &str) -> bool {
-    // .chunks_exact(s2.len()) 将 s1 的字节切片分割成长度为 s2.len() 的块。
-    // 如果 s1 的长度不是 s2.len() 的整数倍,这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0，所以这里不会有问题。
-    // .all(|chunk| chunk == s2.as_bytes()) 对所有分割出的块执行检查每个块是否都与 s2 的字节切片相等。
-    // 如果所有块都相等,那么 s1 是由 s2 重复构成的,函数返回 true,否则返回 false。
-    s1.len() % s2.len() == 0 && s1.as_bytes().chunks_exact(s2.len()).all(|chunk| chunk == s2.as_bytes())
-}
-
 /// 字符串的最大公因子
 // 题目要求:字符串中的字符全是字母
-fn gcd_of_strings(str1: String, str2: String) -> String {
+fn _gcd_of_strings(str1: String, str2: String) -> String {
     let len1 = str1.len();
     let len2 = str2.len();
 
@@ -440,6 +431,13 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
     let gec_len = (1..=cmp::min(len1, len2)).rev()
         .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
 
+    fn can_divide(s1: &str, s2: &str) -> bool {
+        // .chunks_exact(s2.len()) 将 s1 的字节切片分割成长度为 s2.len() 的块。
+        // 如果 s1 的长度不是 s2.len() 的整数倍,这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0，所以这里不会有问题。
+        // .all(|chunk| chunk == s2.as_bytes()) 对所有分割出的块执行检查每个块是否都与 s2 的字节切片相等。
+        // 如果所有块都相等,那么 s1 是由 s2 重复构成的,函数返回 true,否则返回 false。
+        s1.len() % s2.len() == 0 && s1.as_bytes().chunks_exact(s2.len()).all(|chunk| chunk == s2.as_bytes())
+    }
     // let cd1 = can_divide(&str1, &str1[0..gec_len]);
     // let cd2 = can_divide(&str2, &str1[0..gec_len]);
     // println!("cd1: {cd1}, cd2: {cd2}");
@@ -448,6 +446,45 @@ fn gcd_of_strings(str1: String, str2: String) -> String {
     }
 
     "".to_string()
+}
+/// 字符串的最大公因子
+/// 解法二:使用欧几里得算法
+// 欧几里得算法即辗转相除法，指用于计算两个非负整数a，b的最大公约数。计算公式gcd(a,b) = gcd(b, a mod b)。
+// 两个整数的最大公约数等于其中较小的数和两数相除余数的最大公约数
+// 如果两个字符串交替相加后，值仍然相等，即str1 + str2 == str2 + str1时，就可以认为存在公因子字符串。
+// 当一定存在公因子时，最大公因子字符的长度一定就是两个字符串长度的最大公因数。
+// 公因子字符串也就是str1或str2的前缀下标。范围为:[0，最大公因数]
+fn gcd_of_strings2(str1: String, str2: String) -> String {
+    // let s1 = str1.clone() + &str2;  // 消耗内存低，运行稍快
+    // let s2 = str2.clone() + &str1;
+    let s1 = format!("{str1}{str2}"); // 消耗内存低，但是运行稍慢
+    let s2 = format!("{str2}{str1}");
+    if s1 != s2 {
+        return "".to_string();
+    }
+
+    fn get_gcd(a: usize, b: usize) -> usize {
+        if b == 0 {
+            a
+        } else {
+            get_gcd(b, a % b)
+        }
+    }
+    str1[0..get_gcd(str1.len(), str2.len())].to_string()
+
+    // 解法二:
+    /*if str1.len() < str2.len() {
+        return gcd_of_strings2(str2, str1);
+    }
+    if str2.is_empty() {
+        return str1;
+    }
+
+    return if str1.starts_with(&str2) {
+        gcd_of_strings2(str1[str2.len()..].to_string(), str2)
+    } else {
+        "".to_string()
+    };*/
 }
 //-----------------------------------------------------
 
