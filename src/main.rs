@@ -447,6 +447,7 @@ fn _gcd_of_strings(str1: String, str2: String) -> String {
 
     "".to_string()
 }
+
 /// 字符串的最大公因子
 /// 解法二:使用欧几里得算法
 // 欧几里得算法即辗转相除法，指用于计算两个非负整数a，b的最大公约数。计算公式gcd(a,b) = gcd(b, a mod b)。
@@ -470,6 +471,7 @@ fn gcd_of_strings2(str1: String, str2: String) -> String {
             get_gcd(b, a % b)
         }
     }
+
     str1[0..get_gcd(str1.len(), str2.len())].to_string()
 
     // 解法二:
@@ -490,23 +492,23 @@ fn gcd_of_strings2(str1: String, str2: String) -> String {
 
 // 通过遍历candies并比较每个孩子的糖果数量加上extra_candies之后是否大于或等于数组中的最大值。
 fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
-    let max_candies = *candies.iter().max().unwrap_or(&0);
+    let max_candies = *candies.iter().max().unwrap_or(&0) - extra_candies;
 
     // .iter():遍历向量中的每一个元素。迭代器是一个可以记住遍历的位置并在之后再次访问这些位置的对象。
     // .enumerate():这个方法附加在迭代器之后,它会改变迭代器产生的内容。
     // 原本迭代器只产生向量中的元素，但调用enumerate()后,迭代器现在产生的是元组(Tuple),
     // 每个元组包含两个元素:第一个是元素的索引(从0开始),第二个是元素的值。
     /*for (i, &candy) in candies.iter().enumerate() {
-        if candy + extra_candies >= *max_candies {
+        if candy >= *max_candies {
             result[i] = true;
         }
     }*/
 
-    // .map(|&candy| candy + extra_candies >= max_candies)
+    // .map(|&candy| candy >= max_candies)
     // 对迭代器中的每个元素(使用模式匹配|&candy|来借用每个candy的值,避免不必要的复制)应用一个函数。
     // 这个函数计算后会返回一个bool: true表示当前孩子的糖果加上额外的糖果后至少和最大的糖果数量一样多,false则表示不够。
     // .collect()方法调用,将map()步骤返回的迭代器中的所有布尔值收集到一个新的(Vec<bool>)中
-    candies.iter().map(|&candy| candy + extra_candies >= max_candies).collect()
+    candies.iter().map(|&candy| candy >= max_candies).collect()
 }
 //-----------------------------------------------------
 
@@ -589,7 +591,11 @@ fn move_zeroes(nums: &mut Vec<i32>) {
     for i in 0..nums.len() {
         if nums[i] != 0 {
             // 交换两个索引位置的元素
-            nums.swap(i, j);
+            // nums.swap(i, j);
+            nums[j] = nums[i];
+            if i != j {
+                nums[i] = 0;
+            }
 
             j += 1;
         }
@@ -661,12 +667,12 @@ fn largest_altitude(gain: Vec<i32>) -> i32 {
 // 如果数组有多个中心下标,应该返回 最靠近左边 的那一个。如果数组不存在中心下标,返回 -1 。
 fn pivot_index(nums: Vec<i32>) -> i32 {
     let mut sum: i32 = nums.iter().sum();
-    for (i, num) in nums.iter().enumerate() {
-        sum -= num;
+    for (i, v) in nums.iter().enumerate() {
+        sum -= v;
         if sum == 0 {
             return i as i32;
         }
-        sum -= num;
+        sum -= v;
     }
 
     -1
