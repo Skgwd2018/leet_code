@@ -173,6 +173,14 @@ fn main() {
     let result = reverse_words(s);
     println!("reverse_words: {result}"); // example good a
 
+    println!("----- 递增的三元子序列(贪心,数组) ------");
+    // 判断数组nums中是否存在长度为 3 的递增子序列。
+    // 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
+    // 三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 < nums[4] == 4 < nums[5] == 6,返回true
+    let nums = vec![2, 1, 5, 0, 4, 6];
+    let result = increasing_triplet(nums);
+    println!("increasing_triplet: {result}"); // true
+
     println!("------ 压缩字符串(字符串,双指针) ------");
     let mut chars = vec!['a', 'a', 'b', 'b', 'c', 'c', 'c'];
     // let mut chars = vec!['a'];
@@ -304,6 +312,17 @@ fn main() {
     let result = find_peak_element(nums);
     println!("find_peak_element: {result}"); // 7
 
+    println!("----- 爱吃香蕉的珂珂(数组,二分查找) ------");
+    // 这里有 n 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 h 小时后回来。
+    // 珂珂可以决定她吃香蕉的速度 k (单位:根/小时)。每个小时，她将会选择一堆香蕉，从中吃掉 k 根。
+    // 如果这堆香蕉少于 k 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。
+    // 珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。
+    // 返回她可以在 h 小时内吃掉所有香蕉的最小速度 k(k 为整数)。
+    let piles = vec![30, 11, 23, 4, 20];
+    let h = 6;
+    let result = min_eating_speed(piles, h);
+    println!("min_eating_speed: {result}"); // 23
+
     println!("----- 电话号码的字母组合(字符串,哈希表,回溯) ------");
     let digits = String::from("23");
     let result = letter_combinations(digits);
@@ -385,6 +404,7 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
 }
 
 /// 交替合并字符串
@@ -827,7 +847,7 @@ fn count_bits(n: i32) -> Vec<i32> {
 //-----------------------------------------------------
 
 // 题目：给你一个 非空 整数数组 nums,除了某个元素只出现一次以外,其余每个元素均出现两次。找出那个只出现了一次的元素。
-// 假设数组中重复的元素为x，只出现一次的元素为y。
+// 假设数组中重复的元素为x,只出现一次的元素为y。
 // 将数组中的所有元素进行异或运算,由于x出现了两次,所以x和x异或的结果为0,而y只出现了一次,所以最后的结果就是y。
 /// 异或（XOR）运算问题。异或运算有一个重要的性质:任何数和0异或都等于它本身,任何数和其自身异或都等于0。
 fn single_number(nums: Vec<i32>) -> i32 {
@@ -835,13 +855,14 @@ fn single_number(nums: Vec<i32>) -> i32 {
     nums.iter().for_each(|num| single ^= num);
     single*/
 
+    // 解法二:
     // reduce() 和 fold() 在功能上是相似的,但它们的初始值和参数的顺序是不同的。
     // 两者都可以用来累积一个值,通过对集合中的元素应用某种操作。
     // 对于 reduce() 方法,它接受一个二元操作函数,并将集合中的元素两两组合起来,直到只剩下一个元素。
     // reduce() 不需要初始值,因为它使用集合中的第一个元素作为初始值。
     // 注:reduce() 使用数组中的第一个元素作为初始值进行异或操作;如果数组为空,reduce 会返回一个 None,需要使用 unwrap() 来获取结果,这可能会导致运行时错误(如果数组为空)。
     // 在这种情况下,reduce运行更高效
-    // nums.into_iter().reduce(|a, b| a ^ b).unwrap()
+    // nums.into_iter().reduce(|x, y| x ^ y).unwrap()
 
     nums.iter().fold(0, |single, num| single ^ num)
 }
@@ -877,11 +898,29 @@ fn reverse_words(s: String) -> String {
 }
 //-----------------------------------------------------
 
+// 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
+fn increasing_triplet(nums: Vec<i32>) -> bool {
+    let (mut first, mut second) = (i32::MAX, i32::MAX);
+    for num in nums {
+        // 贪心算法(Greed Algorithm)
+        if num <= first {
+            first = num;
+        } else if num <= second {
+            second = num;
+        } else {
+            return true;
+        }
+    }
+
+    false
+}
+//-----------------------------------------------------
+
 // 题目要求:chars不为空
 /// 压缩字符串
 fn compress(chars: &mut Vec<char>) -> i32 {
     let n = chars.len();
-    if n == 1 { return 1; }
+    if n <= 1 { return n as i32; }
 
     let (mut idx, mut count) = (0, 1);
     for i in 1..n {
@@ -1211,7 +1250,7 @@ fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
 
 /// 数组中的第k个最大元素(例：k=1(即最大的元素))
 fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
-    // 要找的是第 k 大的元素，所以目标位置是排序后的数组长度减去 k
+    // 要找的是第 k 大的元素，即目标位置是排序后的数组长度减去 k
     let target_pos = nums.len() - k as usize;
     // select_nth_unstable() 从重新排序的切片中返回一个三元组：索引前的子切片的引用、索引处的元素的引用 和 索引后的子切片的引用。
     // 注:select_nth_unstable() 方法可能并不会保持原始数组的排序，它只是一个快速选择算法的实现，用于在未排序的数组中查找第 n 个最小元素。
@@ -1328,6 +1367,48 @@ fn find_peak_element(nums: Vec<i32>) -> i32 {
     // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等,则返回最后一个元素。如果迭代器为空,则返回None。
     // max_by_key(|(_, &v)| v) 元组的第一个元素（即索引），并返回元组的第二个元素（即值）的引用。
     // nums.iter().enumerate().max_by_key(|(_, &v)| v).unwrap().0 as i32
+}
+//-----------------------------------------------------
+
+fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
+    /*let check = |k: i32| -> bool {
+        let mut sum = piles.len() as i32;
+        for &p in &piles {
+            sum += (p - 1) / k;
+            if sum > h {
+                return false;
+            }
+        }
+        true
+    };
+
+    let mut left = 0;
+    let mut right = *piles.iter().max().unwrap();
+    while left + 1 < right {
+        let mid = left + (right - left) / 2;
+        if check(mid) {
+            right = mid;
+        } else {
+            left = mid;
+        }
+    }
+    right*/
+
+    // 解法二:
+    // let mut right = *piles.iter().max().unwrap(); 计算这个二分法的上界
+    let (mut left, mut right) = (1, 1000000000); // 假设一个二分法的上界
+    while left < right {
+        // 二分中间数
+        let mid = left + ((right - left) >> 1);
+        // p + mid - 1 是为了这个整数除法向上取整
+        let total: i32 = piles.iter().map(|p| (p + mid - 1) / mid).sum();
+        if total > h {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    left
 }
 //-----------------------------------------------------
 
