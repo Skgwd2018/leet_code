@@ -237,31 +237,45 @@ fn main() {
     let result = remove_stars(s);
     println!("remove_stars: {result}");
 
+    println!("----- 735. 小行星碰撞(数组,栈,模拟) ------");
+    // 整数数组 asteroids，表示在同一行的小行星。
+    // 对于数组中的每一个元素，其绝对值表示小行星的大小，正负表示小行星的移动方向（正表示向右移动，负表示向左移动）。每一颗小行星以相同的速度移动。
+    // 找出碰撞后剩下的所有小行星。
+    // 碰撞规则：两个小行星相互碰撞，较小的小行星会爆炸。如果两颗小行星大小相同，则两颗小行星都会爆炸。两颗移动方向相同的小行星，永远不会发生碰撞。
+    let asteroids = vec![10, 2, -5];
+    let result = asteroid_collision(asteroids);
+    println!("asteroid_collision: {result:?}");
+
     println!("------ 394. 字符串解码(栈,字符串,递归) ------");
     let s = "3[a12[c]]".to_string();  // accccccccccccaccccccccccccacccccccccccc
     // let s = "3[a]2[bc]".to_string(); // aaabcbc
     let result = decode_string(s);
     println!("decode_string: {result}"); // accccccccccccaccccccccccccacccccccccccc
 
-    println!("------ 删除链表的中间节点(链表,双指针) ------");
+    println!("----- 649. Dota2 参议院(贪心,队列,字符串) ------");
+    let senate = String::from("RDD");
+    let result = predict_party_victory(senate);
+    println!("predict_party_victory: {result}");
+
+    println!("------ 2095. 删除链表的中间节点(链表,双指针) ------");
     let node_head = ListNode::delete_middle(node_rev);
     match node_head.clone() {
         None => {}
         Some(node) => node.print_list(),
     } // 5 4 2 1
 
-    println!("----- 奇偶链表(链表) ------");
+    println!("----- 328. 奇偶链表(链表) ------");
     let odd_even_head = ListNode::odd_even_list(node_head);
     match odd_even_head {
         None => {}
         Some(node) => node.print_list(),
     } // 5 2 4 1
 
-    println!("----- 统计二叉树中好节点的数目(dfs,bfs) ------");
+    println!("----- 1448. 统计二叉树中好节点的数目(dfs,bfs) ------");
     let result = TreeNode::good_nodes(Some(root));
     println!("good_nodes: {result}"); // 4
 
-    println!("----- 二叉树路径总和Ⅲ(二叉树,dfs) ------");
+    println!("----- 437. 二叉树路径总和Ⅲ(二叉树,dfs) ------");
     let root = Some(Rc::new(RefCell::new(TreeNode {
         val: 10,
         left: Some(Rc::new(RefCell::new(TreeNode {
@@ -286,15 +300,24 @@ fn main() {
     let result = TreeNode::path_sum(root.clone(), 8);
     println!("path_sum: {result}"); // 3
 
-    println!("----- 二叉树的右视图(dfs,bfs) ------");
+    println!("----- 199. 二叉树的右视图(dfs,bfs) ------");
     let result = TreeNode::right_side_view(root.clone());
     println!("right_side_view: {result:?}"); // [10, -3, 11, 1]
 
-    println!("----- 最大层内元素和(dfs,bfs) ------");
+    println!("----- 1161. 最大层内元素和(dfs,bfs) ------");
     let result = TreeNode::max_level_sum(root);
     println!("max_level_sum: {result}"); // 3
 
-    println!("----- 重新规划路线(图,dfs,bfs) ------");
+    println!("----- 547. 省份数量(并查集,图) ------");
+    // 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
+    // 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
+    // 给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。
+    // 返回矩阵中 省份 的数量。
+    let is_connected = vec![vec![1, 1, 0], vec![1, 1, 0], vec![0, 0, 1]];
+    let result = find_circle_num2(is_connected);
+    println!("find_circle_num: {result}"); // 2
+
+    println!("----- 1466. 重新规划路线(图,dfs,bfs) ------");
     let connections = vec![vec![0, 1], vec![1, 3], vec![2, 3], vec![4, 0], vec![4, 5]];
     let result = min_reorder(6, connections);
     println!("min_reorder: {result}"); // 3
@@ -304,6 +327,15 @@ fn main() {
     let entrance = vec![1, 2];
     let result = nearest_exit(maze, entrance);
     println!("nearest_exit: {result}"); // 1
+
+    println!("----- 994. 腐烂的橘子(bfs,数组,矩阵) ------");
+    // 在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
+    // 0: 空单元格; 1: 新鲜橘子; 2: 腐烂的橘子。
+    // 每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+    // 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
+    let grid = vec![vec![2, 1, 1], vec![1, 1, 0], vec![0, 1, 1]];
+    let result = oranges_rotting(grid);
+    println!("oranges_rotting: {result}");
 
     println!("----- 数组中的第k个最大元素(数组,分治,快速选择,排序(堆/优先队列)) ------");
     let nums = vec![3, 2, 1, 5, 6, 4];
@@ -429,6 +461,8 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
+    println!("----- 452. 用最少数量的箭引爆气球(贪心,数组,排序) ------");
 }
 
 /// 交替合并字符串
@@ -1179,6 +1213,36 @@ fn remove_stars(s: String) -> String {
 }
 //-----------------------------------------------------
 
+// asteroids = [10,2,-5]
+// 输出：[10]
+// 解释：2 和 -5 发生碰撞后剩下 -5 。10 和 -5 发生碰撞后剩下 10 。
+fn asteroid_collision(mut asteroids: Vec<i32>) -> Vec<i32> {
+    // 数组原地模拟，使用index表示当前最右(也就是最先接受碰撞的节点索引)行星，只需要寻找可能发生碰撞的行星，即运动方向不同的,
+    // 遍历数组：
+    // 1.如果当前行星向右(尝试找下一个向右的行星)，或者index位于初始位置，或者当前行星和最右行星都向左，将index + 1，并将行星位置前移;
+    // 2.否则，判断最右行星与当前行星的负值大小(必须向左)，如果：
+    //   二者相等，则双双抵消，最右行星索引移动到前一个数组位置即可;
+    //   最右行星的正数值大，相当于碰撞无效，不需要替换行星，不做处理即可;
+    //   当前行星的负值较大，说明碰撞后留下的是当前行星，将当前索引和最右行星同时回拨;
+    // 最后返回原数组的[0,(index + 1).max(0)]范围内的元素。
+    let (mut index, mut i): (i32, usize) = (-1, 0);
+    while i < asteroids.len() {
+        if asteroids[i] > 0 || index == -1 || asteroids[index as usize] < 0 {
+            index += 1;
+            asteroids[index as usize] = asteroids[i];
+        } else if asteroids[index as usize] <= -asteroids[i] {
+            if asteroids[index as usize] < -asteroids[i] {
+                i -= 1;
+            }
+            index -= 1;
+        }
+        i += 1;
+    }
+
+    asteroids[0..(index + 1).max(0) as usize].to_vec()
+}
+//-----------------------------------------------------
+
 // 题目要求:原始数据不包含数字,所有的数字只表示重复的次数 k,例:不会出现像 3a 或 2[4] 的输入
 //         s 中所有整数的取值范围为 [1, 300]
 fn decode_string(s: String) -> String {
@@ -1220,6 +1284,114 @@ fn decode_string(s: String) -> String {
     }
 
     curr_str
+}
+//-----------------------------------------------------
+
+fn predict_party_victory(senate: String) -> String {
+    /*let mut radiant = VecDeque::new();
+    let mut dire = VecDeque::new();
+    for (i, ch) in senate.char_indices() {
+        match ch {
+            'R' => radiant.push_back(i),
+            _ => dire.push_back(i),
+        }
+    }
+    let n = senate.len();
+    loop {
+        match (radiant.pop_front(), dire.pop_front()) {
+            (Some(x), Some(y)) => match x < y {
+                true => radiant.push_back(x + n),
+                false => dire.push_back(y + n),
+            },
+            (Some(_), None) => return "Radiant".to_string(),
+            _ => return "Dire".to_string(),
+        }
+    }*/
+
+    // 解法二:上面的优化版
+    let mut rd = [VecDeque::new(), VecDeque::new()];
+    for (i, c) in senate.chars().enumerate() {
+        rd[(c == 'D') as usize].push_back(i);
+    }
+    let n = senate.len();
+    loop {
+        match (rd[0].pop_front(), rd[1].pop_front()) {
+            (Some(r), Some(d)) => rd[(r > d) as usize].push_back(if r > d { r } else { d } + n),
+            (Some(_r), None) => break "Radiant".to_string(),
+            (None, Some(_d)) => break "Dire".to_string(),
+            _ => ()
+        }
+    }
+}
+//-----------------------------------------------------
+
+fn _find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
+    let n = is_connected.len();
+    let p = &mut (0..n).collect();
+    fn find(x: usize, p: &mut Vec<usize>) -> usize {
+        if p[x] != x {
+            p[x] = find(p[x], p);
+        }
+        p[x]
+    }
+
+    // Union
+    let mut result = n;
+    for i in 0..n {
+        for j in i..n {
+            if is_connected[i][j] == 1 {
+                let (pi, pj) = (find(i, p), find(j, p));
+                if pi != pj {
+                    p[pj] = pi;
+                    result -= 1;
+                }
+            }
+        }
+    }
+
+    result as i32
+}
+
+// 解法二:上面的优化版
+fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
+    // 并查集（Disjoint-Set）是一种数据结构，主要用于管理一组元素的分组情况，并提供合并（Union）和查找（Find）两种基本操作。
+    // 这种数据结构主要用于解决连通性问题，例如判断元素是否在同一集合中，并在需要时合并两个集合。用于处理元素分组和连通性问题.
+
+    // Find
+    fn find(i: usize, par: &Vec<usize>) -> usize {
+        let mut i = i;
+        while par[i] != i {
+            i = par[i];
+        }
+        return i;
+    }
+
+    // Union
+    let n = is_connected.len();
+    let mut result = n;
+    let mut par = vec![0; n];
+    for i in 0..n { par[i] = i; }
+    let mut size = vec![1; n];
+    for i in 0..n {
+        for j in i..n {
+            if is_connected[i][j] == 1 {
+                let root1 = find(i, &par);
+                let root2 = find(j, &par);
+                if root1 != root2 {
+                    result -= 1;
+                    if size[root1] > size[root2] {
+                        par[root2] = root1;
+                        size[root1] += 1;
+                    } else {
+                        par[root1] = root2;
+                        size[root2] += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return result as i32;
 }
 //-----------------------------------------------------
 
@@ -1296,6 +1468,48 @@ fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
 
     -1
 }
+
+fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
+    let (m, n) = (grid.len(), grid[0].len());
+    let mut queue = VecDeque::new();
+    let mut cnt = 0;
+    // 遍历一遍整个网格，统计出新鲜橘子的数量，记为 cnt，并且将所有腐烂的橘子的坐标加入队列 queue 中。
+    for i in 0..m {
+        for j in 0..n {
+            if grid[i][j] == 1 {
+                cnt += 1;
+            } else if grid[i][j] == 2 {
+                queue.push_back(vec![i as i32, j as i32]);
+            }
+        }
+    }
+
+    // bfs 操作
+    let dirs: [i32; 5] = [-1, 0, 1, 0, -1]; // 4个方向
+    let mut result = 0;
+    // 每一轮(每分钟)搜索，将队列中的所有腐烂的橘子向四个方向腐烂新鲜橘子，直到队列为空或者新鲜橘子的数量为 0 为止。
+    while !queue.is_empty() && cnt > 0 {
+        let q_size = queue.len();
+        for _ in 0..q_size {
+            let p = queue.pop_front().unwrap();
+            for d in 0..4 {
+                let x = p[0] + dirs[d];
+                let y = p[1] + dirs[d + 1];
+                if x >= 0 && x < (m as i32) && y >= 0 && y < (n as i32) && grid[x as usize][y as usize] == 1 {
+                    grid[x as usize][y as usize] = 2;
+                    queue.push_back(vec![x, y]);
+                    cnt -= 1;
+                }
+            }
+        }
+        result += 1;
+    }
+
+    // 如果新鲜橘子的数量为 0，则返回当前的轮数，否则返回 −1
+    if cnt > 0 { return -1; }
+    result
+}
+//-----------------------------------------------------
 
 // 解法二:适合迷宫规模较小的情况
 fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
