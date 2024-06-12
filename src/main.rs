@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::cmp::{self, Reverse};
+use std::cmp::{self, Ordering, Reverse};
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
@@ -194,25 +194,50 @@ fn main() {
     let max_area = max_area(height);
     println!("Max water: {max_area}"); // 49
 
+    println!("----- K 和数对的最大数目(数组,哈希表,双指针，排序) ------");
+    // 整数数组 nums 和整数 k ,每一步操作中，需要从数组中选出和为 k 的两个整数，并将它们移出数组。返回你可以对数组执行的最大操作数。
+    let nums = vec![3, 1, 3, 4, 3];
+    let k = 6;
+    let result = max_operations(nums, k);
+    println!("max_operations: {result}"); // 1
+
     println!("------ 定长子串中元音的最大数目(字符串,滑动窗口) ------");
     let s = "abciiidef".to_string();
     let k = 3;
     let result = max_vowels(s, k);
     println!("max_vowels: {result}"); // 3
 
-    println!("------ 确定两个字符串是否接近(字符串,哈希表,计数) ------");
+    println!("----- 1004.最大连续1的个数 III(数组,双指针,前缀和,滑动窗口) ------");
+    // 二进制数组 nums 和整数 k，如果可以翻转最多 k 个 0 ，则返回 数组中连续 1 的最大个数 。
+    let nums = vec![0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1];
+    let k = 3;
+    let result = longest_ones(nums, k);
+    println!("longest_ones: {result}"); // 10
+
+    println!("------ 1657. 确定两个字符串是否接近(字符串,哈希表,计数) ------");
     let word1 = "cabbba".to_string();
     let word2 = "abbccc".to_string();
     let result = close_strings(word1, word2);
     println!("close_strings: {result}"); // true
 
-    println!("------ 从字符串中移除星号(栈,字符串) ------");
+    println!("----- 2352. 相等行列对(数组,哈希,矩阵,模拟) ------");
+    // 给你一个下标从 0 开始、大小为 n x n 的整数矩阵 grid ，返回满足 Ri 行和 Cj 列相等的行列对 (Ri, Cj) 的数目。
+    // 如果行和列以相同的顺序包含相同的元素（即相等的数组），则认为二者是相等的。
+    let grid = vec![vec![3, 1, 2, 2], vec![1, 4, 4, 5], vec![2, 4, 2, 2], vec![2, 4, 2, 2]];
+    // 存在三对相等行列对：
+    // - (第 0 行，第 0 列)：[3,1,2,2]
+    // - (第 2 行, 第 2 列)：[2,4,2,2]
+    // - (第 3 行, 第 2 列)：[2,4,2,2]
+    let result = equal_pairs(grid);
+    println!("equal_pairs: {result}"); // 3
+
+    println!("------ 2390. 从字符串中移除星号(栈,字符串) ------");
     let s = "leet**cod*e".to_string(); // lecoe
     // let s = String::from("erase*****"); // ""
     let result = remove_stars(s);
     println!("remove_stars: {result}");
 
-    println!("------ 字符串解码(栈,字符串,递归) ------");
+    println!("------ 394. 字符串解码(栈,字符串,递归) ------");
     let s = "3[a12[c]]".to_string();  // accccccccccccaccccccccccccacccccccccccc
     // let s = "3[a]2[bc]".to_string(); // aaabcbc
     let result = decode_string(s);
@@ -356,7 +381,7 @@ fn main() {
     let result = max_profit(prices, fee);
     println!("max_profit: {result}"); // 8
 
-    println!("----- 实现Trie(前缀树) ------");
+    println!("----- 208. 实现Trie(前缀树) ------");
     let mut trie = Trie::new();
     let word = "apple".to_string();
     trie.insert(word.clone());
@@ -368,24 +393,24 @@ fn main() {
     let ret_6 = trie.search(prefix);
     println!("ret_2: {ret_2}, ret_3: {ret_3}, ret_4: {ret_4}, ret_6: {ret_6}"); // true, false, true, true
 
-    println!("----- 搜索推荐系统(数组,字符串,字典树) ------");
+    println!("----- 1268. 搜索推荐系统(数组,字符串,字典树) ------");
     let products = vec!["mobile".to_string(), "mouse".to_string(), "moneypot".to_string(),
                         "monitor".to_string(), "mousepad".to_string()];
     let search_word = "mouse".to_string();
     let result = suggested_products(products, search_word);
     println!("suggested_products: {result:?}"); // [["mobile", "moneypot", "monitor"], ["mobile", "moneypot", "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse", "mousepad"]]
 
-    println!("----- 无重叠区间(数组,贪心,动态规划) ------");
+    println!("----- 435. 无重叠区间(数组,贪心,动态规划) ------");
     let intervals = vec![vec![1, 2], vec![2, 3], vec![3, 4], vec![1, 3]];
     let result = erase_overlap_intervals(intervals);
     println!("erase_overlap_intervals: {result}"); // 1
 
-    println!("----- 每日温度(单调栈) ------");
+    println!("----- 739. 每日温度(单调栈) ------");
     let temperatures = vec![73, 74, 75, 71, 69, 72, 76, 73];
     let result = daily_temperatures(temperatures);
     println!("daily_temperatures: {result:?}"); // [1, 1, 4, 2, 1, 1, 0, 0]
 
-    println!("----- 股票价格跨度(单调栈,数据流) ------");
+    println!("----- 901. 股票价格跨度(单调栈,数据流) ------");
     // 设计一个算法收集某些股票的每日报价，并返回该股票当日价格的 跨度。
     // 当日股票价格的 跨度 被定义为股票价格小于或等于今天价格的最大连续日数(从今天开始往回数，包括今天)。
     // 例:如果未来7天股票的价格是 [100,80,60,70,60,75,85]，那么股票跨度将是 [1,1,1,2,1,4,6]。
@@ -404,7 +429,6 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
-
 }
 
 /// 交替合并字符串
@@ -974,6 +998,42 @@ fn max_area(height: Vec<i32>) -> i32 {
 }
 //-----------------------------------------------------
 
+// nums = [3,1,3,4,3], k = 6
+fn max_operations(mut nums: Vec<i32>, k: i32) -> i32 {
+    //解法一:哈希表
+    /*let mut result = 0;
+    let mut cnt_map = HashMap::new();
+    for x in nums {
+        if let Some(c) = cnt_map.get_mut(&(k - x)) {
+            if *c > 0 {
+                *c -= 1;
+                result += 1;
+                continue;
+            }
+        }
+        *cnt_map.entry(x).or_insert(0) += 1;
+    }
+    result*/
+
+    // 解法二:排序,双指针
+    nums.sort_unstable();
+    let (mut left, mut right) = (0, nums.len() - 1);
+    let mut result = 0;
+    while left < right {
+        match (nums[left] + nums[right]).cmp(&k) {
+            Ordering::Less => left += 1,
+            Ordering::Greater => right -= 1,
+            Ordering::Equal => {
+                result += 1;
+                left += 1;
+                right -= 1;
+            }
+        }
+    }
+    result
+}
+//-----------------------------------------------------
+
 // 题目要求:s 由小写英文字母组成且非空
 fn max_vowels(s: String, k: i32) -> i32 {
     let k = k as usize;
@@ -1001,6 +1061,23 @@ fn max_vowels(s: String, k: i32) -> i32 {
     }
 
     max_vowels
+}
+//-----------------------------------------------------
+
+// nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], K = 3
+fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
+    // 双指针
+    let (mut result, mut left, mut cnt) = (0, 0, 0);
+    for (right, &num) in nums.iter().enumerate() {
+        cnt += 1 - num;
+        while cnt > k {
+            cnt -= 1 - nums[left];
+            left += 1;
+        }
+        result = result.max(right - left + 1);
+    }
+
+    result as i32
 }
 //-----------------------------------------------------
 
@@ -1047,6 +1124,31 @@ fn close_strings(word1: String, word2: String) -> bool {
     word1_cnt.sort_unstable();
     word2_cnt.sort_unstable();
     word1_cnt == word2_cnt
+}
+//-----------------------------------------------------
+
+fn equal_pairs(grid: Vec<Vec<i32>>) -> i32 {
+    let (mut cnt, mut cache_map) = (0, HashMap::new());
+    // 遍历行,将其作为 key，行出现的次数为 value 存入 HashMap
+    grid.iter().for_each(|g| *cache_map.entry(g).or_insert(0) += 1);
+    // 遍历列,找到与之匹配的行，累加对应的计数
+    for i in 0..grid.len() {
+        let curr: Vec<i32> = (0..grid.len()).map(|j| grid[j][i]).collect();
+        cnt += cache_map.get(&curr).unwrap_or(&0);
+    }
+    cnt
+
+    // 解法二:
+    /*let n = grid.len();
+    let mut column_vec = vec![0; n];
+    let mut cnt = 0;
+    for i in 0..n {
+        for j in 0..n {
+            column_vec[j] = grid[j][i];
+        }
+        cnt += grid.iter().filter(|&x| x == &column_vec).count();
+    }
+    cnt as i32*/
 }
 //-----------------------------------------------------
 
