@@ -6,25 +6,25 @@ use std::rc::Rc;
 use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
 
 fn main() {
-    println!("------ 交替合并字符串(字符串,双指针) ------");
+    println!("------ 1768. 交替合并字符串(字符串,双指针) ------");
     let word1 = String::from("abcde");
     let word2 = String::from("xyz");
     let result = merge_alternately(word1, word2);
     println!("merge_alternately: {result}"); // axbyczde
 
-    println!("------ 字符串的最大公因子(字符串,数学) ------");
+    println!("------ 1071. 字符串的最大公因子(字符串,数学) ------");
     let str1 = String::from("ABABAB");
     let str2 = String::from("AB");
     let result = gcd_of_strings2(str1, str2);
     println!("gcd_of_strings: {result}"); // AB
 
-    println!("------ 拥有最多糖果的孩子(数组) ------");
+    println!("------ 1431. 拥有最多糖果的孩子(数组) ------");
     let candies = vec![2, 3, 5, 1, 3];
     let extra_candies = 3;
     let result = kids_with_candies(candies, extra_candies);
     println!("kids_with_candies: {:?}", result); // [true, true, true, false, true]
 
-    println!("------ 种花问题(数组,贪心) ------");
+    println!("------ 605. 种花问题(数组,贪心) ------");
     // let flowerbed = vec![1, 0, 0, 0, 0, 1];
     let flowerbed = vec![1, 0, 0, 0, 1, 0, 0];
     // let flowerbed = vec![0, 1, 0];
@@ -32,50 +32,50 @@ fn main() {
     let result = can_place_flowers(flowerbed, n);
     println!("can_place_flowers {n}: {}", result); // true
 
-    println!("------ 反转字符串中的元音字母(字符串,双指针) ------");
+    println!("------ 345. 反转字符串中的元音字母(字符串,双指针) ------");
     let s = "leetcode".to_string();
     // let s = "hello".to_string();
     let result = reverse_vowels(s);
     println!("reverse_vowels: {}", result); // leotcede
 
-    println!("------ 移动零(数组,双指针) ------");
+    println!("------ 283. 移动零(数组,双指针) ------");
     let mut nums = vec![0, 1, 0, 3, 12];
     // let mut nums = vec![4, 1, 5, 3, 12];
     move_zeroes(&mut nums); // [1, 3, 12, 0, 0]
 
-    println!("------ 判断子序列(字符串,双指针,动态规划) ------");
+    println!("------ 392. 判断子序列(字符串,双指针,动态规划) ------");
     let s = "ace";
     let t = "abcde";
     println!("Is '{}' a sub of '{}'? {}", s, t, is_subsequence(s.to_string(), t.to_string())); // true
 
-    println!("------ 子数组最大平均数(数组,滑动窗口) ------");
+    println!("------ 643. 子数组最大平均数Ⅰ (数组,滑动窗口) ------");
     let nums = vec![1, 12, -5, -6, 50, 3];
     let result = find_max_average(nums, 4);
     println!("find_max_average: {result}"); // 12.75
 
-    println!("------ 找到最高海拔(数组,前缀和) ------");
+    println!("------ 1732. 找到最高海拔(数组,前缀和) ------");
     let gain = vec![-5, 1, 5, 0, -7];
     // let gain = vec![-4, -3, -2, -1, 4, 3, 2];
     let result = largest_altitude(gain);
     println!("largest_altitude: {result}"); // 1
 
-    println!("------ 寻找数组的中心下标(数组,前缀和) ------");
+    println!("------ 724. 寻找数组的中心下标(数组,前缀和) ------");
     let nums = vec![1, 7, 3, 6, 5, 6];
     let result = pivot_index(nums);
     println!("pivot_index: {result}"); // 3
 
-    println!("------ 找出两数组的不同(数组,哈希表) ------");
+    println!("------ 2215. 找出两数组的不同(数组,哈希表) ------");
     let nums1 = vec![1, 2, 3, 3];
     let nums2 = vec![1, 2, 1, 2, 4];
     let result = find_difference(nums1, nums2);
     println!("find_difference: {result:?}"); // [[3], [4]]
 
-    println!("------ 独一无二的出现次数(数组,哈希表) ------");
+    println!("------ 1207. 独一无二的出现次数(数组,哈希表) ------");
     let arr = vec![1, 2, 2, 1, 1, 3];
     let result = unique_occurrences(arr);
     println!("unique_occurrences: {result}"); // true
 
-    println!("------ 最近的请求次数(头尾高效操作的队列,数据流) ------");
+    println!("------ 933. 最近的请求次数(头尾高效操作的队列,数据流) ------");
     let mut recent_counter = RecentCounter::new();
     let ret_1 = recent_counter.ping(1);
     println!("ping: {ret_1}");        // 1
@@ -86,7 +86,7 @@ fn main() {
     let ret_4 = recent_counter.ping(3002);
     println!("ping: {ret_4}");        // 3
 
-    println!("------ 反转链表(递归,链表) ------");
+    println!("------ 206. 反转链表(递归,链表) ------");
     let mut node1 = ListNode::new(1);
     let mut node2 = ListNode::new(2);
     let mut node3 = ListNode::new(3);
@@ -106,7 +106,7 @@ fn main() {
         }
     }
 
-    println!("------ 二叉树的最大深度(dfs,bfs) ------");
+    println!("------ 104. 二叉树的最大深度(dfs,bfs) ------");
     let root = Rc::new(RefCell::new(TreeNode::new(3)));
     root.borrow_mut().left = Some(Rc::new(RefCell::new(TreeNode::new(9))));
     root.borrow_mut().right = Some(Rc::new(RefCell::new(TreeNode::new(20))));
@@ -128,52 +128,52 @@ fn main() {
     let result = TreeNode::max_depth(Some(root.clone()));
     println!("max_depth: {result}"); // 3
 
-    println!("------ 叶子相似的树(二叉树,dfs) ------");
+    println!("------ 872. 叶子相似的树(二叉树,dfs) ------");
     let result = TreeNode::leaf_similar(Some(Rc::new(RefCell::new(rt))), Some(root.clone()));
     println!("leaf_similar: {result}"); // true
 
-    println!("------ 二叉搜索树(BST)中的搜索(二叉搜索树) ------");
+    println!("------ 700. 二叉搜索树(BST)中的搜索(二叉搜索树) ------");
     let val = 20;
     let result = TreeNode::search_bst(Some(root.clone()), val);
     println!("search_bst: {result:?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
 
-    println!("----- 删除二叉搜索树中的节点(二叉搜索树) ------");
+    println!("----- 450. 删除二叉搜索树中的节点(二叉搜索树) ------");
     let result = TreeNode::delete_node(Some(root.clone()), val);
     println!("delete_node: {result:?}");
 
-    println!("------ 猜数字大小(二分查找,交互) ------");
+    println!("------ 374. 猜数字大小(二分查找,交互) ------");
     let pick_num = guess_number(10);
     println!("guessNumber: {pick_num}"); // 7
 
-    println!("------ 第N个泰波那契数(记忆化搜索,数学,动态规划) ------");
+    println!("------ 1137. 第N个泰波那契数(记忆化搜索,数学,动态规划) ------");
     let n = 25;
     let result = tribonacci(n);
     println!("tribonacci({n}): {result}"); // 1389537
 
-    println!("------ 使用最小花费爬楼梯(数组,动态规划) ------");
+    println!("------ 746. 使用最小花费爬楼梯(数组,动态规划) ------");
     // let cost = vec![10, 15, 20]; // 15
     let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
     let result = min_cost_climbing_stairs(cost);
     println!("min_cost_climbing_stairs: {result}"); // 6
 
-    println!("------ 比特位计数(位运算,动态规划) ------");
+    println!("------ 338. 比特位计数(位运算,动态规划) ------");
     let n = 5;
     let result = count_bits(n);
     println!("count_bits({n}): {result:?}"); // [0, 1, 1, 2, 1, 2]
 
-    println!("------ 只出现一次的数字(位运算,数组) ------");
+    println!("------ 136. 只出现一次的数字(位运算,数组) ------");
     let nums = vec![4, 1, 2, 1, 2];
     let result = single_number(nums);
     println!("single_number: {result}"); // 4
 
     println!("\n-------------up---------------\n");
 
-    println!("------ 反转字符串中的单词(字符串,双指针) ------");
+    println!("------ 151. 反转字符串中的单词(字符串,双指针) ------");
     let s = "  a good   example ".to_string();
     let result = reverse_words(s);
     println!("reverse_words: {result}"); // example good a
 
-    println!("----- 递增的三元子序列(贪心,数组) ------");
+    println!("----- 334. 递增的三元子序列(贪心,数组) ------");
     // 判断数组nums中是否存在长度为 3 的递增子序列。
     // 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
     // 三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 < nums[4] == 4 < nums[5] == 6,返回true
@@ -181,27 +181,27 @@ fn main() {
     let result = increasing_triplet(nums);
     println!("increasing_triplet: {result}"); // true
 
-    println!("------ 压缩字符串(字符串,双指针) ------");
+    println!("------ 443. 压缩字符串(字符串,双指针) ------");
     let mut chars = vec!['a', 'a', 'b', 'b', 'c', 'c', 'c'];
     // let mut chars = vec!['a'];
     // let mut chars = vec!['a', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'];
     let result = compress(&mut chars);
     println!("compress: {result}"); // 6  ['a', '2', 'b', '2', 'c', '3']
 
-    println!("------ 盛最多水的容器(数组,双指针,贪心) ------");
+    println!("------ 11. 盛最多水的容器(数组,双指针,贪心) ------");
     let height = vec![1, 8, 6, 2, 5, 4, 8, 3, 7];
     // let height = vec![1, 1];
     let max_area = max_area(height);
     println!("Max water: {max_area}"); // 49
 
-    println!("----- K 和数对的最大数目(数组,哈希表,双指针，排序) ------");
+    println!("----- 1679. K和数对的最大数目(数组,哈希表,双指针，排序) ------");
     // 整数数组 nums 和整数 k ,每一步操作中，需要从数组中选出和为 k 的两个整数，并将它们移出数组。返回你可以对数组执行的最大操作数。
     let nums = vec![3, 1, 3, 4, 3];
     let k = 6;
     let result = max_operations(nums, k);
     println!("max_operations: {result}"); // 1
 
-    println!("------ 定长子串中元音的最大数目(字符串,滑动窗口) ------");
+    println!("------ 1456. 定长子串中元音的最大数目(字符串,滑动窗口) ------");
     let s = "abciiidef".to_string();
     let k = 3;
     let result = max_vowels(s, k);
@@ -322,7 +322,7 @@ fn main() {
     let result = min_reorder(6, connections);
     println!("min_reorder: {result}"); // 3
 
-    println!("----- 迷宫中离入口最近的出口(图,bfs) ------");
+    println!("----- 1926. 迷宫中离入口最近的出口(图,bfs) ------");
     let maze = vec![vec!['+', '+', '.', '+'], vec!['.', '.', '.', '+'], vec!['+', '+', '+', '.']];
     let entrance = vec![1, 2];
     let result = nearest_exit(maze, entrance);
@@ -337,19 +337,19 @@ fn main() {
     let result = oranges_rotting(grid);
     println!("oranges_rotting: {result}");
 
-    println!("----- 数组中的第k个最大元素(数组,分治,快速选择,排序(堆/优先队列)) ------");
+    println!("----- 215. 数组中的第k个最大元素(数组,分治,快速选择,排序(堆/优先队列)) ------");
     let nums = vec![3, 2, 1, 5, 6, 4];
     // let nums = vec![3, 2, 3, 1, 2, 4, 5, 5, 6];
     let result = find_kth_largest(nums, 2);
     println!("find_kth_largest: {result}"); // 5
 
-    println!("----- 无限集中的最小数字(堆/优先队列) ------");
+    println!("----- 2336. 无限集中的最小数字(堆/优先队列) ------");
     let mut obj = SmallestInfiniteSet::new();
     let ret_1 = obj.pop_smallest();
     obj.add_back(2);
     println!("pop_smallest: {ret_1}"); // 1
 
-    println!("----- 雇佣k位工人的总代价(数组,双指针) ------");
+    println!("----- 2462. 雇佣k位工人的总代价(数组,双指针) ------");
     let costs = vec![17, 12, 10, 2, 7, 20, 11, 2, 8];       // 11
     // let costs = vec![17, 12, 10, 2, 7, 20, 11, 2, 8, 28, 11, 28]; // 17
     let k = 3;
@@ -357,19 +357,19 @@ fn main() {
     let result = total_cost(costs, k, candidates);
     println!("total_cost: {result}"); // 11
 
-    println!("----- 咒语和药水的成功对数(数组,双指针,二分查找) ------");
+    println!("----- 2300. 咒语和药水的成功对数(数组,双指针,二分查找) ------");
     let spells = vec![5, 1, 3];
     let potions = vec![1, 2, 3, 4, 5];
     let success = 7;
     let result = successful_pairs(spells, potions, success);
     println!("successful_pairs: {result:?}"); // [4, 0, 3]
 
-    println!("----- 寻找峰值元素的索引(数组,二分查找) ------");
+    println!("----- 162. 寻找峰值元素的索引(数组,二分查找) ------");
     let nums = vec![1, 6, 7, 5, 6, 8, 8, 8];
     let result = find_peak_element(nums);
     println!("find_peak_element: {result}"); // 7
 
-    println!("----- 爱吃香蕉的珂珂(数组,二分查找) ------");
+    println!("----- 875. 爱吃香蕉的珂珂(数组,二分查找) ------");
     // 这里有 n 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 h 小时后回来。
     // 珂珂可以决定她吃香蕉的速度 k (单位:根/小时)。每个小时，她将会选择一堆香蕉，从中吃掉 k 根。
     // 如果这堆香蕉少于 k 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。
@@ -380,28 +380,28 @@ fn main() {
     let result = min_eating_speed(piles, h);
     println!("min_eating_speed: {result}"); // 23
 
-    println!("----- 电话号码的字母组合(字符串,哈希表,回溯) ------");
+    println!("----- 17. 电话号码的字母组合(字符串,哈希表,回溯) ------");
     let digits = String::from("23");
     let result = letter_combinations(digits);
     println!("letter_combinations: {result:?}"); // ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
 
-    println!("----- 组合总和Ⅲ(数组,回溯) ------");
+    println!("----- 216. 组合总和Ⅲ(数组,回溯) ------");
     let result = combination_sum3(3, 9);
     println!("combination_sum3: {result:?}"); // [[6, 2, 1], [5, 3, 1], [4, 3, 2]]
 
-    println!("----- 多米诺和托米诺平铺(动态规划) ------");
+    println!("----- 790. 多米诺和托米诺平铺(动态规划) ------");
     let result = num_tilings(3);
     println!("num_tilings: {result}"); // 5
 
-    println!("----- 不同路径(组合数学,动态规划) ------");
+    println!("----- 62. 不同路径(组合数学,动态规划) ------");
     let result = unique_paths(3, 7);
     println!("unique_paths: {result}"); // 28
 
-    println!("----- 最长公共子序列(字符串,动态规划) ------");
+    println!("----- 1143. 最长公共子序列(字符串,动态规划) ------");
     let result = longest_common_subsequence("abcde".to_string(), "ace".to_string());
     println!("longest_common_subsequence: {result}"); // 3
 
-    println!("----- 买卖股票的最佳时机含手续费(数组,贪心,动态规划) ------");
+    println!("----- 714. 买卖股票的最佳时机含手续费(数组,贪心,动态规划) ------");
     let prices = vec![1, 3, 2, 8, 4, 9];
     let fee = 2;
     // 解释：能够达到的最大利润:
@@ -437,6 +437,17 @@ fn main() {
     let result = erase_overlap_intervals(intervals);
     println!("erase_overlap_intervals: {result}"); // 1
 
+    println!("----- 452. 用最少数量的箭引爆气球(贪心,数组,排序) ------");
+    // 有许多球形气球贴在一堵用 XY 平面表示的墙面上。
+    // 墙面上的气球记录在整数数组 points ，其中points[i] = [Xstart, Xend] 表示水平直径在 Xstart 和 Xend之间的气球。你不知道气球的确切 y 坐标。
+    // 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。
+    // 在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 Xstart，Xend，且满足 Xstart ≤ X ≤ Xend，则该气球会被 引爆 。
+    // 可以射出的弓箭的数量 没有限制 。弓箭一旦被射出之后，可以无限地前进。
+    // 数组 points ,返回引爆所有气球所必须射出的 最小 弓箭数。
+    let points = vec![vec![10, 16], vec![2, 8], vec![1, 6], vec![7, 12]];
+    let result = find_min_arrow_shots(points);
+    println!("find_min_arrow_shots: {result}"); // 2
+
     println!("----- 739. 每日温度(单调栈) ------");
     let temperatures = vec![73, 74, 75, 71, 69, 72, 76, 73];
     let result = daily_temperatures(temperatures);
@@ -461,8 +472,6 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
-
-    println!("----- 452. 用最少数量的箭引爆气球(贪心,数组,排序) ------");
 }
 
 /// 交替合并字符串
@@ -844,9 +853,9 @@ fn guess_number(n: i32) -> i32 {
 fn guess(num: i32) -> i32 {
     // 这里应该是调用实际的猜数字接口的逻辑,但在这只是模拟一下,假设选中的数字是某个固定的值,比如7
     match num.cmp(&7) {
-        cmp::Ordering::Equal => 0,
-        cmp::Ordering::Greater => -1,
-        cmp::Ordering::Less => 1,
+        Ordering::Equal => 0,
+        Ordering::Greater => -1,
+        Ordering::Less => 1,
     }
 }
 //-----------------------------------------------------
@@ -1358,23 +1367,24 @@ fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
     // 这种数据结构主要用于解决连通性问题，例如判断元素是否在同一集合中，并在需要时合并两个集合。用于处理元素分组和连通性问题.
 
     // Find
-    fn find(i: usize, par: &Vec<usize>) -> usize {
+    fn find(i: usize, par: &[usize]) -> usize {
         let mut i = i;
         while par[i] != i {
             i = par[i];
         }
-        return i;
+        i
     }
 
     // Union
     let n = is_connected.len();
     let mut result = n;
     let mut par = vec![0; n];
-    for i in 0..n { par[i] = i; }
+    for (i, p) in par.iter_mut().enumerate() { *p = i; }
     let mut size = vec![1; n];
-    for i in 0..n {
-        for j in i..n {
-            if is_connected[i][j] == 1 {
+    // 使用enumerate()的操作相比上面的is_connected[i][j]操作方式运行效率更高
+    for (i, item) in is_connected.into_iter().enumerate() {
+        for (j, ic) in item.iter().enumerate().skip(i) {
+            if *ic == 1 {
                 let root1 = find(i, &par);
                 let root2 = find(j, &par);
                 if root1 != root2 {
@@ -1391,7 +1401,7 @@ fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
         }
     }
 
-    return result as i32;
+    result as i32
 }
 //-----------------------------------------------------
 
@@ -1474,11 +1484,12 @@ fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
     let mut queue = VecDeque::new();
     let mut cnt = 0;
     // 遍历一遍整个网格，统计出新鲜橘子的数量，记为 cnt，并且将所有腐烂的橘子的坐标加入队列 queue 中。
-    for i in 0..m {
-        for j in 0..n {
-            if grid[i][j] == 1 {
+    // 相比使用grid[i][j]的操作方式执行效率更高，内存消耗更低
+    for (i, item) in grid.iter().enumerate() {
+        for (j, g) in item.iter().enumerate() {
+            if *g == 1 {
                 cnt += 1;
-            } else if grid[i][j] == 2 {
+            } else if *g == 2 {
                 queue.push_back(vec![i as i32, j as i32]);
             }
         }
@@ -1962,6 +1973,37 @@ fn erase_overlap_intervals(mut intervals: Vec<Vec<i32>>) -> i32 {
     }
 
     count
+}
+//-----------------------------------------------------
+
+// 输入：points = [[10,16],[2,8],[1,6],[7,12]]
+// 输出：2
+// 解释：气球可以用2支箭来爆破:
+// -在x = 6处射出箭，击破气球[2,8]和[1,6]。
+// -在x = 11处发射箭，击破气球[10,16]和[7,12]。
+fn find_min_arrow_shots(mut points: Vec<Vec<i32>>) -> i32 {
+    // 解法一:直接将二维数组按照末尾的数字进行排序，然后比较 区间 是否有重叠部分。
+    /*points.sort_unstable_by_key(|p| p[1]);
+    points.iter().skip(1).fold((1, points[0][1]), |(cnt, end), x| {
+        if x[0] > end {
+            (cnt + 1, x[1])
+        } else {
+            (cnt, end)
+        }
+    }).0*/
+
+    // 解法二:优化版
+    points.sort_unstable_by_key(|p| p[1]);
+    let mut cnt = 1;
+    let mut p_end = points[0][1];
+    for x in points.into_iter().skip(1) {
+        let (start, end) = (x[0], x[1]);
+        if start > p_end {
+            cnt += 1;
+            p_end = end;
+        }
+    }
+    cnt
 }
 //-----------------------------------------------------
 
