@@ -484,24 +484,24 @@ fn merge_alternately(word1: String, word2: String) -> String {
     // word.len()的执行效率非常高,因为它只需要读取字符串的内部长度字段,不需要遍历整个字符串。
     //
     // word.chars().count():这个方法首先将字符串转换为一个字符迭代器,然后计算迭代器的长度。
-    // 即是它需要遍历整个字符串来计算字符的数量。因此,它的执行效率通常比len()低,特别是当字符串很长时。
-    // 如果需要知道字符串中字符的实际数量,无论它们是否由多少个字节表示,那么word.chars().count()才是正确的方法,尽管它的执行效率相对较低。
+    // 即是它需要遍历整个字符串来计算字符的数量。因此,它的执行效率通常比 len() 低,特别是当字符串很长时。
+    // 当需要知道字符串中字符的实际数量,无论它们是否由多少个字节表示,则 word.chars().count() 才是正确的做法。
 
     let len1 = word1.chars().count();
     let len2 = word2.chars().count();
     let mut result = String::with_capacity(len1 + len2);
     // 使用zip()将两个等长的Vec组合成一个Vec,其中元素是一个元组,包含原来两个Vec中对应位置的元素。
-    for (ch1, ch2) in word1.chars().zip(word2.chars()) {
-        result.push(ch1);
-        result.push(ch2);
+    for (c1, c2) in word1.chars().zip(word2.chars()) {
+        result.push(c1);
+        result.push(c2);
     }
 
     // .iter().skip(n):从迭代器中跳过前 n 个元素
-    for ch in word1.chars().skip(len2) {
-        result.push(ch);
+    for c in word1.chars().skip(len2) {
+        result.push(c);
     }
-    for ch in word2.chars().skip(len1) {
-        result.push(ch);
+    for c in word2.chars().skip(len1) {
+        result.push(c);
     }
 
     result
@@ -543,9 +543,9 @@ fn _gcd_of_strings(str1: String, str2: String) -> String {
 // 当一定存在公因子时，最大公因子字符的长度一定就是两个字符串长度的最大公因数。
 // 公因子字符串也就是str1或str2的前缀下标。范围为:[0，最大公因数]
 fn gcd_of_strings2(str1: String, str2: String) -> String {
-    // let s1 = str1.clone() + &str2;  // 消耗内存低，运行稍快
+    // let s1 = str1.clone() + &str2;  // 消耗内存稍高，运行稍快
     // let s2 = str2.clone() + &str1;
-    let s1 = format!("{str1}{str2}"); // 消耗内存低，但是运行稍慢
+    let s1 = format!("{str1}{str2}"); // 消耗内存稍低，但是运行稍慢
     let s2 = format!("{str2}{str1}");
     if s1 != s2 {
         return "".to_string();
@@ -595,17 +595,16 @@ fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
     // 对迭代器中的每个元素(使用模式匹配|&candy|来借用每个candy的值,避免不必要的复制)应用一个函数。
     // 这个函数计算后会返回一个bool: true表示当前孩子的糖果加上额外的糖果后至少和最大的糖果数量一样多,false则表示不够。
     // .collect()方法调用,将map()步骤返回的迭代器中的所有布尔值收集到一个新的(Vec<bool>)中
-    candies.iter().map(|&candy| candy >= max_candies).collect()
+    // candies.iter().map(|&candy| candy >= max_candies).collect()
+    candies.into_iter().map(|candy| candy >= max_candies).collect()
 }
 //-----------------------------------------------------
 
 // 题目要求:每朵花的旁边都不能种花，所以种花必须是间隔种1朵
-// n: 是否可以种的花数量
-fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
+// n:是否可以种的花数量
+fn can_place_flowers(flowerbed: Vec<i32>, mut n: i32) -> bool {
     let len = flowerbed.len();
-    let mut n = n;
     let mut i = 0;
-
     while i < len {
         // 检查头尾&相邻项的问题
         if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == len - 1 || flowerbed[i + 1] == 0) {
@@ -743,7 +742,7 @@ fn largest_altitude(gain: Vec<i32>) -> i32 {
     // fold() 方法接受一个初始值和一个闭包(或函数),该闭包定义了如何将集合中的每个元素与累积器(accumulator)的值结合起来。
     // 闭包有两个参数:第一个是累积器的当前值,第二个是集合中的当前元素。
     // let numbers = vec![1, 2, 3, 4, 5];
-    // let sum = numbers.iter().fold(0, |accumulator, &number| accumulator + number); // 15
+    // let sum = numbers.iter().fold(0, |accumulator, &num| accumulator + num); // 15
     gain.iter().fold((0, 0), |(highest, sum), g| (highest.max(sum + g), sum + g)).0
 }
 //-----------------------------------------------------
@@ -780,19 +779,19 @@ fn find_difference(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<Vec<i32>> {
     // set1.difference(&set2).map(|&x| x).collect(); // 这种方式会更高效
     // set1.difference(&set2).cloned().collect();    // 作用同上
     // .cloned() 是一个适配器,它会对迭代器中的每个元素调用 clone() 方法。
-    // 使用 map() 方法来克隆每个元素。map() 方法接受一个闭包,该闭包对迭代器中的每个元素进行转换。
+    // 使用 .map() 方法来克隆每个元素。.map() 方法接受一个闭包,该闭包对迭代器中的每个元素进行转换。
     // 在这里，闭包 |&x| x 实际上并没有改变元素，因为它只是借用并返回了元素本身。
     // 因此，这里的 map 操作实际上并没有做额外的工作,只是简单地返回了元素的引用
     // vec![set1.difference(&set2).cloned().collect(), set2.difference(&set1).map(|&x| x).collect()]
 
     // .copied() 是一个用于复制迭代器中原始元素值的适配器。.copied()的作用和上面的.map(|&x| x)是一样的
-    // 它通常用于原始元素是 Copy trait 的实现者的情况,这意味着这些元素可以通过简单的位复制来复制,而不是通过调用 clone 方法。
-    // 这通常比 clone() 克隆更高效，因为位复制通常比调用 clone 方法更快。
+    // 它通常用于原始元素是 Copy trait 的实现者的情况,这意味着这些元素可以通过简单的位复制来复制,而不是通过调用 clone() 方法。
+    // 这通常比 clone() 克隆更高效，因为位复制通常比调用 clone() 方法更快。
     // .cloned() 用于克隆实现了 Clone trait 的元素。
     // .copied() 用于复制实现了 Copy trait 的元素,这通常比克隆更高效。
     // 在选择使用哪个适配器时:
     // 如果元素是 Copy 的,使用 .copied() 通常是更好的选择。
-    // 如果元素不是 Copy 的,但实现了 Clone,那应该使用 .cloned()。
+    // 如果元素不是 Copy 的,但实现了 Clone trait,那应该使用 .cloned()。
     vec![set1.difference(&set2).copied().collect(), set2.difference(&set1).copied().collect()]
 }
 //-----------------------------------------------------
@@ -814,6 +813,7 @@ fn unique_occurrences(arr: Vec<i32>) -> bool {
     // .into_iter() 方法将 arr 转换为一个拥有权的迭代器，即它消耗了 arr，并且 arr 在迭代之后不再可用。
     // 如果你在迭代之后仍然需要访问或使用 arr，那么显然应该选择 .iter()，因为 into_iter() 会消耗 arr。
     // 如果迭代之后不再需要 arr，那么理论上 .into_iter() 可能会稍微快一些，因为它避免了引用计数的操作(如果 arr 是一个引用类型的话)。在大多数实际场景中差异都是可以忽略不计。
+    // 但是当迭代的数据元素体积比较大时，.iter()的性能反而会更高
 
     // 存储出现次数的集合
     let mut occurrences = HashSet::new();
@@ -927,8 +927,9 @@ fn single_number(nums: Vec<i32>) -> i32 {
     // 两者都可以用来累积一个值,通过对集合中的元素应用某种操作。
     // 对于 reduce() 方法,它接受一个二元操作函数,并将集合中的元素两两组合起来,直到只剩下一个元素。
     // reduce() 不需要初始值,因为它使用集合中的第一个元素作为初始值。
-    // 注:reduce() 使用数组中的第一个元素作为初始值进行异或操作;如果数组为空,reduce 会返回一个 None,需要使用 unwrap() 来获取结果,这可能会导致运行时错误(如果数组为空)。
-    // 在这种情况下,reduce运行更高效
+    // 注:reduce() 使用数组中的第一个元素作为初始值进行异或操作;
+    // 如果数组为空, reduce() 会返回一个 None,需要使用 unwrap() 来获取结果,这可能会导致运行时错误(如果数组为空)。
+    // 在这种情况下, reduce() 运行更高效
     // nums.into_iter().reduce(|x, y| x ^ y).unwrap()
 
     nums.iter().fold(0, |single, num| single ^ num)
@@ -985,7 +986,7 @@ fn increasing_triplet(nums: Vec<i32>) -> bool {
 
 // 题目要求:chars不为空
 /// 压缩字符串
-fn compress(chars: &mut Vec<char>) -> i32 {
+fn compress(chars: &mut [char]) -> i32 {
     let n = chars.len();
     if n <= 1 { return n as i32; }
 
@@ -1026,7 +1027,9 @@ fn max_area(height: Vec<i32>) -> i32 {
     while left < right {
         // let curr_area = cmp::min(height[left], height[right]) * (right - left) as i32;
         // max_area = cmp::max(curr_area, max_area);
-        // 这两种操作方式通常会内联调用且性能非常接近，建议使用下面的方式(易读)
+        // let curr_area = i32::min(height[left], height[right]) * (right - left) as i32;
+        // max_area = i32::max(max_area, curr_area);
+        // 这两种操作方式通常会内联调用且性能非常接近，建议使用下面的方式(易写且易读)
         let curr_area = height[left].min(height[right]) * (right - left) as i32;
         max_area = max_area.max(curr_area);
 
@@ -1041,7 +1044,7 @@ fn max_area(height: Vec<i32>) -> i32 {
 }
 //-----------------------------------------------------
 
-// nums = [3,1,3,4,3], k = 6
+// nums = [3, 1, 3, 4, 3], k = 6
 fn max_operations(mut nums: Vec<i32>, k: i32) -> i32 {
     //解法一:哈希表
     /*let mut result = 0;
@@ -1107,7 +1110,7 @@ fn max_vowels(s: String, k: i32) -> i32 {
 }
 //-----------------------------------------------------
 
-// nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], K = 3
+// nums = [0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], K = 3
 fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
     // 双指针
     let (mut result, mut left, mut cnt) = (0, 0, 0);
@@ -1233,7 +1236,7 @@ fn asteroid_collision(mut asteroids: Vec<i32>) -> Vec<i32> {
     //   二者相等，则双双抵消，最右行星索引移动到前一个数组位置即可;
     //   最右行星的正数值大，相当于碰撞无效，不需要替换行星，不做处理即可;
     //   当前行星的负值较大，说明碰撞后留下的是当前行星，将当前索引和最右行星同时回拨;
-    // 最后返回原数组的[0,(index + 1).max(0)]范围内的元素。
+    // 最后返回原数组的[0, (index + 1).max(0)]范围内的元素。
     let (mut index, mut i): (i32, usize) = (-1, 0);
     while i < asteroids.len() {
         if asteroids[i] > 0 || index == -1 || asteroids[index as usize] < 0 {
@@ -1334,7 +1337,7 @@ fn predict_party_victory(senate: String) -> String {
 }
 //-----------------------------------------------------
 
-fn _find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
+/* fn _find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
     let n = is_connected.len();
     let p = &mut (0..n).collect();
     fn find(x: usize, p: &mut Vec<usize>) -> usize {
@@ -1359,13 +1362,13 @@ fn _find_circle_num(is_connected: Vec<Vec<i32>>) -> i32 {
     }
 
     result as i32
-}
+} */
+
+// 并查集（Disjoint-Set）是一种数据结构，主要用于管理一组元素的分组情况，并提供合并（Union）和查找（Find）两种基本操作。
+// 这种数据结构主要用于解决连通性问题，例如:判断元素是否在同一集合中，并在需要时合并两个集合。用于处理元素分组和连通性问题.
 
 // 解法二:上面的优化版
 fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
-    // 并查集（Disjoint-Set）是一种数据结构，主要用于管理一组元素的分组情况，并提供合并（Union）和查找（Find）两种基本操作。
-    // 这种数据结构主要用于解决连通性问题，例如判断元素是否在同一集合中，并在需要时合并两个集合。用于处理元素分组和连通性问题.
-
     // Find
     fn find(i: usize, par: &[usize]) -> usize {
         let mut i = i;
@@ -1380,6 +1383,17 @@ fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
     let mut result = n;
     let mut par = vec![0; n];
     for (i, p) in par.iter_mut().enumerate() { *p = i; }
+    // .iter_mut() 是用于可变引用集合(例: Vec<T> 或 &mut [T])的方法，它返回一个迭代器，该迭代器产生集合中每个元素的可变引用。
+    // .iter_mut() 用于在迭代过程中修改集合的元素，返回的是可变引用迭代器,之后vec集合可以继续使用。
+    // let mut vec = vec![1, 2, 3];
+    // for item in vec.iter_mut() { *item *= 2; }
+    // println!("{:?}", vec); // 输出 [2, 4, 6]
+    // .into_iter() 是一个消费性方法，用于将集合转换为所有权转移给迭代器的元素。这通常用于当你不再需要原始集合，并希望将其元素作为迭代器使用时。
+    // .into_iter() 用于将集合的所有权转移到迭代器中，通常用于当你不再需要原始集合时。调用.into_iter()后，原始vec集合将不再可用,因为其所有权已被转移到迭代器中。
+    // let iter = vec.into_iter();
+    // for item in iter { println!("{}", item); }
+    // vec 在这里不再可用，因为所有权已转移到 iter
+
     let mut size = vec![1; n];
     // 使用enumerate()的操作相比上面的is_connected[i][j]操作方式运行效率更高
     for (i, item) in is_connected.into_iter().enumerate() {
@@ -1479,49 +1493,6 @@ fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     -1
 }
 
-fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
-    let (m, n) = (grid.len(), grid[0].len());
-    let mut queue = VecDeque::new();
-    let mut cnt = 0;
-    // 遍历一遍整个网格，统计出新鲜橘子的数量，记为 cnt，并且将所有腐烂的橘子的坐标加入队列 queue 中。
-    // 相比使用grid[i][j]的操作方式执行效率更高，内存消耗更低
-    for (i, item) in grid.iter().enumerate() {
-        for (j, g) in item.iter().enumerate() {
-            if *g == 1 {
-                cnt += 1;
-            } else if *g == 2 {
-                queue.push_back(vec![i as i32, j as i32]);
-            }
-        }
-    }
-
-    // bfs 操作
-    let dirs: [i32; 5] = [-1, 0, 1, 0, -1]; // 4个方向
-    let mut result = 0;
-    // 每一轮(每分钟)搜索，将队列中的所有腐烂的橘子向四个方向腐烂新鲜橘子，直到队列为空或者新鲜橘子的数量为 0 为止。
-    while !queue.is_empty() && cnt > 0 {
-        let q_size = queue.len();
-        for _ in 0..q_size {
-            let p = queue.pop_front().unwrap();
-            for d in 0..4 {
-                let x = p[0] + dirs[d];
-                let y = p[1] + dirs[d + 1];
-                if x >= 0 && x < (m as i32) && y >= 0 && y < (n as i32) && grid[x as usize][y as usize] == 1 {
-                    grid[x as usize][y as usize] = 2;
-                    queue.push_back(vec![x, y]);
-                    cnt -= 1;
-                }
-            }
-        }
-        result += 1;
-    }
-
-    // 如果新鲜橘子的数量为 0，则返回当前的轮数，否则返回 −1
-    if cnt > 0 { return -1; }
-    result
-}
-//-----------------------------------------------------
-
 // 解法二:适合迷宫规模较小的情况
 fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     let mut clones = VecDeque::from_iter([(entrance[0] as usize, entrance[1] as usize)]);
@@ -1572,6 +1543,49 @@ fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     }
 
     -1
+}
+//-----------------------------------------------------
+
+fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
+    let (m, n) = (grid.len(), grid[0].len());
+    let mut queue = VecDeque::new();
+    let mut cnt = 0;
+    // 遍历一遍整个网格，统计出新鲜橘子的数量，记为 cnt，并且将所有腐烂的橘子的坐标加入队列 queue 中。
+    // 相比使用grid[i][j]的操作方式执行效率更高，内存消耗更低
+    for (i, item) in grid.iter().enumerate() {
+        for (j, g) in item.iter().enumerate() {
+            if *g == 1 {
+                cnt += 1;
+            } else if *g == 2 {
+                queue.push_back(vec![i as i32, j as i32]);
+            }
+        }
+    }
+
+    // bfs 操作
+    let dirs: [i32; 5] = [-1, 0, 1, 0, -1]; // 4个方向
+    let mut result = 0;
+    // 每一轮(每分钟)搜索，将队列中的所有腐烂的橘子向四个方向腐烂新鲜橘子，直到队列为空或者新鲜橘子的数量为 0 为止。
+    while !queue.is_empty() && cnt > 0 {
+        let q_size = queue.len();
+        for _ in 0..q_size {
+            let p = queue.pop_front().unwrap();
+            for d in 0..4 {
+                let x = p[0] + dirs[d];
+                let y = p[1] + dirs[d + 1];
+                if x >= 0 && x < (m as i32) && y >= 0 && y < (n as i32) && grid[x as usize][y as usize] == 1 {
+                    grid[x as usize][y as usize] = 2;
+                    queue.push_back(vec![x, y]);
+                    cnt -= 1;
+                }
+            }
+        }
+        result += 1;
+    }
+
+    // 如果新鲜橘子的数量为 0，则返回当前的轮数，否则返回 −1
+    if cnt > 0 { return -1; }
+    result
 }
 //-----------------------------------------------------
 
@@ -1795,7 +1809,7 @@ fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
     ///      n:当前组合还需要凑足的和。
     fn backtrace(result: &mut Vec<Vec<i32>>, curr: &mut Vec<i32>, i: i32, k: i32, n: i32) {
         let c = k - curr.len() as i32;
-        // 剪枝条件:用于提前终止递归,这个条件基于组合数学中的公式，用于确定当前情况下是否还有可能找到一个满足条件的组合。
+        // 剪枝条件:用于提前终止递归,这个条件基于组合数学中的公式,用于确定当前情况下是否还有可能找到一个满足条件的组合。
         if n < 0 || n > (i * 2 - c + 1) * c / 2 { return; }
         // 递归终止条件
         if c == 0 {
@@ -1846,8 +1860,8 @@ fn unique_paths(m: i32, n: i32) -> i32 {
         dp[0] = 1;
         for j in 1..n { dp[j] += dp[j - 1]; }
     }*/
-    // 注:使用for_each可能会略微增加一些额外的开销，因为闭包的创建和调用通常会比直接的for循环略慢。
-    // 但这个差异通常是非常小的，除非在性能非常关键的场景下，否则这种差异通常可以忽略不计。
+    // 注:使用 for_each() 可能会略微增加一些额外的开销，因为闭包的创建和调用通常会比直接的for循环略慢。
+    // 但这个差异通常是非常微小的，除非在性能非常关键的场景下，否则这种差异通常可以忽略不计。
     // 此外，Rust编译器的优化器也会对这两种形式进行相似的优化，使得它们在实际运行时的性能非常接近。
     (1..m as usize).for_each(|_| {
         dp[0] = 1;
@@ -1888,15 +1902,15 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
         (1..n).for_each(|j| {
             // text1.bytes().nth(i - 1)
             // text1.as_bytes().get(i - 1).copied()
-            // text1.bytes()会返回一个迭代器，它逐个产生text1中每个字符的字节表示。
-            // .nth(i - 1)方法会获取迭代器中第i - 1个元素的值。如果i - 1超出了迭代器的范围，它将返回None。
-            // text1.as_bytes()会返回一个指向字符串内部字节数组的slice，这个slice是原始字符串的直接视图，没有额外的迭代器开销。
-            // get(i - 1)方法会尝试获取切片中索引为i - 1的元素的可变引用，如果这个索引是有效的，那么它就会返回一个指向该元素的引用。
-            // .copied()会将这个引用转换为对应元素的值（如果存在的话），并产生一个Option<u8>
-            // 在性能上，text1.as_bytes().get(i - 1).copied()通常会比text1.bytes().nth(i - 1)更快，
-            // 因为as_bytes()是直接访问字符串的内部数据，而bytes()则需要在每次调用时生成一个新的迭代器。
-            // 迭代器每次调用nth()时都需要从当前位置开始重新计算到目标位置，这增加了额外的开销。
-            // 因此优先使用text1.as_bytes().get(i - 1).copied()来访问字符串的字节。
+            // text1.bytes() 会返回一个迭代器，它逐个产生text1中每个字符的字节表示。
+            // .nth(i - 1) 会获取迭代器中第i - 1个元素的值。如果i - 1超出了迭代器的范围，它将返回None。
+            // text1.as_bytes() 会返回一个指向字符串内部字节数组的slice，这个slice是原始字符串的直接视图，没有额外的迭代器开销。
+            // .get(i - 1) 会尝试获取切片中索引为i - 1的元素的可变引用，如果这个索引是有效的，那么它就会返回一个指向该元素的引用。
+            // .copied() 会将这个引用转换为对应元素的值（如果存在的话），并产生一个 Option<u8>
+            // 在性能上，text1.as_bytes().get(i - 1).copied() 通常会比 text1.bytes().nth(i - 1) 更快，
+            // 因为 as_bytes() 是直接访问字符串的内部数据，而 bytes() 则需要在每次调用时生成一个新的迭代器。
+            // 迭代器每次调用 nth() 时都需要从当前位置开始重新计算到目标位置，这增加了额外的开销。
+            // 因此优先使用 text1.as_bytes().get(i - 1).copied() 来访问字符串的字节。
             dp[i][j] = match text1.as_bytes().get(i - 1).copied() == text2.as_bytes().get(j - 1).copied() {
                 true => dp[i - 1][j - 1] + 1,
                 false => dp[i - 1][j].max(dp[i][j - 1]),
@@ -1927,12 +1941,24 @@ fn suggested_products(mut products: Vec<String>, search_word: String) -> Vec<Vec
     products.sort_unstable();
     // 遍历搜索词的所有可能前缀
     for i in 1..=search_word.len() {
+        // let vec = vec![1, 2, 3, 4, 5];
+        // let filtered_vec: Vec<i32> = vec.iter().filter(|&x| x % 2 == 0).collect(); // // 保留偶数
+        // println!("{:?}", filtered_vec); // 输出 [2, 4], 且原始vec集合保持不变
+        // let mut vec = vec![1, 2, 3, 4, 5];
+        // vec.retain(|&x| x % 2 == 0); // 保留偶数
+        // println!("{:?}", vec); // 输出 [2, 4], 直接修改原始vec集合
+        // 修改性: .filter() 创建了一个新的迭代器，不修改原始集合；而 .retain() 直接修改原始集合，删除不满足条件的元素。
+        // 返回值：.filter() 返回一个迭代器，你可以用它来创建新的集合；.retain() 没有返回值，因为它直接修改了原始集合。
+        // 性能：由于 .retain() 直接在原始集合上操作，避免了创建新集合的开销，因此在某些情况下可能更高效。然而，这也意味着你不能保留原始集合的完整状态。
+        // 使用场景：如果需要保留原始集合不变，并创建一个新的集合来包含满足条件的元素，那么应该使用 .filter()。
+        //          如果希望直接修改原始集合，删除不满足条件的元素，那么应该使用 .retain()。
+        
         // .retain() 方法用于过滤集合(如vec、slice等)中的元素。即只保留满足特定条件的元素
         // 遍历集合中的每个元素，并根据提供的闭包（或函数）的返回值来决定是否保留该元素。如果闭包返回 true，则保留;如果返回 false，则不要。
         // retain() 方法的一个重要特性是就地操作，即直接在原始vec上修改元素，而不是创建一个新的vec。
         // 这通常比创建一个新vec更高效，尤其是当处理大型数据集时。然而，调用 retain() 后，原始vec将被修改，可能不再包含之前所有的元素。
         // 注意:由于 retain() 方法可能会改变vec的长度，因此调用 retain() 之后，任何依赖于原始vec长度的代码都应该小心处理。
-        // 此外，如果闭包内部使用了vec的引用或迭代器，并且这些引用或迭代器在 retain() 调用期间可能变得无效，可能会导致未定义的行为.
+        // 此外,如果闭包内部使用了vec的引用或迭代器，并且这些引用或迭代器在 retain() 调用期间可能变得无效，可能会导致未定义的行为.
         // 此处由于闭包只使用了字符串的本地副本，因此没有这个问题
         products.retain(|s| s.starts_with(search_word.get(0..i).unwrap()));
         // 对过滤后的 products,使用 iter().take(3).cloned().collect() 获取前三个元素（如果存在的话）并将其添加到 result 中。
