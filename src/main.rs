@@ -515,6 +515,8 @@ fn _gcd_of_strings(str1: String, str2: String) -> String {
     let len2 = str2.len();
 
     // 求两个字符串长度的最大公约数
+    // .find()：用于查找单个元素,返回满足条件的第一个元素(如果存在)。返回类型为 Option<T>。
+    // .filter()：返回一个新迭代器，包含所有满足条件的元素。返回类型为实现了 Iterator<Item=T> 的类型。
     let gec_len = (1..=cmp::min(len1, len2)).rev()
         .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
 
@@ -2002,11 +2004,11 @@ fn erase_overlap_intervals(mut intervals: Vec<Vec<i32>>) -> i32 {
 }
 //-----------------------------------------------------
 
-// 输入：points = [[10,16],[2,8],[1,6],[7,12]]
+// 输入：points = [[10, 16], [2, 8], [1, 6], [7, 12]]
 // 输出：2
 // 解释：气球可以用2支箭来爆破:
-// -在x = 6处射出箭，击破气球[2,8]和[1,6]。
-// -在x = 11处发射箭，击破气球[10,16]和[7,12]。
+// -在x = 6处射出箭，击破气球[2, 8]和[1, 6]。
+// -在x = 11处发射箭，击破气球[10, 16]和[7, 12]。
 fn find_min_arrow_shots(mut points: Vec<Vec<i32>>) -> i32 {
     // 解法一:直接将二维数组按照末尾的数字进行排序，然后比较 区间 是否有重叠部分。
     /*points.sort_unstable_by_key(|p| p[1]);

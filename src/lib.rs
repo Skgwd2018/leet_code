@@ -129,8 +129,8 @@ impl ListNode {
     // 给定单链表的头节点 head,将所有索引为奇数的节点和索引为偶数的节点分别组合在一起,然后返回重新排序的列表。
     // 第一个节点的索引被认为是 奇数,第二个节点的索引为 偶数,以此类推。
     // 请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。
-    // 输入: head = [2,1,3,5,6,4,7]
-    // 输出:        [2,3,6,7,1,5,4]
+    // 输入: head = [2, 1, 3, 5, 6, 4, 7]
+    // 输出:        [2, 3, 6, 7, 1, 5, 4]
     pub fn odd_even_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         if head.is_none() {
             return head;
@@ -188,21 +188,21 @@ impl ListNode {
 }
 //-----------------------------------------------------
 
-// Rc（引用计数）是一个用于管理堆上数据的所有权的智能指针。它提供了一种在多个所有者之间共享数据的方式，而无需将数据复制到每个所有者。
+// Rc(引用计数)是一个用于管理堆上数据的所有权的智能指针。它提供了一种在多个所有者之间共享数据的方式，而无需将数据复制到每个所有者。
 // Rust的所有权模型要求每个值都有一个明确的所有者，当所有者离开作用域时，该值将被自动释放。这有助于防止内存泄漏和其他常见的内存安全问题。
-// 在某些情况下，希望多个变量共享对同一数据的所有权，而不是复制数据。这就是Rc发挥作用的地方。
+// 在某些情况下，需要多个变量共享同一数据的所有权，而不是复制数据。这就是Rc发挥作用的地方。
 // Rc通过在内部维护一个引用计数来实现共享所有权。每当一个新的Rc引用被创建时，引用计数就会增加。
 // 当Rc引用离开作用域或被丢弃时，引用计数就会减少。当引用计数变为零时，Rc将自动释放其管理的数据。
 // let five = Rc::new(5);
 // let shared_five = Rc::clone(&five);  // 此时 five 和 shared_five 共享同一份数据
 
 // RefCell 用于在运行时检查借用规则，并允许在某些情况下绕过Rust的静态借用检查。
-// 即是在存在不可变引用的情况下，RefCell允许你获取可变引用，从而可以在不破坏Rust的安全性和所有权规则的前提下，
-// 实现在不改变数据结构的情况下进行内部修改，即实现内部可变性（interior mutability）。
-// RefCell通过提供borrow()和borrow_mut()方法，允许你借用值的不可变引用和可变引用。
+// 即存在不可变引用的情况下，RefCell允许你获取可变引用，从而可以在不破坏Rust的安全性和所有权规则的前提下，
+// 实现在不改变数据结构的情况下进行内部修改，即实现内部可变性(interior mutability)。
+// RefCell 通过提供 borrow() 和 borrow_mut() 方法，允许你借用值的不可变引用和可变引用。
 // 这些方法在运行时执行借用规则的检查，并在违反规则时引发运行时错误。虽然RefCell提供了更大的灵活性，但如果不正确地使用，也会导致程序在运行时崩溃。
 // 此外，RefCell 与 Cell 类似，都是用于实现内部可变性的类型，但两者在使用上有存在差异。
-// Cell只能用于实现Copy trait的类型，因为Cell的值在赋值时可以进行复制。而RefCell则可以用于非Copy trait类型，因为它的值在赋值时不会进行复制
+// Cell只能用于实现 Copy trait 的类型，因为Cell的值在赋值时可以进行复制。而RefCell则可以用于非 Copy trait 类型，因为它的值在赋值时不会进行复制
 
 /// 二叉树节点
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -217,7 +217,7 @@ impl TreeNode {
     // 内联是将函数体直接插入到调用该函数的地方，而不是进行常规的函数调用。这有助于减少函数调用的开销，但可能会增加生成的代码的大小。
     // #[inline]属性主要用于优化那些频繁调用的小函数，或者是那些对性能有严格要求的代码。然而，编译器并不一定会遵循这个提示，它会在权衡代码大小和性能之后做出决策。
     // 注:过度使用内联可能会导致生成的代码过大，反而降低缓存效率，甚至影响性能。#[inline]应该谨慎使用，并且通常只在确定某个函数应该被内联的情况下使用。
-    // 其实Rust编译器有自己的内联策略，它会自动决定哪些函数应该被内联。这意味着，即使你不使用#[inline]属性，编译器也可能会自动内联一些函数。
+    // 其实Rust编译器有自己的内联策略，它会自动决定哪些函数应该被内联。即使你不使用#[inline]属性，编译器也可能会自动内联一些函数。
     // 总结: #[inline]是一个优化提示，它告诉编译器可能希望某个函数被内联。最终是否内联这个函数，还是由编译器根据代码的具体情况来决定的。
     #[inline]
     pub fn new(val: i32) -> Self {
@@ -232,13 +232,13 @@ impl TreeNode {
             None => 0,
             Some(node) => {
                 // node.borrow().left.to_owned() 相比 node.borrow().left.clone() 效率更高
-                // node.borrow().left.clone() 会调用Option和Rc<RefCell<T>>的clone方法，
-                // node.borrow().left.to_owned()会调用Option的cloned方法,然后返回一个新的Option，
-                // 其中的Rc<RefCell<TreeNode>>也是通过克隆得到的。
-                // to_owned():这是一个Option<T>的方法,它用于将Option<T>中的值转换为其拥有的版本。
+                // node.borrow().left.clone() 会调用 Option和Rc<RefCell<T>> 的 clone() 方法，
+                // node.borrow().left.to_owned() 会调用 Option 的 cloned() 方法,然后返回一个新的 Option，
+                // 其中的 Rc<RefCell<TreeNode>> 也是通过克隆得到的。
+                // to_owned():是一个Option<T>的方法,它用于将Option<T>中的值转换为其拥有的版本。
                 // 如果Option是Some(value),那么to_owned()会返回该值的克隆;如果Option是None,则to_owned()会返回None。
-                // Rc<T>的clone方法实现的是引用计数加1的操作,这是一个快速的、O(1)复杂度的操作。
-                // 因此,无论是 clone() 还是 to_owned(),都需要对Rc<RefCell<TreeNode>>进行克隆,性能上非常接近。
+                // Rc<T> 的 clone() 方法实现的是引用计数加1的操作,是一个快速的 O(1) 复杂度的操作。
+                // 因此,无论是 clone() 还是 to_owned(),都需要对 Rc<RefCell<TreeNode>> 进行克隆,性能上非常接近。
                 1 + cmp::max(
                     Self::max_depth(node.borrow().left.to_owned()),
                     Self::max_depth(node.borrow().right.to_owned()),
@@ -253,7 +253,7 @@ impl TreeNode {
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
         // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数,并且可以访问其包含作用域中的变量。
         // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数,它们可以像其他值一样传递。
-        //     闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
+        //      闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
         /*fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
             if let Some(node) = node {
                 let left = node.borrow_mut().left.take();
@@ -271,7 +271,7 @@ impl TreeNode {
         let (mut values1, mut values2) = (Vec::new(), Vec::new());
         // pre_order(root1, &mut values1);
         // pre_order(root2, &mut values2);
-        // 这种局部函数的实现方式性能比下面的dfs()方法的实现方式高,但是.take()会取走值(即修改了节点),比较函数的耗时也会长一点
+        // 这种局部函数的实现方式性能比下面的dfs()方法的实现方式高,但是 .take() 会取走值(即修改了节点),比较函数的耗时也会长一点
         Self::dfs(root1, &mut values1);
         Self::dfs(root2, &mut values2);
 
@@ -293,9 +293,9 @@ impl TreeNode {
     }
 
     /// 二叉搜索树(BST)中搜索一个特定的值
-    // BST的特性，即对于树中的每个节点，其左子节点的值都小于该节点的值，而右子节点的值都大于该节点的值。
-    // 根据这个特性，可以从根节点开始，如果当前节点的值等于目标值，则返回当前节点;
-    // 如果目标值小于当前节点的值，则递归地在左子树中搜索;如果目标值大于当前节点的值，则递归地在右子树中搜索。
+    // BST的特性,即对于树中的每个节点,其左子节点的值都小于该节点的值,而右子节点的值都大于该节点的值。
+    // 根据这个特性,可以从根节点开始,如果当前节点的值等于目标值,则返回当前节点;
+    // 如果目标值小于当前节点的值,则递归地在左子树中搜索;如果目标值大于当前节点的值,则递归地在右子树中搜索。
     pub fn search_bst(root: Option<Rc<RefCell<TreeNode>>>, val: i32) -> Option<Rc<RefCell<TreeNode>>> {
         // 递归搜索
         /*match root {
@@ -402,7 +402,7 @@ impl TreeNode {
     fn dfs3(node: Rc<RefCell<TreeNode>>, curr_sum: i64, target_sum: i64, prefix_sum: &mut HashMap<i64, i32>) -> i32 {
         let curr_sum = curr_sum + node.borrow().val as i64;
         let mut count = 0;
-        // 以当前节点为终点，查找是否有满足要求的前缀和
+        // 以当前节点为终点,查找是否有满足要求的前缀和
         if let Some(&val) = prefix_sum.get(&(curr_sum - target_sum)) {
             count += val;
         }
@@ -417,15 +417,15 @@ impl TreeNode {
         if let Some(right) = node.borrow().right.clone() {
             count += Self::dfs3(right, curr_sum, target_sum, prefix_sum);
         }
-        // 回溯作用,即在处理完当前节点后,需要将curr_sum对应的值(路径数量)减一,以反映已经离开了这个节点,不再考虑从它开始的路径。
-        // 常见的技巧，用于在深度优先搜索中正确地更新状态。
+        // 回溯作用,即在处理完当前节点后,需要将 curr_sum 对应的值(路径数量)减一,以反映已经离开了这个节点,不再考虑从它开始的路径。
+        // 常用于在深度优先搜索中正确地更新状态。
         *prefix_sum.entry(curr_sum).or_insert(0) -= 1;
 
         count
     }
 
     /// 右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
-    // 给定一个二叉树的 根节点root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+    // 给定一个二叉树的 根节点root,想象自己站在它的右侧,按照从顶部到底部的顺序,返回从右侧能看到的节点值。
     pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         // 深度优先搜索
         /*fn dfs4(root: &TreeNode, result: &mut Vec<i32>, deep: usize) {
@@ -453,14 +453,14 @@ impl TreeNode {
         while let Some((node, depth)) = dequeue.pop_front() {
             if let Some(node) = node {
                 let node = node.borrow();
-                // 检查 result 的长度是否小于当前深度加1。如果是，即到达了新的层级，直接将当前节点的值推入 result;
-                // 如果 result 向量的长度不小于当前深度加1，即已经在当前层级有了一个节点值。由于是从右侧查看，所以当前节点的值将替换掉之前存储的该层级的节点值。
+                // 检查 result 的长度是否小于当前深度加1。如果是,即到达了新的层级,直接将当前节点的值推入 result;
+                // 如果 result 向量的长度不小于当前深度加1,即已经在当前层级有了一个节点值。由于是从右侧查看,所以当前节点的值将替换掉之前存储的该层级的节点值。
                 if result.len() < depth + 1 {
                     result.push(node.val)
                 } else {
                     result[depth] = node.val;
                 }
-                // 将当前节点的左子节点和右子节点（如果存在的话）以及它们的深度（当前深度加1）压入队列的尾部，以便在下一次循环中处理。
+                // 将当前节点的左子节点和右子节点(如果存在的话)以及它们的深度(当前深度加1)压入队列的尾部，以便在下一次循环中处理。
                 dequeue.push_back((node.left.clone(), depth + 1));
                 dequeue.push_back((node.right.clone(), depth + 1));
             }
@@ -514,11 +514,10 @@ impl TreeNode {
 
 /// 无限集合
 // 使用堆(优先队列解决问题)
-// 由于题目要求一个包含所有正整数的无限集合，所有值存储起来很费内存。
-// 可以使用一个指针来代替，表示后续所有连续正整数的起点，而新加入的更小的值，如果是集合不再连续，可以存储在一个最小堆中，极大减少内存。
-// 判断最小堆是否为空，是则返回堆中最小值，否则使用指针所表示的值，并使指针后移一位
-// 加入的值是否使指针连续，是则指针前移，否则
-// 判断加入值是否小于当前断点，并且不在堆中，是则加入堆中
+// 由于题目要求一个包含所有正整数的无限集合,所有值存储起来很费内存。
+// 可以使用一个指针来代替,表示后续所有连续正整数的起点,而新加入的更小的值,如果是集合不再连续,可以存储在一个最小堆中,极大减少内存。
+// 判断最小堆是否为空,是则返回堆中最小值,否则使用指针所表示的值,并使指针后移一位
+// 加入的值是否使指针连续,是则指针前移,否则判断加入值是否小于当前断点,并且不在堆中,是则加入堆中
 /*pub struct SmallestInfiniteSet {
     smallest: i32,
     heap: BinaryHeap<Reverse<i32>>,
@@ -631,7 +630,7 @@ impl Trie {
             .is_end = true;
     }
 
-    ///  如果字符串 word 在前缀树中,返回 true(即，在检索之前已经插入);否则返回 false
+    ///  如果字符串 word 在前缀树中,返回 true(即在检索之前已经插入);否则返回 false
     pub fn search(&self, word: String) -> bool {
         let mut curr = self;
         for i in word.bytes().map(|b| (b - b'a') as usize) {
