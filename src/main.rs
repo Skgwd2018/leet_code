@@ -100,7 +100,7 @@ fn main() {
     println!("------ rev ------");
     let node_rev = ListNode::reverse_list(Some(Box::new(node1.clone())));
     match node_rev.clone() {
-        None => {}
+        None => (), //元组类型的单元值即空元组, 告诉 Rust 不需要运行任何代码。
         Some(node) => {
             node.print_list(); // 5 4 3 2 1
         }
@@ -260,14 +260,14 @@ fn main() {
     println!("------ 2095. 删除链表的中间节点(链表,双指针) ------");
     let node_head = ListNode::delete_middle(node_rev);
     match node_head.clone() {
-        None => {}
+        None => (),
         Some(node) => node.print_list(),
     } // 5 4 2 1
 
     println!("----- 328. 奇偶链表(链表) ------");
     let odd_even_head = ListNode::odd_even_list(node_head);
     match odd_even_head {
-        None => {}
+        None => (),
         Some(node) => node.print_list(),
     } // 5 2 4 1
 
@@ -1954,7 +1954,7 @@ fn suggested_products(mut products: Vec<String>, search_word: String) -> Vec<Vec
         // 性能：由于 .retain() 直接在原始集合上操作，避免了创建新集合的开销，因此在某些情况下可能更高效。然而，这也意味着你不能保留原始集合的完整状态。
         // 使用场景：如果需要保留原始集合不变，并创建一个新的集合来包含满足条件的元素，那么应该使用 .filter()。
         //          如果希望直接修改原始集合，删除不满足条件的元素，那么应该使用 .retain()。
-        
+
         // .retain() 方法用于过滤集合(如vec、slice等)中的元素。即只保留满足特定条件的元素
         // 遍历集合中的每个元素，并根据提供的闭包（或函数）的返回值来决定是否保留该元素。如果闭包返回 true，则保留;如果返回 false，则不要。
         // retain() 方法的一个重要特性是就地操作，即直接在原始vec上修改元素，而不是创建一个新的vec。
