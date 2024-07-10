@@ -219,6 +219,11 @@ fn main() {
     let answer = longest_ones(nums, k);
     println!("longest_ones: {answer}"); // 10
 
+    println!("----- 1493. 删掉一个元素以后全为 1 的最长子数组(数组,动态规划,滑动窗口) ------");
+    let nums = vec![0, 1, 1, 1, 0, 1, 1, 0, 1];
+    let answer = longest_subarray(nums);
+    println!("longest_subarray: {answer}");
+
     println!("------ 1657. 确定两个字符串是否接近(字符串,哈希表,计数) ------");
     let word1 = "cabbba".to_string();
     let word2 = "abbccc".to_string();
@@ -477,7 +482,6 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
-
 }
 
 /// 交替合并字符串
@@ -993,7 +997,7 @@ fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
     // 解法二:
     let (mut left, mut right, n) = (1, 1, nums.len());
     let mut answer = vec![1; n];
-    for (i, num) in nums.iter().enumerate() {
+    for (i, &num) in nums.iter().enumerate() {
         answer[i] *= left;
         // print!("{} ", answer[i]);
         left *= num;
@@ -1166,6 +1170,33 @@ fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
     }
 
     answer as i32
+}
+//-----------------------------------------------------
+
+// 给定一个二进制数组 nums，需要从中删掉一个元素。请在删掉元素的结果数组中，返回最长的且只包含 1 的非空子数组的长度。
+// 如果不存在这样的子数组，请返回 0
+fn longest_subarray(nums: Vec<i32>) -> i32 {
+    /*let (mut zero_cnt, mut max_len, mut n) = (0, 0, 0);
+    for (i, &num) in nums.iter().enumerate() {
+        if num == 0 { zero_cnt += 1; }
+
+        while zero_cnt > 1 {
+            if nums[n] == 0 { zero_cnt -= 1; }
+            n += 1;
+        }
+
+        max_len = max_len.max(i - n);
+    }
+    max_len as i32*/
+
+    //解法二:
+    nums.into_iter().fold((-1, 0, 0), |(prev, curr, answer), n| {
+        match n {
+            1 => (prev, curr + 1, answer.max(curr + prev + 1)),
+            0 => (curr, 0, answer.max(curr + prev)),
+            _ => panic!()
+        }
+    }).2
 }
 //-----------------------------------------------------
 
