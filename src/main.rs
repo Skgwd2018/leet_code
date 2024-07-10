@@ -173,6 +173,11 @@ fn main() {
     let answer = reverse_words(s);
     println!("reverse_words: {answer}"); // example good a
 
+    println!("------ 238. 除自身以外数组的乘积(数组,前缀和) ------");
+    let nums = vec![1, 2, 3, 4];
+    let answer = product_except_self(nums);
+    println!("product_except_self: {answer:?}"); // [24, 12, 8, 6]
+
     println!("----- 334. 递增的三元子序列(贪心,数组) ------");
     // 判断数组nums中是否存在长度为 3 的递增子序列。
     // 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
@@ -472,6 +477,7 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
 }
 
 /// 交替合并字符串
@@ -965,6 +971,40 @@ fn reverse_words(s: String) -> String {
     // .collect::<Vec<&str>>():将反转后的迭代器元素收集到一个新的vec中并指定了它的返回类型。且每个元素都是一个指向原始字符串中单词的切片(&str)
     // .join(" "):将vec中的所有切片用空格连接起来,形成一个新的字符串
     s.split_ascii_whitespace().rev().collect::<Vec<&str>>().join(" ")
+}
+//-----------------------------------------------------
+
+// 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积，且不能使用除法
+fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+    /*let n = nums.len();
+    let mut answer = vec![0; n];
+    answer[n - 1] = 1;
+    for i in (0..n - 1).rev() {
+        answer[i] = answer[i + 1] * nums[i + 1];
+    }
+    let mut pre = 1;
+    for (i, num) in nums.iter().enumerate() {
+        // 此时 pre 为 nums[0] 到 nums[i-1] 的乘积，然后直接乘到 answer[i] 中
+        answer[i] *= pre;
+        pre *= num;
+    }
+    answer*/
+
+    // 解法二:
+    let (mut left, mut right, n) = (1, 1, nums.len());
+    let mut answer = vec![1; n];
+    for (i, num) in nums.iter().enumerate() {
+        answer[i] *= left;
+        // print!("{} ", answer[i]);
+        left *= num;
+        // print!("{} ", left);
+        answer[n - 1 - i] *= right;
+        // print!("{} ", answer[n - 1 - i]);
+        right *= nums[n - 1 - i];
+        // println!("{} ", right);
+    }
+
+    answer
 }
 //-----------------------------------------------------
 
