@@ -318,6 +318,12 @@ fn main() {
     let answer = TreeNode::max_level_sum(root);
     println!("max_level_sum: {answer}"); // 3
 
+    println!("----- 841. 钥匙和房间(dfs,bfs,图) ------");
+    let rooms = vec![vec![1], vec![2], vec![3], vec![]];
+    // let rooms = vec![vec![1, 3], vec![3, 0, 1], vec![2], vec![0]];
+    let answer = can_visit_all_rooms(rooms);
+    println!("can_visit_all_rooms: {answer}");
+
     println!("----- 547. 省份数量(并查集,图) ------");
     // 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
     // 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
@@ -482,6 +488,8 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
+
 }
 
 /// 交替合并字符串
@@ -1407,6 +1415,43 @@ fn predict_party_victory(senate: String) -> String {
             _ => ()
         }
     }
+}
+//-----------------------------------------------------
+
+// 有 n 个房间，房间按从 0 到 n - 1 编号。最初，除 0 号房间外的其余所有房间都被锁住。目标是进入所有的房间，但不能在没有获得钥匙的时候进入锁住的房间。
+// 当进入一个房间，可能会在里面找到一套不同的钥匙，每把钥匙上都有对应的房间号，即表示钥匙可以打开的房间。可以拿上所有钥匙去解锁其他房间。
+// 给定一个数组 rooms 其中 rooms[i] 是进入 i 号房间可以获得的钥匙集合。如果能进入 所有 房间返回 true，否则返回 false。
+fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
+    // bfs解法
+    let mut queue = VecDeque::new();
+    let mut room_map = vec![false; rooms.len()];
+    queue.push_back(0);
+    room_map[0] = true;
+    while let Some(curr) = queue.pop_front() {
+        rooms[curr].iter().for_each(|&x| {
+            let x = x as usize;
+            // 未进入过的房间
+            if !room_map[x] {
+                room_map[x] = true;
+                queue.push_back(x);
+            }
+        });
+    }
+    room_map.into_iter().all(|x| x)
+
+    // dfs解法
+    /*fn dfs(rooms: &Vec<Vec<i32>>, curr: usize, visited: &mut Vec<bool>) -> i32 {
+        if visited[curr] { return 0; }
+        visited[curr] = true;
+        let mut cnt = 1;
+        for &r in &rooms[curr] {
+            cnt += dfs(rooms, r as usize, visited);
+        }
+        cnt
+    }
+
+    let mut visited = vec![false; rooms.len()];
+    dfs(&rooms, 0, &mut visited) == rooms.len() as i32 */
 }
 //-----------------------------------------------------
 
