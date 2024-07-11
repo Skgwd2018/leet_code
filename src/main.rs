@@ -319,8 +319,8 @@ fn main() {
     println!("max_level_sum: {answer}"); // 3
 
     println!("----- 841. 钥匙和房间(dfs,bfs,图) ------");
-    let rooms = vec![vec![1], vec![2], vec![3], vec![]];
-    // let rooms = vec![vec![1, 3], vec![3, 0, 1], vec![2], vec![0]];
+    let rooms = vec![vec![1], vec![2], vec![3], vec![]]; // true
+    // let rooms = vec![vec![1, 3], vec![3, 0, 1], vec![2], vec![0]]; // false
     let answer = can_visit_all_rooms(rooms);
     println!("can_visit_all_rooms: {answer}");
 
@@ -337,6 +337,15 @@ fn main() {
     let connections = vec![vec![0, 1], vec![1, 3], vec![2, 3], vec![4, 0], vec![4, 5]];
     let answer = min_reorder(6, connections);
     println!("min_reorder: {answer}"); // 3
+
+    println!("----- 399. 除法求值(dfs,bfs,并查集,图,数组,字符串,最短路径) ------");
+    let equations = vec![vec!["a".to_string(), "b".to_string()], vec!["b".to_string(), "c".to_string()],
+                         vec!["bc".to_string(), "cd".to_string()]];
+    let values = vec![1.5, 2.5, 5.0];
+    let queries = vec![vec!["a".to_owned(), "c".to_owned()], vec!["c".to_owned(), "b".to_owned()],
+                       vec!["bc".to_owned(), "cd".to_owned()], vec!["cd".to_owned(), "bc".to_owned()]];
+    let answer = calc_equation(equations, values, queries);
+    println!("calc_equation: {answer:?}"); // [3.75, 0.4, 5.0, 0.2]
 
     println!("----- 1926. 迷宫中离入口最近的出口(图,bfs) ------");
     let maze = vec![vec!['+', '+', '.', '+'], vec!['.', '.', '.', '+'], vec!['+', '+', '+', '.']];
@@ -488,8 +497,6 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
-
-
 }
 
 /// 交替合并字符串
@@ -1565,6 +1572,104 @@ fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
     }
 
     dfs(0, -1, &g)
+}
+//-----------------------------------------------------
+
+// 给定一个变量对数组 equations 和一个实数值数组 values 作为已知条件，其中 equations[i] = [Ai, Bi] 和 values[i] 共同表示等式 Ai / Bi = values[i] 。每个 Ai 或 Bi 是一个表示单个变量的字符串。
+// 另有一些以数组 queries 表示的问题，其中 queries[j] = [Cj, Dj] 表示第 j 个问题，请根据已知条件找出 Cj / Dj = ? 的结果作为答案。
+// 返回 所有问题的答案 。如果存在某个无法确定的答案，则用 -1.0 替代这个答案。如果问题中出现了给定的已知条件中没有出现的字符串，也需要用 -1.0 替代这个答案。
+// 注意:输入总是有效的。可以假设除法运算中不会出现除数为 0 的情况，且不存在任何矛盾的结果。
+// 注意:未在等式列表中出现的变量是未定义的，因此无法确定它们的答案。
+fn calc_equation(equations: Vec<Vec<String>>, values: Vec<f64>, queries: Vec<Vec<String>>) -> Vec<f64> {
+    /*
+    // graph1:将图转化为邻接矩阵
+    let mut graph1 = HashMap::new();
+    let n = equations.len();
+    for i in 0..n {
+        graph1.entry(equations[i][0].clone()).or_insert(HashMap::new()).entry(equations[i][1].clone()).or_insert(values[i]);
+        graph1.entry(equations[i][1].clone()).or_insert(HashMap::new()).entry(equations[i][0].clone()).or_insert(1_f64 / values[i]);
+    }
+
+    // graph2:每个变量的分组情况，不同组之间没有通路
+    let mut graph2 = HashMap::new();
+    for key in graph1.keys() {
+        graph2.insert(key, 0);
+    }
+    // unchecked:尚未分组的变量数
+    let mut unchecked = graph2.len();
+    // secnum:组别数量
+    let mut secnum = 0;
+    // graph3:每个变量的虚拟值(用于计算)
+    let mut graph3 = HashMap::new();
+    for key in graph1.keys() {
+        if graph2.get(key) == Some(&0) {
+            graph3.entry(key).or_insert(1_f64);
+            secnum += 1;
+            graph2.insert(key, secnum);
+            let mut keys = vec![key];
+            while keys.len() > 0 {
+                let mut keys_n = vec![];
+                for item in keys.clone() {
+                    for key_n in graph1.get(item).unwrap().keys() {
+                        if graph2.get(&key_n) == Some(&0) {
+                            graph2.insert(key_n, secnum);
+                            unchecked -= 1;
+                            let r = graph3.get(item).unwrap() * graph1.get(key_n).unwrap().get(item).unwrap();
+                            graph3.entry(key_n).or_insert(r);
+                            keys_n.push(key_n);
+                        }
+                    }
+                }
+                keys = keys_n;
+            }
+        }
+    }
+
+    let mut ans = vec![];
+    for query in queries.iter() {
+        if graph2.contains_key(&query[0]) && graph2.contains_key(&query[1]) && graph2.get(&query[0]) == graph2.get(&query[1]) {
+            ans.push(graph3.get(&query[0]).unwrap() / graph3.get(&query[1]).unwrap());
+        } else {
+            ans.push(-1_f64);
+        }
+    }
+    ans*/
+
+    let mut graph = HashMap::new();
+    let mut ans = Vec::new();
+    for i in 0..equations.len() {
+        graph.entry(equations[i][0].clone()).or_insert(Vec::new()).push((equations[i][1].clone(), values[i]));
+        graph.entry(equations[i][1].clone()).or_insert(Vec::new()).push((equations[i][0].clone(), 1_f64 / values[i]));
+    }
+
+    for query in queries {
+        if !graph.contains_key(&query[0]) || !graph.contains_key(&query[1]) {
+            ans.push(-1_f64);
+        } else if query[0] == query[1] {
+            ans.push(1_f64);
+        } else {
+            let mut visited = vec![&query[0]].into_iter().collect::<HashSet<&String>>();
+            let mut queue = vec![(&query[0], 1_f64)];
+            let mut val = -1_f64;
+            while let Some((node, curr)) = queue.pop() {
+                let connected_nodes = graph.get(node).unwrap();
+                for (conn_node, v) in connected_nodes {
+                    if visited.insert(conn_node) {
+                        queue.push((conn_node, v * curr));
+                        if *conn_node == query[1] {
+                            val = v * curr;
+                            queue.clear();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            ans.push(val);
+        }
+    }
+
+    ans
 }
 //-----------------------------------------------------
 
