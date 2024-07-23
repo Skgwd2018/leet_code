@@ -168,6 +168,10 @@ fn main() {
     let answer = single_number(nums);
     println!("single_number: {answer}"); // 4
 
+    println!("----- 1318. 或运算的最小翻转次数(位运算) ------");
+    let answer = min_flips(2, 6, 5);
+    println!("min_flips: {answer}"); // 3
+
     println!("\n-------------up---------------\n");
 
     println!("------ 151. 反转字符串中的单词(字符串,双指针) ------");
@@ -977,6 +981,37 @@ fn single_number(nums: Vec<i32>) -> i32 {
     // nums.into_iter().reduce(|x, y| x ^ y).unwrap()
 
     nums.iter().fold(0, |single, num| single ^ num)
+}
+//-----------------------------------------------------
+
+// 给定三个正整数 a、b 和 c；可以对 a 和 b 的二进制表示进行位翻转操作，返回能够使按位或运算 a OR b == c 成立的最小翻转次数。
+// 「位翻转操作」是指将一个数的二进制表示任何单个位上的 1 变成 0 或者 0 变成 1
+// 输入：a = 2, b = 6, c = 5
+// 输出：3
+// 解释：翻转后 a = 1 , b = 4 , c = 5 使得 a OR b == c
+fn min_flips(a: i32, b: i32, c: i32) -> i32 {
+    /*let mut answer = 0;
+    for i in 0..32 {
+        let (a_i, b_i, c_i) = ((a >> i) & 1, (b >> i) & 1, (c >> i) & 1);
+        if c_i == 0 {
+            answer += a_i + b_i;
+        } else if a_i + b_i == 0 {
+            answer += 1;
+        }
+    }
+    answer*/
+
+    // 解法二:
+    /*let mut answer = 0;
+    for i in 0..(32 - c.leading_zeros()).max(32 - a.leading_zeros()).max(32 - b.leading_zeros()) {
+        if ((a | b) >> i) & 1 != (c >> i & 1) {
+            answer += if c >> i & 1 == 1 { 1 } else { (a >> i & 1) + (b >> i & 1) }
+        }
+    }
+    answer*/
+
+    // 解法三:
+    (((a | b) ^ c).count_ones() + (((a & b) & !c)).count_ones()) as i32
 }
 //-----------------------------------------------------
 
