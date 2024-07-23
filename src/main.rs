@@ -444,6 +444,12 @@ fn main() {
     let answer = max_profit(prices, fee);
     println!("max_profit: {answer}"); // 8
 
+    println!("----- 72. 编辑距离(字符串,动态规划) ------");
+    let word1 = "intention".to_string();
+    let word2 = "execution".to_string();
+    let answer = min_distance(word1, word2);
+    println!("min_distance: {answer}"); // 5
+
     println!("----- 208. 实现Trie(前缀树) ------");
     let mut trie = Trie::new();
     let word = "apple".to_string();
@@ -503,8 +509,6 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
-
-
 }
 
 /// 交替合并字符串
@@ -2227,6 +2231,56 @@ fn longest_common_subsequence(text1: String, text2: String) -> i32 {
 // 注意:这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
 fn max_profit(prices: Vec<i32>, fee: i32) -> i32 {
     prices.iter().fold((0, -prices[0]), |(sell, buy), p| (sell.max(buy + p - fee), buy.max(sell - p))).0
+}
+//-----------------------------------------------------
+
+// 给定两个单词 word1 和 word2，请返回将 word1 转换成 word2 所使用的最少操作数。
+// 可以对一个单词进行这三种操作：插入一个字符 or 删除一个字符 or 替换一个字符
+// 输入：word1 = "intention", word2 = "execution"
+// 输出：5
+// 解释：
+// intention -> inention (删除 't')
+// inention -> enention (将 'i' 替换为 'e')
+// enention -> exention (将 'n' 替换为 'x')
+// exention -> exection (将 'n' 替换为 'c')
+// exection -> execution (插入 'u')
+fn min_distance(word1: String, word2: String) -> i32 {
+    let (m, n) = (word1.len(), word2.len());
+    let mut dp = vec![vec![0; n + 1]; m + 1];
+    // 初始化 dp 的第一行和第一列为其索引值
+    for i in 0..=m {
+        dp[i][0] = i;
+    }
+    for j in 0..=n {
+        dp[0][j] = j;
+    }
+    // 动态规划计算编辑距离
+    for (i, c1) in word1.chars().enumerate() {
+        for (j, c2) in word2.chars().enumerate() {
+            // 由于 if 语句是表达式，可以实现类似三元运算符的效果
+            dp[i + 1][j + 1] = if c1 == c2 { dp[i][j] } else { (dp[i][j] + 1).min(dp[i + 1][j] + 1).min(dp[i][j + 1] + 1) };
+        }
+    }
+
+    dp[m][n] as i32
+
+    // 解法二:
+    /*let word1_chars = word1.as_bytes();
+    let word2_chars = word2.as_bytes();
+    let (m, n) = (word1_chars.len(), word2_chars.len());
+    let mut result = vec![vec![0; n + 1]; m + 1];
+    for i in 0..=m {
+        for j in 0..=n {
+            if i == 0 {
+                result[i][j] = j as i32;
+            } else if j == 0 {
+                result[i][j] = i as i32;
+            } else {
+                result[i][j] = *[result[i - 1][j] + 1, result[i][j - 1] + 1, result[i - 1][j - 1] + if word1_chars[i - 1] == word2_chars[j - 1] { 0 } else { 1 }].iter().min().unwrap();
+            }
+        }
+    }
+    result[m][n]*/
 }
 //-----------------------------------------------------
 
