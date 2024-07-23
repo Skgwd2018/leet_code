@@ -36,7 +36,7 @@ impl RecentCounter {
             }
         }
 
-        self.requests.len() as i32
+        i32::try_from(self.requests.len()).unwrap_or_default()
     }
 }
 //-----------------------------------------------------
@@ -379,7 +379,7 @@ impl TreeNode {
             Some(node) => {
                 let node = node.borrow();
                 // let count = if node.val >= max_val { 1 } else { 0 };
-                let count = (node.val >= max_val) as i32;
+                let count = i32::from(node.val >= max_val);
                 let max_val = node.val.max(max_val);
 
                 count + Self::dfs2(node.left.clone(), max_val) + Self::dfs2(node.right.clone(), max_val)
@@ -396,11 +396,11 @@ impl TreeNode {
         prefix_sum.insert(0, 1);
         match root {
             None => 0,
-            Some(root) => Self::dfs3(root, 0, target_sum as i64, &mut prefix_sum),
+            Some(root) => Self::dfs3(root, 0, i64::from(target_sum), &mut prefix_sum),
         }
     }
     fn dfs3(node: Rc<RefCell<TreeNode>>, curr_sum: i64, target_sum: i64, prefix_sum: &mut HashMap<i64, i32>) -> i32 {
-        let curr_sum = curr_sum + node.borrow().val as i64;
+        let curr_sum = curr_sum + i64::from(node.borrow().val);
         let mut count = 0;
         // 以当前节点为终点,查找是否有满足要求的前缀和
         if let Some(&val) = prefix_sum.get(&(curr_sum - target_sum)) {
@@ -456,7 +456,7 @@ impl TreeNode {
                 // 检查 result 的长度是否小于当前深度加1。如果是,即到达了新的层级,直接将当前节点的值推入 result;
                 // 如果 result 向量的长度不小于当前深度加1,即已经在当前层级有了一个节点值。由于是从右侧查看,所以当前节点的值将替换掉之前存储的该层级的节点值。
                 if result.len() < depth + 1 {
-                    result.push(node.val)
+                    result.push(node.val);
                 } else {
                     result[depth] = node.val;
                 }
