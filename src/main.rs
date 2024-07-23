@@ -571,7 +571,9 @@ fn _gcd_of_strings(str1: String, str2: String) -> String {
         return str1[0..gec_len].to_string();
     }
 
-    "".to_string()
+    // 创建空字符串推荐使用 String::new() 的方式
+    // "".to_string()
+    String::new()
 }
 
 /// 字符串的最大公因子
@@ -587,7 +589,7 @@ fn gcd_of_strings2(str1: String, str2: String) -> String {
     let s1 = format!("{str1}{str2}"); // 消耗内存稍低，但是运行稍慢
     let s2 = format!("{str2}{str1}");
     if s1 != s2 {
-        return "".to_string();
+        return String::new();
     }
 
     fn get_gcd(a: usize, b: usize) -> usize {
@@ -725,7 +727,7 @@ fn move_zeroes(nums: &mut Vec<i32>) {
             j += 1;
         }
     }
-    println!("{:?}", nums);
+    println!("{nums:?}");
 }
 //-----------------------------------------------------
 
@@ -750,11 +752,10 @@ fn is_subsequence(s: String, t: String) -> bool {
 //-----------------------------------------------------
 
 /// 找出平均数最大值且长度为 k 的连续子数组
-fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
-    let k = k as usize;
-    if nums.len() < k {
-        panic!("Array length is less than k");
-    }
+fn find_max_average(nums: Vec<i32>, k: usize) -> f64 {
+    // 推荐使用 assert! 比 panic! 更好
+    // if nums.len() < k { panic!("Array length is less than k"); }
+    assert!(nums.len() >= k, "Array length is less than k");
 
     // 滑动窗口计算总和
     let mut window_sum: i32 = nums.iter().take(k).sum();
@@ -790,6 +791,7 @@ fn largest_altitude(gain: Vec<i32>) -> i32 {
 // 数组的中心下标 是数组的一个下标,其左侧所有元素相加的和等于右侧所有元素相加的和。
 // 如果中心下标位于数组最左端,那么左侧数之和视为 0,因为在下标的左侧不存在元素。这一点对于中心下标位于数组最右端同样适用。
 // 如果数组有多个中心下标,应该返回 最靠近左边 的那一个。如果数组不存在中心下标,返回 -1 。
+#[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
 fn pivot_index(nums: Vec<i32>) -> i32 {
     let mut sum: i32 = nums.iter().sum();
     for (i, v) in nums.iter().enumerate() {
@@ -1154,8 +1156,8 @@ fn max_operations(mut nums: Vec<i32>, k: i32) -> i32 {
 //-----------------------------------------------------
 
 // 题目要求:s 由小写英文字母组成且非空
-fn max_vowels(s: String, k: i32) -> i32 {
-    let k = k as usize;
+fn max_vowels(s: String, k: usize) -> i32 {
+    // let k = k as usize;
     if s.len() < k { return 0; }
     // let s = s.chars().collect::<Vec<char>>();
     let s = s.as_bytes(); // 操作byte效率更高
@@ -1552,7 +1554,8 @@ fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
         }
     }
 
-    answer as i32
+    // answer as i32
+    i32::try_from(answer).expect("Err")
 }
 //-----------------------------------------------------
 
@@ -1825,9 +1828,9 @@ fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
 //-----------------------------------------------------
 
 /// 数组中的第k个最大元素(例：k=1(即最大的元素))
-fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
+fn find_kth_largest(mut nums: Vec<i32>, k: usize) -> i32 {
     // 要找的是第 k 大的元素，即目标位置是排序后的数组长度减去 k
-    let target_pos = nums.len() - k as usize;
+    let target_pos = nums.len() - k;
     // select_nth_unstable() 从重新排序的切片中返回一个三元组：索引前的子切片的引用、索引处的元素的引用 和 索引后的子切片的引用。
     // 注:select_nth_unstable() 方法可能并不会保持原始数组的排序，它只是一个快速选择算法的实现，用于在未排序的数组中查找第 n 个最小元素。
     // 如果你的目的是查找第 k 大的元素，且不在乎算法是否保持排序。
@@ -1850,9 +1853,8 @@ fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
 // - 选择下标 0 ，2 和 3 ，得到分数 (1+3+2) * min(2,3,4) = 12
 // - 选择下标 1 ，2 和 3 ，得到分数 (3+3+2) * min(1,3,4) = 8
 // 所以最大分数为 12
-fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> i64 {
+fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: usize) -> i64 {
     /*let n = nums1.len();
-    let k = k as usize;
     let mut ids = (0..n).collect::<Vec<_>>();
     // 对下标排序
     ids.sort_unstable_by(|&i, &j| nums2[j].cmp(&nums2[i]));
@@ -1877,7 +1879,6 @@ fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> i64 {
     answer*/
 
     // 解法二:
-    let k = k as usize;
     // 合并nums1、 nums2得到数组vec，并按照nums2元素的大小对vec进行降序排序。
     let mut vec: Vec<(i32, i32)> = nums1.into_iter().zip(nums2).collect();
     vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
@@ -1960,7 +1961,7 @@ fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
             // println!("prev ----> {prev:?}");
             // [Reverse(7), Reverse(10), Reverse(12), Reverse(17)]
             // [Reverse(10), Reverse(11), Reverse(12), Reverse(17)]
-            p as i64
+            i64::from(p)
         } else {
             suff.pop();
             // println!("j: {j}"); // 7
@@ -1969,7 +1970,7 @@ fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
             // println!("j: {j}"); // 6
             // println!("suff ----> {suff:?}");
             // [Reverse(2), Reverse(11), Reverse(28), Reverse(28)]
-            s as i64
+            i64::from(s)
         }
     }).sum()
 }
@@ -2072,9 +2073,10 @@ fn letter_combinations(digits: String) -> Vec<String> {
 // digits:输入的字符串, index:当前的索引, value:用于存储当前字母组合的Vec<char>, answer:用于存储所有结果的Vec<String>
 fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, answer: &mut Vec<String>) {
     if index >= digits.len() {
-        let s = String::from_iter(value.iter()); // 将一个字符迭代器转换为一个字符串
+        // let s = String::from_iter(value.iter()); // 将一个字符迭代器转换为一个字符串
+        let s = value.iter().collect(); // 将一个字符迭代器转换为一个字符串
         // let value = vec!['a', 'b', 'c'];
-        // let s = String::from_iter(value.iter()); // "abc"
+        // let s = value.iter().collect(); // "abc"
         answer.push(s);
         return;
     }
