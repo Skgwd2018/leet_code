@@ -374,6 +374,12 @@ fn main() {
     obj.add_back(2);
     println!("pop_smallest: {ret_1}"); // 1
 
+    println!("----- 2542. 最大子序列的分数(贪心,数组,排序,堆(优先队列)) ------");
+    let num1 = vec![1, 3, 3, 2];
+    let num2 = vec![2, 1, 3, 4];
+    let answer = max_score(num1, num2, 3);
+    println!("max_score: {answer}"); // 12
+
     println!("----- 2462. 雇佣k位工人的总代价(数组,双指针) ------");
     let costs = vec![17, 12, 10, 2, 7, 20, 11, 2, 8];       // 11
     // let costs = vec![17, 12, 10, 2, 7, 20, 11, 2, 8, 28, 11, 28]; // 17
@@ -497,6 +503,8 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
+
 }
 
 /// 交替合并字符串
@@ -1820,6 +1828,74 @@ fn find_kth_largest(mut nums: Vec<i32>, k: i32) -> i32 {
     // 注:select_nth_unstable() 方法可能并不会保持原始数组的排序，它只是一个快速选择算法的实现，用于在未排序的数组中查找第 n 个最小元素。
     // 如果你的目的是查找第 k 大的元素，且不在乎算法是否保持排序。
     *nums.select_nth_unstable(target_pos).1
+}
+//-----------------------------------------------------
+
+// 给定两个下标从 0 开始的整数数组 nums1 和 nums2，两者长度都是 n，再给一个正整数 k。必须从 nums1 中选一个长度为 k 的 子序列 对应的下标。
+// 对于选择的下标 i0 ，i1 ，...， ik - 1 ，你的 分数 定义如下：
+// nums1 中下标对应元素求和，乘以 nums2 中下标对应元素的 最小值。
+// 用公式表示： (nums1[i0] + nums1[i1] +...+ nums1[ik - 1]) * min(nums2[i0] , nums2[i1], ... ,nums2[ik - 1]) 。
+// 返回 最大 可能的分数。
+// 一个数组的 子序列 下标是集合 {0, 1, ..., n-1} 中删除若干元素得到的剩余集合，也可以不删除任何元素。
+// 输入：nums1 = [1,3,3,2], nums2 = [2,1,3,4], k = 3
+// 输出：12
+// 解释：
+// 四个可能的子序列分数为：
+// - 选择下标 0 ，1 和 2 ，得到分数 (1+3+3) * min(2,1,3) = 7
+// - 选择下标 0 ，1 和 3 ，得到分数 (1+3+2) * min(2,1,4) = 6
+// - 选择下标 0 ，2 和 3 ，得到分数 (1+3+2) * min(2,3,4) = 12
+// - 选择下标 1 ，2 和 3 ，得到分数 (3+3+2) * min(1,3,4) = 8
+// 所以最大分数为 12
+fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: i32) -> i64 {
+    /*let n = nums1.len();
+    let k = k as usize;
+    let mut ids = (0..n).collect::<Vec<_>>();
+    // 对下标排序
+    ids.sort_unstable_by(|&i, &j| nums2[j].cmp(&nums2[i]));
+
+    let mut h = BinaryHeap::new();
+    let mut sum = 0;
+    for i in 0..k {
+        // 类型转换:使用 i64::from(x) 比 x as i64 更安全,但是消耗内存略高
+        sum += i64::from(nums1[ids[i]]);
+        h.push(-nums1[ids[i]]); // 转换成最小堆
+    }
+
+    let mut answer = sum * i64::from(nums2[ids[k - 1]]);
+    for i in k..n {
+        let x = nums1[ids[i]];
+        if x > -h.peek().unwrap() {
+            sum += i64::from(x + h.pop().unwrap());
+            h.push(-x);
+            answer = answer.max(sum * i64::from(nums2[ids[i]]));
+        }
+    }
+    answer*/
+
+    // 解法二:
+    let k = k as usize;
+    // 合并nums1、 nums2得到数组vec，并按照nums2元素的大小对vec进行降序排序。
+    let mut vec: Vec<(i32, i32)> = nums1.into_iter().zip(nums2).collect();
+    vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
+
+    let mut heap = BinaryHeap::<Reverse<i32>>::new();
+    // 按照vec的顺序计算前k个nums1元素和sum，并且将其放入最小堆中，并计算出迭代前初始答案answer
+    let mut sum: i64 = vec[..k].iter().map(|p| {
+        heap.push(Reverse(p.0));
+        i64::from(p.0)
+    }).sum();
+    let mut answer = sum * i64::from(vec[k - 1].1);
+
+    // 迭代更新answer
+    for (x, y) in &vec[k..] {
+        if *x > heap.peek().unwrap().0 {
+            sum += i64::from(*x - heap.pop().unwrap().0);
+            heap.push(Reverse(*x));
+            answer = answer.max(sum * i64::from(*y));
+        }
+    }
+
+    answer
 }
 //-----------------------------------------------------
 
