@@ -5,6 +5,8 @@ use std::rc::Rc;
 
 use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
 
+// 忽略提示含有大量行的函数
+#[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
 fn main() {
     println!("------ 1768. 交替合并字符串(字符串,双指针) ------");
     let word1 = String::from("abcde");
@@ -22,7 +24,7 @@ fn main() {
     let candies = vec![2, 3, 5, 1, 3];
     let extra_candies = 3;
     let answer = kids_with_candies(candies, extra_candies);
-    println!("kids_with_candies: {:?}", answer); // [true, true, true, false, true]
+    println!("kids_with_candies: {answer:?}"); // [true, true, true, false, true]
 
     println!("------ 605. 种花问题(数组,贪心) ------");
     // let flowerbed = vec![1, 0, 0, 0, 0, 1];
@@ -30,13 +32,13 @@ fn main() {
     // let flowerbed = vec![0, 1, 0];
     let n = 3;
     let answer = can_place_flowers(flowerbed, n);
-    println!("can_place_flowers {n}: {}", answer); // true
+    println!("can_place_flowers {n}: {answer}"); // true
 
     println!("------ 345. 反转字符串中的元音字母(字符串,双指针) ------");
     let s = "leetcode".to_string();
     // let s = "hello".to_string();
     let answer = reverse_vowels(s);
-    println!("reverse_vowels: {}", answer); // leotcede
+    println!("reverse_vowels: {answer}"); // leotcede
 
     println!("------ 283. 移动零(数组,双指针) ------");
     let mut nums = vec![0, 1, 0, 3, 12];
@@ -791,13 +793,14 @@ fn largest_altitude(gain: Vec<i32>) -> i32 {
 // 数组的中心下标 是数组的一个下标,其左侧所有元素相加的和等于右侧所有元素相加的和。
 // 如果中心下标位于数组最左端,那么左侧数之和视为 0,因为在下标的左侧不存在元素。这一点对于中心下标位于数组最右端同样适用。
 // 如果数组有多个中心下标,应该返回 最靠近左边 的那一个。如果数组不存在中心下标,返回 -1 。
-#[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
+// #[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
 fn pivot_index(nums: Vec<i32>) -> i32 {
     let mut sum: i32 = nums.iter().sum();
     for (i, v) in nums.iter().enumerate() {
         sum -= v;
         if sum == 0 {
-            return i as i32;
+            // return i as i32;
+            return i32::try_from(i).unwrap_or_default();
         }
         sum -= v;
     }
@@ -1091,7 +1094,8 @@ fn compress(chars: &mut [char]) -> i32 {
         }
     }
 
-    idx as i32
+    // idx as i32
+    i32::try_from(idx).unwrap_or_default()
 }
 //-----------------------------------------------------
 
@@ -1105,7 +1109,7 @@ fn max_area(height: Vec<i32>) -> i32 {
         // let curr_area = i32::min(height[left], height[right]) * (right - left) as i32;
         // max_area = i32::max(max_area, curr_area);
         // 这两种操作方式通常会内联调用且性能非常接近，建议使用下面的方式(易写且易读)
-        let curr_area = height[left].min(height[right]) * (right - left) as i32;
+        let curr_area = height[left].min(height[right]) * i32::try_from(right - left).unwrap_or_default();
         max_area = max_area.max(curr_area);
 
         if height[left] < height[right] {
@@ -1198,7 +1202,8 @@ fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
         answer = answer.max(right - left + 1);
     }
 
-    answer as i32
+    // answer as i32
+    i32::try_from(answer).unwrap_or_default()
 }
 //-----------------------------------------------------
 
@@ -1425,12 +1430,12 @@ fn predict_party_victory(senate: String) -> String {
     // 解法二:上面的优化版
     let mut rd = [VecDeque::new(), VecDeque::new()];
     for (i, c) in senate.chars().enumerate() {
-        rd[(c == 'D') as usize].push_back(i);
+        rd[usize::from(c == 'D')].push_back(i);
     }
     let n = senate.len();
     loop {
         match (rd[0].pop_front(), rd[1].pop_front()) {
-            (Some(r), Some(d)) => rd[(r > d) as usize].push_back(if r > d { r } else { d } + n),
+            (Some(r), Some(d)) => rd[usize::from(r > d)].push_back(if r > d { r } else { d } + n),
             (Some(_r), None) => break "Radiant".to_string(),
             (None, Some(_d)) => break "Dire".to_string(),
             _ => ()
@@ -1569,7 +1574,7 @@ fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
 // n = 6, connections: [[0,1], [1,3], [2,3], [4,0], [4,5]]
 fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
     let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
-    for e in connections.iter() {
+    for e in &connections {
         let (a, b) = (e[0] as usize, e[1] as usize);
         g[a].push((b as i32, 1));
         g[b].push((a as i32, 0));
@@ -2006,7 +2011,7 @@ fn find_peak_element(nums: Vec<i32>) -> i32 {
         }
     }
     // 当left和right相等，此时就找到了峰值元素的索引。
-    left as i32
+    i32::try_from(left).unwrap_or_default()
 
     // 解法二:
     // max_by_key() 返回指定函数中给出最大值的元素。如果多个元素的最大值相等,则返回最后一个元素。如果迭代器为空,则返回None。
@@ -2264,7 +2269,7 @@ fn min_distance(word1: String, word2: String) -> i32 {
         }
     }
 
-    dp[m][n] as i32
+    i32::try_from(dp[m][n]).unwrap_or_default()
 
     // 解法二:
     /*let word1_chars = word1.as_bytes();
