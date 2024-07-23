@@ -2,7 +2,35 @@
 name = "leet_code"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+repository = "https://github.com/Skgwd2018/leet_code"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+# https://doc.rust-lang.org/cargo/reference/profiles.html
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "z"
+panic = "abort"
+strip = true
+
+[lints.rust]
+# https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html#allowed-by-default-lints
+unsafe_code = "warn"
+unsafe_op_in_unsafe_fn = "warn"
+missing-abi = "warn"
+#missing_docs = "warn"
+
+[lints.clippy]
+# https://rust-lang.github.io/rust-clippy/master/
+pedantic = { level = "warn", priority = -1 }
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+
+# restriction
+undocumented_unsafe_blocks = "warn"
+multiple_unsafe_ops_per_block = "warn"
