@@ -426,6 +426,11 @@ fn main() {
     let answer = combination_sum3(3, 9);
     println!("combination_sum3: {answer:?}"); // [[6, 2, 1], [5, 3, 1], [4, 3, 2]]
 
+    println!("----- 198. 打家劫舍(数组,动态规划) ------");
+    let nums = vec![2, 7, 9, 3, 1];
+    let answer = rob(nums);
+    println!("rob: {answer}");
+
     println!("----- 790. 多米诺和托米诺平铺(动态规划) ------");
     let answer = num_tilings(3);
     println!("num_tilings: {answer}"); // 5
@@ -1011,7 +1016,7 @@ fn min_flips(a: i32, b: i32, c: i32) -> i32 {
     answer*/
 
     // 解法三:
-    (((a | b) ^ c).count_ones() + (((a & b) & !c)).count_ones()) as i32
+    (((a | b) ^ c).count_ones() + ((a & b) & !c).count_ones()) as i32
 }
 //-----------------------------------------------------
 
@@ -2173,6 +2178,18 @@ fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
     let mut answer = vec![];
     backtrace(&mut answer, &mut vec![], 9, k, n);
     answer
+}
+//-----------------------------------------------------
+
+// 假设你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+// 如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+// 给定一个代表每个房屋存放金额的非负整数数组，计算 不触动警报装置的情况下，一夜之内能够偷窃到的最高金额。
+// 输入：[2, 7, 9, 3, 1]
+// 输出：12
+// 解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+//      偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+fn rob(nums: Vec<i32>) -> i32 {
+    nums.iter().skip(1).fold((nums[0], 0), |dp, &n| (dp.0, dp.0).max((dp.1 + n, dp.0))).0
 }
 //-----------------------------------------------------
 
