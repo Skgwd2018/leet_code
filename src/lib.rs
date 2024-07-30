@@ -58,7 +58,7 @@ impl ListNode {
         self.next = next;
     }
 
-    /// 反转链表
+    /// 206.反转链表
     pub fn reverse_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         let mut prev = None; // 前一个节点
         let mut curr = head; // 当前节点
@@ -78,7 +78,7 @@ impl ListNode {
         prev
     }
 
-    /// 删除链表的中间节点
+    /// 2095.删除链表的中间节点
     // 题目要求:链表中节点的数目范围[1, 105]
     pub fn delete_middle(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
         /*let mut prev = std::ptr::null_mut();
@@ -125,7 +125,7 @@ impl ListNode {
         temp_head.next
     }
 
-    /// 奇偶链表
+    /// 328.奇偶链表
     // 给定单链表的头节点 head,将所有索引为奇数的节点和索引为偶数的节点分别组合在一起,然后返回重新排序的列表。
     // 第一个节点的索引被认为是 奇数,第二个节点的索引为 偶数,以此类推。
     // 请注意，偶数组和奇数组内部的相对顺序应该与输入时保持一致。
@@ -167,6 +167,27 @@ impl ListNode {
         // even.unwrap().next
         *curr_even = odd;
         even
+    }
+
+    /// 2130.链表最大孪生和
+    // 在一个大小为 n 且 n 为 偶数 的链表中，对于 0 <= i <= (n / 2) - 1 的 i，第 i 个节点（下标从 0 开始）的孪生节点为第 (n-1-i) 个节点。
+    // 比方说，n = 4 那么节点 0 是节点 3 的孪生节点，节点 1 是节点 2 的孪生节点。这是长度为 n = 4 的链表中所有的孪生节点。
+    // 孪生和 定义为一个节点和它孪生节点两者值之和。
+    // 给定一个长度为偶数的链表的头节点 head，返回链表的 最大孪生和。
+    pub fn pair_sum(head: Option<Box<ListNode>>) -> i32 {
+        let mut list = vec![];
+        let mut curr = head;
+        let mut ans = 0;
+        while let Some(node) = curr {
+            list.push(node.val);
+            curr = node.next;
+        }
+        let n = list.len();
+        for i in 0..n / 2 {
+            ans = ans.max(list[i] + list[n - 1 - i]);
+        }
+
+        ans
     }
 
     /// 遍历链表
@@ -224,7 +245,7 @@ impl TreeNode {
         TreeNode { val, left: None, right: None }
     }
 
-    /// 最大深度(深度优先搜索问题)
+    /// 104.二叉树的最大深度(深度优先搜索问题)
     // 二叉树的 最大深度 是指从根节点到最远叶子节点的最长路径上的节点数。
     pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
         // 递归操作
@@ -247,7 +268,7 @@ impl TreeNode {
         }
     }
 
-    /// 叶值序列相似的树(深度优先搜索问题)
+    /// 872.叶值序列相似的树(深度优先搜索问题)
     pub fn leaf_similar(root1: Option<Rc<RefCell<TreeNode>>>, root2: Option<Rc<RefCell<TreeNode>>>) -> bool {
         // 函数内部定义的函数称为闭包(Closure)或局部函数(Local Function)。
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
@@ -323,7 +344,7 @@ impl TreeNode {
         None
     }
 
-    /// 删除二叉搜索树中的节点
+    /// 450.删除二叉搜索树中的节点
     // 给定一个二叉搜索树的根节点 root 和一个值 key,删除二叉搜索树中的 key 对应的节点,并保证二叉搜索树的性质不变。
     // 返回二叉搜索树(有可能被更新)的根节点的引用。
     pub fn delete_node(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
@@ -366,7 +387,7 @@ impl TreeNode {
         dfs5(root, key)
     }
 
-    /// 统计二叉树中好节点的数目(深度优先搜索问题)
+    /// 1448.统计二叉树中好节点的数目(深度优先搜索问题)
     // 即从根节点开始遍历到某个节点,并且始终保持当前遍历到的节点的值是非递减的,那么该节点就是一个好节点。
     // 根节点一定是好节点,例：3 -> 4 -> 5, 3个节点都是好节点，3 -> 1 -> 3, 则3和3都是好节点，1不是;
     pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
@@ -387,7 +408,7 @@ impl TreeNode {
         }
     }
 
-    /// 二叉树路径总和Ⅲ(深度优先搜索问题,回溯操作)
+    /// 437.二叉树路径总和Ⅲ(深度优先搜索问题,回溯操作)
     // 给定一个二叉树的根节点 root,和一个整数 targetSum,求该二叉树里节点值之和等于 targetSum 的 路径 的数目。
     // 路径 不需要从根节点开始,也不需要在叶子节点结束,但是路径方向必须是向下的(只能从父节点到子节点)。
     pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> i32 {
@@ -424,7 +445,7 @@ impl TreeNode {
         count
     }
 
-    /// 右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
+    /// 199.二叉树的右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
     // 给定一个二叉树的 根节点root,想象自己站在它的右侧,按照从顶部到底部的顺序,返回从右侧能看到的节点值。
     pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         // 深度优先搜索
@@ -469,7 +490,7 @@ impl TreeNode {
         result
     }
 
-    /// 最大层内元素和(广度优先搜索)
+    /// 1161.最大层内元素和(广度优先搜索)
     // 给你一个二叉树的根节点 root。设根节点位于二叉树的第 1 层,而根节点的子节点位于第 2 层,依此类推。
     // 请返回层内元素之和 最大 的那几层(可能只有一层)的层号，并返回其中 最小 的那个。
     pub fn max_level_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {

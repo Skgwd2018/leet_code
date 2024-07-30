@@ -282,10 +282,15 @@ fn main() {
 
     println!("----- 328. 奇偶链表(链表) ------");
     let odd_even_head = ListNode::odd_even_list(node_head);
-    match odd_even_head {
+    match odd_even_head.clone() {
         None => (),
         Some(node) => node.print_list(),
     } // 5 2 4 1
+
+    println!("----- 2130. 链表最大孪生和(链表,栈,双指针) ------");
+    let node_head = odd_even_head.clone();
+    let answer = ListNode::pair_sum(node_head);
+    println!("ListNode::pair_sum: {answer}");
 
     println!("----- 1448. 统计二叉树中好节点的数目(dfs,bfs) ------");
     let answer = TreeNode::good_nodes(Some(root));
