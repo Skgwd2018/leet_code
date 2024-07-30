@@ -290,7 +290,7 @@ fn main() {
     println!("----- 2130. 链表最大孪生和(链表,栈,双指针) ------");
     let node_head = odd_even_head.clone();
     let answer = ListNode::pair_sum(node_head);
-    println!("ListNode::pair_sum: {answer}");
+    println!("ListNode::pair_sum: {answer}"); // 6
 
     println!("----- 1448. 统计二叉树中好节点的数目(dfs,bfs) ------");
     let answer = TreeNode::good_nodes(Some(root));
@@ -320,6 +320,10 @@ fn main() {
     })));
     let answer = TreeNode::path_sum(root.clone(), 8);
     println!("path_sum: {answer}"); // 3
+
+    println!("----- 1372. 二叉树中的最长交错路径(dfs,动态规划) ------");
+    let answer = TreeNode::longest_zig_zag(root.clone());
+    println!("longest_zig_zag: {answer}"); // 2
 
     println!("----- 199. 二叉树的右视图(dfs,bfs) ------");
     let answer = TreeNode::right_side_view(root.clone());

@@ -445,6 +445,35 @@ impl TreeNode {
         count
     }
 
+    /// 1372.二叉树中的最长交错路径(DFS,动态规划)
+    // 给定一棵以 root 为根的二叉树，二叉树中的交错路径定义如下：
+    // 选择二叉树中 任意 节点和一个方向（左或者右）。
+    // 如果前进方向为右，那么移动到当前节点的的右子节点，否则移动到它的左子节点。
+    // 改变前进方向：左变右或者右变左。
+    // 重复第二步和第三步，直到你在树中无法继续移动。
+    // 交错路径的长度定义为：访问过的节点数目 - 1(单个节点的路径长度为 0)。
+    // 返回给定树中最长 交错路径 的长度。
+    pub fn longest_zig_zag(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        Self::dfs6(&root, false, 0)
+    }
+    // direct left:false, right:true
+    fn dfs6(root: &Option<Rc<RefCell<TreeNode>>>, direct: bool, curr_sum: i32) -> i32 {
+        match root {
+            None => 0,
+            Some(node) => {
+                let (left_answer, right_answer) = if direct {
+                    (Self::dfs6(&node.borrow().left, false, curr_sum + 1),
+                     Self::dfs6(&node.borrow().right, true, 1))
+                } else {
+                    (Self::dfs6(&node.borrow().left, false, 1),
+                     Self::dfs6(&node.borrow().right, true, curr_sum + 1))
+                };
+
+                curr_sum.max(left_answer.max(right_answer))
+            }
+        }
+    }
+
     /// 199.二叉树的右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
     // 给定一个二叉树的 根节点root,想象自己站在它的右侧,按照从顶部到底部的顺序,返回从右侧能看到的节点值。
     pub fn right_side_view(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
