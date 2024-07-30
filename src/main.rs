@@ -137,11 +137,11 @@ fn main() {
     println!("------ 700. 二叉搜索树(BST)中的搜索(二叉搜索树) ------");
     let val = 20;
     let answer = TreeNode::search_bst(Some(root.clone()), val);
-    println!("search_bst: {answer:?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
+    println!("search_bst: {answer:#?}"); // Some(RefCell { value: TreeNode { val: 20, left: Some(RefCell { value: TreeNode { val: 17, left: None, right: None } }), right: Some(RefCell { value: TreeNode { val: 36, left: None, right: None } }) } })
 
     println!("----- 450. 删除二叉搜索树中的节点(二叉搜索树) ------");
     let answer = TreeNode::delete_node(Some(root.clone()), val);
-    println!("delete_node: {answer:?}");
+    println!("delete_node: {answer:#?}");
 
     println!("------ 374. 猜数字大小(二分查找,交互) ------");
     let pick_num = guess_number(10);
@@ -325,6 +325,12 @@ fn main() {
     let answer = TreeNode::longest_zig_zag(root.clone());
     println!("longest_zig_zag: {answer}"); // 2
 
+    println!("----- 236. 二叉树的最近公共祖先(DFS) ------");
+    let p = Some(Rc::new(RefCell::new(TreeNode { val: 3, left: None, right: None })));
+    let q = Some(Rc::new(RefCell::new(TreeNode { val: 1, left: None, right: None })));
+    let answer = TreeNode::lowest_common_ancestor(root.clone(), p, q);
+    println!("lowest_common_ancestor: {answer:#?}");
+
     println!("----- 199. 二叉树的右视图(dfs,bfs) ------");
     let answer = TreeNode::right_side_view(root.clone());
     println!("right_side_view: {answer:?}"); // [10, -3, 11, 1]
@@ -487,7 +493,7 @@ fn main() {
                         "monitor".to_string(), "mousepad".to_string()];
     let search_word = "mouse".to_string();
     let answer = suggested_products(products, search_word);
-    println!("suggested_products: {answer:?}"); // [["mobile", "moneypot", "monitor"], ["mobile", "moneypot", "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse", "mousepad"]]
+    println!("suggested_products: {answer:#?}"); // [["mobile", "moneypot", "monitor"], ["mobile", "moneypot", "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse", "mousepad"]]
 
     println!("----- 435. 无重叠区间(数组,贪心,动态规划) ------");
     let intervals = vec![vec![1, 2], vec![2, 3], vec![3, 4], vec![1, 3]];

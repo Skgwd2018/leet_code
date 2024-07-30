@@ -461,7 +461,7 @@ impl TreeNode {
         match root {
             None => 0,
             Some(node) => {
-                let (left_answer, right_answer) = if direct {
+                let (left, right) = if direct {
                     (Self::dfs6(&node.borrow().left, false, curr_sum + 1),
                      Self::dfs6(&node.borrow().right, true, 1))
                 } else {
@@ -469,9 +469,23 @@ impl TreeNode {
                      Self::dfs6(&node.borrow().right, true, curr_sum + 1))
                 };
 
-                curr_sum.max(left_answer.max(right_answer))
+                curr_sum.max(left.max(right))
             }
         }
+    }
+
+    /// 236.二叉树的最近公共祖先(DFS)
+    // 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+    // 最近公共祖先的定义为:对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大(一个节点也可以是它自己的祖先)。
+    pub fn lowest_common_ancestor(root: Option<Rc<RefCell<TreeNode>>>, p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        if root.is_none() || root == p || root == q { return root; }
+
+        let node_ref = root.as_ref().unwrap();
+        let left = Self::lowest_common_ancestor(node_ref.borrow_mut().left.take(), p.clone(), q.clone());
+        let right = Self::lowest_common_ancestor(node_ref.borrow_mut().right.take(), p, q);
+        if left.is_some() && right.is_some() { return root; }
+
+        if left.is_some() { left } else { right }
     }
 
     /// 199.二叉树的右视图(广度优先搜索),BFS是广度优先搜索（breadth first search）
