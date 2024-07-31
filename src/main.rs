@@ -174,7 +174,15 @@ fn main() {
 
     println!("----- 1025. 除数博弈(脑筋急转弯,数学,动态规划,博弈) ------");
     let answer = divisor_game(2);
-    println!("divisor_game: {answer}");
+    println!("divisor_game: {answer}"); // true
+
+    println!("----- 509. 斐波那契数(记忆化搜索,动态规划) ------");
+    let answer = fib(28);
+    println!("fib: {answer}"); // 317811
+
+    println!("----- 70. 爬楼梯(记忆化搜索,动态规划) ------");
+    let answer = climb_stairs(3);
+    println!("climb_stairs: {answer}"); // 3
 
     println!("\n-------------up---------------\n");
 
@@ -1047,6 +1055,52 @@ fn min_flips(a: i32, b: i32, c: i32) -> i32 {
 // 只有在爱丽丝在游戏中取得胜利时才返回 true 。假设两个玩家都以最佳状态参与游戏。
 fn divisor_game(n: i32) -> bool {
     n % 2 == 0
+}
+//-----------------------------------------------------
+
+// 斐波那契数(通常用 F(n) 表示)形成的序列称为 斐波那契数列。该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：
+// F(0) = 0，F(1) = 1
+// F(n) = F(n - 1) + F(n - 2)，其中 n > 1
+// 给定 n，请计算 F(n)。
+fn fib(n: i32) -> i32 {
+    if n < 2 { return n; }
+
+    let n = n as usize;
+    let mut dp = vec![0; n + 1];
+    dp[0] = 0;
+    dp[1] = 1;
+    for i in 2..=n {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    dp[n]
+}
+//-----------------------------------------------------
+
+// 假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+// 每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+// 输入：n = 3
+// 输出：3
+// 解释：有三种方法可以爬到楼顶。
+// 1. 1 阶 + 1 阶 + 1 阶
+// 2. 1 阶 + 2 阶
+// 3. 2 阶 + 1 阶
+fn climb_stairs(n: i32) -> i32 {
+    fn dfs(i: usize, memo: &mut Vec<i32>) -> i32 {
+        if i <= 1 { // 递归边界
+            return 1;
+        }
+        if memo[i] != 0 { // 之前计算过
+            return memo[i];
+        }
+        let res = dfs(i - 1, memo) + dfs(i - 2, memo);
+        memo[i] = res; // 记忆化
+        res
+    }
+    let n = n as usize;
+    let mut memo = vec![0; n + 1];
+
+    dfs(n, &mut memo)
 }
 //-----------------------------------------------------
 
