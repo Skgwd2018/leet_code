@@ -587,6 +587,11 @@ fn main() {
     let answer = sequence_reconstruction(nums, sequences);
     println!("sequence_reconstruction: {answer}"); // true
 
+    println!("----- 912. 排序数组(桶排序,分治,数组,基数排序,计数排序,归并排序,堆(优先队列)) ------");
+    let nums = vec![5, 1, 1, 2, 0, 0];
+    let answer = sort_array(nums);
+    println!("sort_array: {answer:?}");
+
     println!("\n-------------up---------------\n");
 
     println!("----- 149. 直线上最多的点数(几何,数学,数组,哈希表) ------");
@@ -2732,6 +2737,193 @@ fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool {
     // 对于 nums（一个 Vec<i32>），windows(2) 遍历所有长度为2的连续子切片。
     // 即如果 nums 是 [1, 2, 3, 4]，那么 nums.windows(2) 将生成一个迭代器，依次返回 &[1, 2]、&[2, 3] 和 &[3, 4]。
     nums.windows(2).all(|win| map.get(&win[0]).map_or(false, |set| set.contains(&win[1])))
+}
+//-----------------------------------------------------
+
+// 给定一个整数数组 nums，请你将该数组升序排列。
+fn sort_array(mut nums: Vec<i32>) -> Vec<i32> {
+    // bubble_sort(&mut nums); // 冒泡排序
+    // insert_sort(&mut nums); // 插入排序
+    // select_sort(&mut nums); // 选择排序
+    merge_sort(&mut nums); // 归并排序
+    // quick_sort(&mut nums); // 快速排序
+    // heap_sort(&mut nums); // 堆排序
+
+    nums
+}
+
+/// 1.冒泡排序，时间复杂度：O(n^2)，空间复杂度：O(1)，稳定性排序
+#[allow(unused)]
+fn bubble_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+
+    for i in (1..n).rev() {
+        let mut flag = true;
+
+        for j in 1..=i {
+            if nums[j - 1] > nums[j] {
+                nums.swap(j - 1, j);
+                flag = false;
+            }
+        }
+
+        if flag { break; }
+    }
+}
+
+/// 2.插入排序，时间复杂度：O(n^2)，空间复杂度：O(1)，稳定性排序
+#[allow(unused)]
+fn insert_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+
+    for i in 1..n {
+        let insert_val = nums[i];
+
+        for j in (0..i).rev() {
+            if nums[j] > insert_val {
+                nums[j + 1] = nums[j];
+            } else {
+                nums[j + 1] = insert_val;
+                break;
+            }
+
+            if j == 0 {
+                nums[0] = insert_val;
+            }
+        }
+    }
+}
+
+/// 3.选择排序，时间复杂度：O(n^2)，空间复杂度：O(1)，非稳定性排序
+#[allow(unused)]
+fn select_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+
+    for i in (1..n).rev() {
+        let mut max_idx = i;
+
+        for j in 0..i {
+            if nums[j] > nums[max_idx] {
+                max_idx = j;
+            }
+        }
+
+        nums.swap(i, max_idx);
+    }
+}
+
+/// 4.归并排序，时间复杂度：O(nlogn)，空间复杂度：O(n)，稳定性排序
+#[allow(unused)]
+fn merge_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+
+    merge(nums, 0, n)
+}
+fn merge(nums: &mut Vec<i32>, beg: usize, end: usize) {
+    if beg + 1 >= end { return; }
+
+    let mid = (beg + end) / 2;
+    merge(nums, beg, mid);
+    merge(nums, mid, end);
+
+    sort(nums, beg, mid, end)
+}
+fn sort(nums: &mut Vec<i32>, beg: usize, mid: usize, end: usize) {
+    let nums2 = nums[mid..end].to_vec();
+    let mut idx1 = mid - 1;
+    let mut idx2 = nums2.len() - 1;
+    let mut idx = end - 1;
+
+    loop {
+        if nums[idx1] > nums2[idx2] {
+            nums[idx] = nums[idx1];
+            idx -= 1;
+            if idx1 != beg { idx1 -= 1; } else {
+                for i in 0..=idx2 {
+                    nums[i + beg] = nums2[i];
+                }
+
+                break;
+            }
+        } else {
+            nums[idx] = nums2[idx2];
+            idx -= 1;
+            if idx2 != 0 { idx2 -= 1; } else { break; }
+        }
+    }
+}
+
+/// 5.快速排序，时间复杂度：O(nlogn)，空间复杂度：O(1)，非稳定性排序
+#[allow(unused)]
+fn quick_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+    quick(nums, 0, n);
+}
+fn quick(nums: &mut Vec<i32>, beg: usize, end: usize) {
+    if beg + 1 >= end { return; }
+
+    // 相当于随机选取一个点
+    let idx = rand::thread_rng().gen_range(beg..end);
+    //let idx = (beg + end) / 2;
+    nums.swap(beg, idx);
+    let val = nums[beg];
+
+    let mut idx = beg;
+    let (mut l, mut r) = (beg + 1, end);
+    while l < r {
+        while l < r && nums[r - 1] > val { r -= 1; }
+        if l < r {
+            nums[idx] = nums[r - 1];
+            idx = r - 1;
+            r -= 1;
+        }
+
+        while l < r && nums[l] < val { l += 1; }
+        if l < r {
+            nums[idx] = nums[l];
+            idx = l;
+            l += 1;
+        }
+    }
+
+    nums[idx] = val;
+    quick(nums, beg, idx);
+    quick(nums, idx + 1, end);
+}
+
+/// 6.堆排序，时间复杂度：O(nlogn)，空间复杂度：O(1)，非稳定性排序
+#[allow(unused)]
+fn heap_sort(nums: &mut Vec<i32>) {
+    let n = nums.len();
+
+    // 1.建立大顶堆
+    for i in (0..n / 2).rev() {
+        heap_fy(nums, i, n);
+    }
+
+    // 2.此时nums[0]就是最大元素
+    for i in (1..n).rev() {
+        nums.swap(0, i);
+        heap_fy(nums, 0, i);
+    }
+}
+fn heap_fy(nums: &mut Vec<i32>, mut idx: usize, n: usize) {
+    loop {
+        let mut max_idx = idx;
+        let left_idx = idx * 2 + 1;
+        let right_idx = left_idx + 1;
+
+        if left_idx < n && nums[left_idx] > nums[max_idx] {
+            max_idx = left_idx;
+        }
+        if right_idx < n && nums[right_idx] > nums[max_idx] {
+            max_idx = right_idx;
+        }
+        if max_idx == idx { break; }
+
+        nums.swap(idx, max_idx);
+        idx = max_idx;
+    }
 }
 //-----------------------------------------------------
 
