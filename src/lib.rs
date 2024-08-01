@@ -4,6 +4,7 @@ use std::collections::{BTreeSet, HashMap, VecDeque};
 use std::fmt::Debug;
 use std::mem::swap;
 use std::rc::Rc;
+use rand::distributions::{Distribution, Uniform};
 
 /// 计算特定时间范围内最近的请求
 #[derive(Default)]
@@ -796,6 +797,34 @@ impl StockSpanner {
         self.stack.push((self.curr_day, price));
 
         result
+    }
+}
+//-----------------------------------------------------
+
+pub struct Solution {
+    x: f64,
+    y: f64,
+    r: f64,
+}
+
+impl Solution {
+    pub fn new(radius: f64, x_center: f64, y_center: f64) -> Self {
+        Solution {
+            x: x_center,
+            y: y_center,
+            r: radius,
+        }
+    }
+
+    pub fn rand_point(&self) -> Vec<f64> {
+        let mut rng = rand::thread_rng();
+        let die = Uniform::from(-self.r..=self.r);
+        loop {
+            let (x, y): (f64, f64) = (die.sample(&mut rng), die.sample(&mut rng));
+            if x * x + y * y <= self.r * self.r {
+                return vec![x + self.x, y + self.y];
+            }
+        }
     }
 }
 //-----------------------------------------------------

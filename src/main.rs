@@ -1,9 +1,10 @@
 use std::cell::RefCell;
 use std::cmp::{self, Ordering, Reverse};
-use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
+use std::collections::{BinaryHeap, BTreeSet, HashMap, HashSet, VecDeque};
+use std::ops::Bound::{Included, Unbounded};
 use std::rc::Rc;
 use rand::Rng;
-use leet_code::{BSTIterator, ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
+use leet_code::{BSTIterator, ListNode, RecentCounter, SmallestInfiniteSet, Solution, StockSpanner, TreeNode, Trie};
 
 // 忽略提示含有大量行的函数
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
@@ -560,6 +561,16 @@ fn main() {
     println!("----- 470. 用 Rand7() 实现 Rand10() (数学,拒绝采样,概率与统计,随机化) ------");
     let answer = rand10();
     println!("rand10(): {answer}");
+
+    println!("----- 478. 在圆内随机生成点(数学,拒绝采样,几何,随机化) ------");
+    let solution = Solution::new(1.0, 0.0, 0.0);
+    let answer: Vec<f64> = solution.rand_point();
+    println!("solution.rand_point(): {answer:?}"); //随机的 [0.7767803745865258, 0.4342820953752826]
+
+    println!("----- LCR 057. 存在重复元素 III(数组,桶排序,有序集合,滑动窗口) ------");
+    let nums = vec![1, 5, 9, 1, 5, 9];
+    let answer = contains_nearby_almost_duplicate(nums, 2, 3);
+    println!("contains_nearby_almost_duplicate: {answer}"); // false
 
     println!("\n-------------up---------------\n");
 
@@ -2597,6 +2608,31 @@ fn rand10() -> i32 {
     }
 
     x % 10 + 1
+}
+//-----------------------------------------------------
+
+// 给定一个整数数组 nums 和两个整数 k 和 t 。
+// 请判断是否存在 两个不同下标 i 和 j，使得 abs(nums[i] - nums[j]) <= t ，同时又满足 abs(i - j) <= k 。
+// 如果存在则返回 true，不存在返回 false。
+// 输入：nums = [1,5,9,1,5,9], k = 2, t = 3
+// 输出：false
+fn contains_nearby_almost_duplicate(nums: Vec<i32>, k: i32, t: i32) -> bool {
+    let k = k as usize;
+    let mut v: BTreeSet<i32> = BTreeSet::new();
+    for i in 0..nums.len() {
+        let iter = v.range((Included(nums[i].max(i32::MIN + t) - t), Unbounded)).next();
+        if let Some(&res) = iter {
+            if res <= (nums[i].min(i32::MAX - t) + t) {
+                return true;
+            }
+        }
+        v.insert(nums[i]);
+        if i >= k {
+            v.remove(&nums[i - k]);
+        }
+    }
+
+    false
 }
 //-----------------------------------------------------
 
