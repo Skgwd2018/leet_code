@@ -3,7 +3,7 @@ use std::cmp::{self, Ordering, Reverse};
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
 
-use leet_code::{ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
+use leet_code::{BSTIterator, ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
 
 // 忽略提示含有大量行的函数
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
@@ -348,8 +348,17 @@ fn main() {
     println!("right_side_view: {answer:?}"); // [10, -3, 11, 1]
 
     println!("----- 1161. 最大层内元素和(dfs,bfs) ------");
-    let answer = TreeNode::max_level_sum(root);
+    let answer = TreeNode::max_level_sum(root.clone());
     println!("max_level_sum: {answer}"); // 3
+
+    println!("----- LCR 055. 二叉搜索树迭代器(迭代器,栈,树,设计) ------");
+    let mut bst_iter = BSTIterator::new(root);
+    println!("bst_iter.next(): {}", bst_iter.next()); // 10
+    println!("bst_iter.next(): {}", bst_iter.next()); // -1
+    println!("bst_iter.has_next(): {}", bst_iter.has_next()); // false
+    println!("bst_iter.next(): {}", bst_iter.next()); // -1
+    // println!("bst_iter.has_next(): {}", bst_iter.has_next()); // false
+    // println!("bst_iter.next(): {}", bst_iter.next()); // -1
 
     println!("----- 841. 钥匙和房间(dfs,bfs,图) ------");
     let rooms = vec![vec![1], vec![2], vec![3], vec![]]; // true
