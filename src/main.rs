@@ -547,6 +547,13 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
+    println!("\n-------------up---------------\n");
+
+    println!("----- 149. 直线上最多的点数(几何,数学,数组,哈希表) ------");
+    let points = vec![[1, 1], [3, 2], [5, 3], [4, 1], [2, 3], [1, 4]];
+    let answer = max_points(points);
+    println!("max_points: {answer}");
 }
 
 /// 交替合并字符串
@@ -2557,5 +2564,29 @@ fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
     }
 
     answer
+}
+//-----------------------------------------------------
+
+// 给你一个数组 points ，其中 points[i] = [xi, yi] 表示 X-Y 平面上的一个点。求最多有多少个点在同一条直线上。
+// points 中的所有点 互不相同
+// 输入：points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]
+// 输出：4
+fn max_points(mut points: Vec<[i32; 2]>) -> i32 {
+    let mut counter = 0;
+    points.sort_unstable();
+    let mut s = HashMap::<i32, i32>::with_capacity(points.len() / 2 + 50);
+    while let Some(x) = points.pop() {
+        for i in &points {
+            // Inf 的符号不会发生改变，不必处理+-Inf的问题
+            /* *s.entry(unsafe {
+                // std::mem::transmute::<f32, i32>((x[1] - i[1]) as f32 / (x[0] - i[0]) as f32)
+            }).or_insert(0) += 1; */
+            *s.entry(((x[1] - i[1]) as f32 / (x[0] - i[0]) as f32).to_bits() as i32).or_insert(0) += 1;
+        }
+        counter = s.drain().map(|x| x.1).max().unwrap_or(counter).max(counter);
+
+        if counter > points.len() as i32 / 2 { break; }
+    }
+    counter + 1
 }
 //-----------------------------------------------------
