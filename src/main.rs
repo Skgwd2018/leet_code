@@ -185,6 +185,11 @@ fn main() {
     let answer = climb_stairs(3);
     println!("climb_stairs: {answer}"); // 3
 
+    println!("----- 1979. 找出数组的最大公约数(数组,数学,数论) ------");
+    let nums = vec![7, 5, 6, 8, 3];
+    let answer = find_gcd(nums);
+    println!("find_gcd: {answer}"); // 1
+
     println!("\n-------------up---------------\n");
 
     println!("------ 151. 反转字符串中的单词(字符串,双指针) ------");
@@ -1136,6 +1141,20 @@ fn climb_stairs(n: i32) -> i32 {
     let mut memo = vec![0; n + 1];
 
     dfs(n, &mut memo)
+}
+//-----------------------------------------------------
+
+// 给定一个整数数组 nums ，返回数组中最大数和最小数的 最大公约数。
+// 两个数的 最大公约数 是能够被两个数整除的最大正整数。
+// 输入：nums = [7,5,6,8,3]
+// 输出：1
+// 解释：
+// nums 中最小的数是 3
+// nums 中最大的数是 8
+// 3 和 8 的最大公约数是 1
+fn find_gcd(nums: Vec<i32>) -> i32 {
+    let (min, max) = (*nums.iter().min().unwrap(), *nums.iter().max().unwrap());
+    (1..=min).rev().find(|i| min % i == 0 && max % i == 0).unwrap()
 }
 //-----------------------------------------------------
 
