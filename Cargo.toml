@@ -8,6 +8,7 @@ repository = "https://github.com/Skgwd2018/leet_code"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rand = "0.8.5"
 
 # https://doc.rust-lang.org/cargo/reference/profiles.html
 [profile.release]

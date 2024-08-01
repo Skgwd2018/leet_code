@@ -2,7 +2,7 @@ use std::cell::RefCell;
 use std::cmp::{self, Ordering, Reverse};
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::rc::Rc;
-
+use rand::Rng;
 use leet_code::{BSTIterator, ListNode, RecentCounter, SmallestInfiniteSet, StockSpanner, TreeNode, Trie};
 
 // 忽略提示含有大量行的函数
@@ -556,6 +556,10 @@ fn main() {
     println!("stock_spanner.next(75): {ret_1}");   // 4
     let ret_1 = stock_spanner.next(85);
     println!("stock_spanner.next(85): {ret_1}");   // 6
+
+    println!("----- 470. 用 Rand7() 实现 Rand10() (数学,拒绝采样,概率与统计,随机化) ------");
+    let answer = rand10();
+    println!("rand10(): {answer}");
 
     println!("\n-------------up---------------\n");
 
@@ -2573,6 +2577,26 @@ fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
     }
 
     answer
+}
+//-----------------------------------------------------
+
+// 给定方法 rand7 可生成 [1, 7] 范围内的均匀随机整数，试写一个方法 rand10 生成 [1, 10] 范围内的均匀随机整数。
+// 你只能调用 rand7() 且不能调用其他方法。请不要使用系统的 Math.random() 方法。
+// 每个测试用例将有一个内部参数 n，即你实现的函数 rand10() 在测试时将被调用的次数。请注意，这不是传递给 rand10() 的参数。
+// 输入: 3
+// 输出: [3, 8, 10]
+
+fn rand7() -> i32 {
+    rand::thread_rng().gen_range(1..=7)
+}
+
+fn rand10() -> i32 {
+    let mut x = 40;
+    while x >= 40 {
+        x = 7 * (rand7() - 1) + (rand7() - 1);
+    }
+
+    x % 10 + 1
 }
 //-----------------------------------------------------
 
