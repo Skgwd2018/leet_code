@@ -581,6 +581,12 @@ fn main() {
     let answer = count_arrangement(2);
     println!("count_arrangement: {answer}"); // 2
 
+    println!("----- LCR 115. 序列重建(图,拓扑排序,数组) ------");
+    let nums = vec![1, 2, 3];
+    let sequences = vec![[1, 2], [1, 3], [2, 3]];
+    let answer = sequence_reconstruction(nums, sequences);
+    println!("sequence_reconstruction: {answer}"); // true
+
     println!("\n-------------up---------------\n");
 
     println!("----- 149. 直线上最多的点数(几何,数学,数组,哈希表) ------");
@@ -2689,6 +2695,43 @@ fn count_arrangement(n: i32) -> i32 {
     }
 
     f[f.len() - 1]
+}
+//-----------------------------------------------------
+
+// 给定一个长度为 n 的整数数组 nums ，其中 nums 是范围为 [1，n] 的整数的排列。
+// 还提供了一个 2D 整数数组 sequences ，其中 sequences[i] 是 nums 的子序列。
+// 检查 nums 是否是唯一的最短 超序列 。最短 超序列 是 长度最短 的序列，并且所有序列 sequences[i] 都是它的子序列。
+// 对于给定的数组 sequences ，可能存在多个有效的 超序列。
+// 例如，对于 sequences = [[1,2],[1,3]] ，有两个最短的 超序列 ，[1,2,3] 和 [1,3,2] 。
+// 而对于 sequences = [[1,2],[1,3],[1,2,3]] ，唯一可能的最短 超序列 是 [1,2,3] 。[1,2,3,4] 是可能的超序列，但不是最短的。
+// 如果 nums 是序列的唯一最短 超序列 ，则返回 true ，否则返回 false 。
+// 子序列 是一个可以通过从另一个序列中删除一些元素或不删除任何元素，而不改变其余元素的顺序的序列。
+// 输入：nums = [1,2,3], sequences = [[1,2],[1,3],[2,3]]
+// 输出：true
+// 解释：最短可能的超序列为[1,2,3]。
+// 序列 [1,2] 是它的一个子序列：[1,2,3]。
+// 序列 [1,3] 是它的一个子序列：[1,2,3]。
+// 序列 [2,3] 是它的一个子序列：[1,2,3]。
+// 因为 nums 是唯一最短的超序列，所以返回true。
+fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool {
+    let mut map = HashMap::new();
+    sequences.into_iter().for_each(|seq| {
+        // .windows() 返回一个迭代器，遍历所有长度大小的连续窗口。窗口重叠。如果切片小于大小，迭代器将不返回任何值。
+        // .windows() 是 Iterator trait 的一个扩展方法，用于在切片（slice）或类似容器的迭代器上。
+        // 它返回一个新的迭代器，该迭代器遍历原始数据中的所有连续窗口（或子切片）。窗口的大小由 windows() 方法的参数指定，并且窗口是重叠的。
+        // 对于 sequences 中的每个元素（这里是一个 [i32; 2] 数组，即包含两个元素的数组），
+        // windows(2) 会生成一个迭代器，该迭代器遍历这个数组的所有可能长度为2的连续窗口。
+        // 由于数组长度恰好为2，windows(2) 实际上只会生成一个窗口，即整个数组本身。但是，这种方式使得代码在处理更长的序列时更加通用和灵活。
+        // 例如，如果 seq 是 [1, 2, 3]，那么 seq.windows(2) 将生成一个迭代器，依次返回 &[1, 2] 和 &[2, 3]。
+        // 但在你的例子中，因为 seq 总是 [i32; 2]，所以 windows(2) 实际上只返回 &[seq[0], seq[1]]。
+        seq.windows(2).for_each(|win| {
+            map.entry(win[0]).or_insert(HashSet::new()).insert(win[1]);
+        });
+    });
+
+    // 对于 nums（一个 Vec<i32>），windows(2) 遍历所有长度为2的连续子切片。
+    // 即如果 nums 是 [1, 2, 3, 4]，那么 nums.windows(2) 将生成一个迭代器，依次返回 &[1, 2]、&[2, 3] 和 &[3, 4]。
+    nums.windows(2).all(|win| map.get(&win[0]).map_or(false, |set| set.contains(&win[1])))
 }
 //-----------------------------------------------------
 
