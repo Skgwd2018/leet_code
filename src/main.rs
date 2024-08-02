@@ -196,6 +196,11 @@ fn main() {
     let answer = find_gcd(nums);
     println!("find_gcd: {answer}"); // 1
 
+    println!("----- 1534. 统计好三元组(数组,枚举) ------");
+    let arr = vec![3, 0, 1, 1, 9, 7];
+    let answer = count_good_triplets(arr, 7, 2, 3);
+    println!("count_good_triplets: {answer}"); // 4
+
     println!("\n-------------up---------------\n");
 
     println!("------ 151. 反转字符串中的单词(字符串,双指针) ------");
@@ -1192,6 +1197,35 @@ fn climb_stairs(n: i32) -> i32 {
 fn find_gcd(nums: Vec<i32>) -> i32 {
     let (min, max) = (*nums.iter().min().unwrap(), *nums.iter().max().unwrap());
     (1..=min).rev().find(|i| min % i == 0 && max % i == 0).unwrap()
+}
+//-----------------------------------------------------
+
+// 给定一个整数数组 arr ，以及 a、b 、c 三个整数。请你统计其中好三元组的数量。
+// 如果三元组 (arr[i], arr[j], arr[k]) 满足下列全部条件，则认为它是一个 好三元组。
+// 0 <= i < j < k < arr.length
+// |arr[i] - arr[j]| <= a
+// |arr[j] - arr[k]| <= b
+// |arr[i] - arr[k]| <= c
+// 其中 |x| 表示 x 的绝对值。
+// 返回 好三元组的数量。
+// 输入：arr = [3,0,1,1,9,7], a = 7, b = 2, c = 3
+// 输出：4
+// 解释：一共有 4 个好三元组：[(3,0,1), (3,0,1), (3,1,1), (0,1,1)]
+fn count_good_triplets(arr: Vec<i32>, a: i32, b: i32, c: i32) -> i32 {
+    let mut ans = 0;
+    for i in 0..arr.len() {
+        for j in i + 1..arr.len() {
+            if (arr[i] - arr[j]).abs() <= a {
+                for k in j + 1..arr.len() {
+                    if (arr[j] - arr[k]).abs() <= b && (arr[i] - arr[k]).abs() <= c {
+                        ans += 1;
+                    }
+                }
+            }
+        }
+    }
+
+    ans
 }
 //-----------------------------------------------------
 
