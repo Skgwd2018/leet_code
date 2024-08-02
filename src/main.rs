@@ -204,7 +204,7 @@ fn main() {
     println!("----- 3042. 统计前后缀下标对 I(字典树,字符串匹配,哈希函数,滚动哈希) ------");
     let words = vec!["a".to_string(), "aba".to_string(), "ababa".to_string(), "aa".to_string()];
     let answer = count_prefix_suffix_pairs(words);
-    println!("count_prefix_suffix_pairs: {answer}");
+    println!("count_prefix_suffix_pairs: {answer}"); // 4
 
     println!("\n-------------up---------------\n");
 
@@ -607,6 +607,11 @@ fn main() {
     let nums = vec![5, 1, 1, 2, 0, 0];
     let answer = sort_array(nums);
     println!("sort_array: {answer:?}");
+
+    println!("----- 1584. 连接所有点的最小费用(并查集,图,最小生成树) ------");
+    let points = vec![vec![3, 12], vec![-2, 5], vec![-4, 1]];
+    let answer = min_cost_connect_points(points);
+    println!("min_cost_connect_points: {answer}"); // 18
 
     println!("\n-------------up---------------\n");
 
@@ -3022,6 +3027,45 @@ fn heap_fy(nums: &mut Vec<i32>, mut idx: usize, n: usize) {
         nums.swap(idx, max_idx);
         idx = max_idx;
     }
+}
+//-----------------------------------------------------
+
+// 给定一个points 数组，表示 2D 平面上的一些点，其中 points[i] = [xi, yi]
+// 连接点 [xi, yi] 和点 [xj, yj] 的费用为它们之间的 曼哈顿距离 ：|xi - xj| + |yi - yj| ，其中 |val| 表示 val 的绝对值。
+// 请返回将所有点连接的最小总费用。只有任意两点之间 有且仅有 一条简单路径时，才认为所有点都已连接。
+// 输入：points = [[3,12],[-2,5],[-4,1]]
+// 输出：18
+fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+    // Kruskal 算法
+    let n = points.len();
+    let mut edges = Vec::new();
+    for i in 0..(n - 1) {
+        for j in (i + 1)..n {
+            edges.push((i, j, (points[i][0] - points[j][0]).abs() + (points[i][1] - points[j][1]).abs()));
+        }
+    }
+    edges.sort_unstable_by(|a, b| a.2.cmp(&b.2));
+
+    let mut parents = Vec::new();
+    for i in 0..n { parents.push(i); }
+
+    let mut ans = 0;
+    for edge in edges {
+        let (mut a, mut b) = (edge.0, edge.1);
+        while a != parents[a] {
+            a = parents[a];
+        }
+        while b != parents[b] {
+            b = parents[b];
+        }
+
+        if a == b { continue; }
+
+        parents[b] = a;
+        ans += edge.2;
+    }
+
+    ans
 }
 //-----------------------------------------------------
 
