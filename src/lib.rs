@@ -5,6 +5,7 @@ use std::fmt::Debug;
 use std::mem::swap;
 use std::rc::Rc;
 use rand::distributions::{Distribution, Uniform};
+use rand::Rng;
 
 /// 计算特定时间范围内最近的请求
 #[derive(Default)]
@@ -824,6 +825,41 @@ impl Solution {
             if x * x + y * y <= self.r * self.r {
                 return vec![x + self.x, y + self.y];
             }
+        }
+    }
+}
+//-----------------------------------------------------
+
+pub struct Solution2 {
+    // nums: Vec<i32>,
+    map: HashMap<i32, Vec<usize>>,
+}
+
+impl Solution2 {
+    pub fn new(nums: Vec<i32>) -> Self {
+        let mut map: HashMap<i32, Vec<usize>> = HashMap::new();
+        for (i, n) in nums.into_iter().enumerate() {
+            map.entry(n).or_default().push(i);
+        }
+
+        Self { map }
+    }
+
+    // 水塘抽样
+    pub fn pick(&self, target: i32) -> i32 {
+        /*self.nums.iter().enumerate().fold((0, -1), |(mut cnt, mut ans), (i, v)|
+        if *v != target { (cnt, ans) } else {
+            cnt += 1;
+            if rand::thread_rng().gen_range(0..cnt) < 1 { ans = i as i32; }
+
+            (cnt, ans)
+        }).1*/
+
+        if let Some(v) = self.map.get(&target) {
+            let mut rng = rand::thread_rng();
+            v[rng.gen_range(0..v.len())] as i32
+        } else {
+            -1
         }
     }
 }
