@@ -201,6 +201,11 @@ fn main() {
     let answer = count_good_triplets(arr, 7, 2, 3);
     println!("count_good_triplets: {answer}"); // 4
 
+    println!("----- 3042. 统计前后缀下标对 I(字典树,字符串匹配,哈希函数,滚动哈希) ------");
+    let words = vec!["a".to_string(), "aba".to_string(), "ababa".to_string(), "aa".to_string()];
+    let answer = count_prefix_suffix_pairs(words);
+    println!("count_prefix_suffix_pairs: {answer}");
+
     println!("\n-------------up---------------\n");
 
     println!("------ 151. 反转字符串中的单词(字符串,双指针) ------");
@@ -1226,6 +1231,43 @@ fn count_good_triplets(arr: Vec<i32>, a: i32, b: i32, c: i32) -> i32 {
     }
 
     ans
+}
+//-----------------------------------------------------
+
+// 给定一个下标从 0 开始的字符串数组 words。
+// 定义一个 布尔 函数 isPrefixAndSuffix ，它接受两个字符串参数 str1 和 str2:
+// 当 str1 同时是 str2 的前缀(prefix)和后缀(suffix)时，isPrefixAndSuffix(str1, str2) 返回 true，否则返回 false。
+// 例如，isPrefixAndSuffix("aba", "ababa") 返回 true，因为 "aba" 既是 "ababa" 的前缀，也是 "ababa" 的后缀，但是 isPrefixAndSuffix("abc", "abcd") 返回 false。
+// 以整数形式，返回满足 i < j 且 isPrefixAndSuffix(words[i], words[j]) 为 true 的下标对 (i, j) 的 数量
+// 输入：words = ["a","aba","ababa","aa"]
+// 输出：4
+// 解释：在本示例中，计数的下标对包括：
+// i = 0 且 j = 1 ，因为 isPrefixAndSuffix("a", "aba") 为 true
+// i = 0 且 j = 2 ，因为 isPrefixAndSuffix("a", "ababa") 为 true
+// i = 0 且 j = 3 ，因为 isPrefixAndSuffix("a", "aa") 为 true
+// i = 1 且 j = 2 ，因为 isPrefixAndSuffix("aba", "ababa") 为 true
+// 因此，答案是 4
+fn count_prefix_suffix_pairs(words: Vec<String>) -> i32 {
+    /*fn is_prefix_and_suffix(str1: &str, str2: &str) -> bool {
+        if str1.len() > str2.len() { return false; }
+
+        let prefix = &str2[..str1.len()];
+        let suffix = &str2[(str2.len() - str1.len())..];
+
+        prefix == str1 && suffix == str1
+    }*/
+
+    let n = words.len();
+    let mut cnt = 0;
+    for i in 0..n {
+        for j in (i + 1)..n {
+            if words[j].starts_with(&words[i]) && words[j].ends_with(&words[i]) {
+                cnt += 1;
+            }
+        }
+    }
+
+    cnt
 }
 //-----------------------------------------------------
 
