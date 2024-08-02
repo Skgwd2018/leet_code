@@ -608,6 +608,11 @@ fn main() {
     println!("----- 753. 破解保险箱(DFS,图,欧拉回路) ------");
     let answer = crack_safe(2, 2);
     println!("crack_safe: {answer}");
+
+    println!("----- 391. 完美矩形(数组,扫描线) ------");
+    let rectangles = vec![vec![1, 1, 3, 3], vec![3, 1, 4, 2], vec![3, 2, 4, 4], vec![1, 3, 2, 4], vec![2, 3, 3, 4]];
+    let answer = is_rectangle_cover(rectangles);
+    println!("is_rectangle_cover: {answer}"); // true
 }
 
 // 给定两个字符串 haystack 和 needle ，请在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标(下标从 0 开始)。
@@ -3001,5 +3006,28 @@ fn crack_safe(n: i32, k: i32) -> String {
     dfs(0, highest, k, &mut seen, &mut ans);
     ans.push_str(&"0".repeat((n - 1) as usize));
     ans
+}
+//-----------------------------------------------------
+
+// 给定一个数组 rectangles，其中 rectangles[i] = [xi, yi, ai, bi] 表示一个坐标轴平行的矩形。
+// 这个矩形的左下顶点是 (xi, yi) ，右上顶点是 (ai, bi)。
+// 如果所有矩形一起精确覆盖了某个矩形区域，则返回 true；否则，返回 false
+// 输入：rectangles = [[1,1,3,3],[3,1,4,2],[3,2,4,4],[1,3,2,4],[2,3,3,4]]
+// 输出：true
+// 解释：5 个矩形一起可以精确地覆盖一个矩形区域
+fn is_rectangle_cover(rectangles: Vec<Vec<i32>>) -> bool {
+    let (x1, y1, x2, y2, a, set) = rectangles.iter().fold(
+        (i32::MAX, i32::MAX, i32::MIN, i32::MIN, 0, HashSet::new()),
+        |(x1, y1, x2, y2, a, mut set), rect| {
+            for p in [(rect[0], rect[1]), (rect[2], rect[1]), (rect[0], rect[3]), (rect[2], rect[3])] {
+                if !set.remove(&p) {
+                    set.insert(p);
+                }
+            }
+
+            (x1.min(rect[0]), y1.min(rect[1]), x2.max(rect[2]), y2.max(rect[3]), a + (rect[2] - rect[0]) * (rect[3] - rect[1]), set)
+        });
+
+    (x2 - x1) * (y2 - y1) == a && set == HashSet::from([(x1, y1), (x1, y2), (x2, y1), (x2, y2)])
 }
 //-----------------------------------------------------
