@@ -9,6 +9,12 @@ use leet_code::{BSTIterator, ListNode, RecentCounter, SmallestInfiniteSet, Solut
 // 忽略提示含有大量行的函数
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
 fn main() {
+    println!("------ 28. 找出字符串中第一个匹配项的下标(字符串匹配) ------");
+    let haystack = String::from("sadbutsad");
+    let needle = String::from("sad");
+    let answer = str_str(haystack, needle);
+    println!("str_str: {answer}"); // 0
+
     println!("------ 1768. 交替合并字符串(字符串,双指针) ------");
     let word1 = String::from("abcde");
     let word2 = String::from("xyz");
@@ -602,6 +608,12 @@ fn main() {
     println!("----- 753. 破解保险箱(DFS,图,欧拉回路) ------");
     let answer = crack_safe(2, 2);
     println!("crack_safe: {answer}");
+}
+
+// 给定两个字符串 haystack 和 needle ，请在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标(下标从 0 开始)。
+// 如果 needle 不是 haystack 的一部分，则返回 -1
+fn str_str(haystack: String, needle: String) -> i32 {
+    haystack.find(&needle).map(|n| n as i32).unwrap_or(-1)
 }
 
 /// 交替合并字符串
