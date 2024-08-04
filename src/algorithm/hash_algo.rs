@@ -110,6 +110,7 @@ pub fn close_strings(word1: String, word2: String) -> bool {
     // 由于它不需要保证稳定性，所以通常比 sort 快一些，因为它可以采用更高效的排序算法。
     word1_cnt.sort_unstable();
     word2_cnt.sort_unstable();
+
     word1_cnt == word2_cnt
 }
 //-----------------------------------------------------
@@ -124,6 +125,7 @@ pub fn equal_pairs(grid: Vec<Vec<i32>>) -> i32 {
         let curr: Vec<i32> = (0..grid.len()).map(|j| grid[j][i]).collect();
         cnt += cache_map.get(&curr).unwrap_or(&0);
     }
+
     cnt
 
     // 解法二:
@@ -152,15 +154,16 @@ pub fn max_points(mut points: Vec<[i32; 2]>) -> i32 {
     while let Some(x) = points.pop() {
         for i in &points {
             // Inf 的符号不会发生改变，不必处理+-Inf的问题
-            /* *s.entry(unsafe {
-                // std::mem::transmute::<f32, i32>((x[1] - i[1]) as f32 / (x[0] - i[0]) as f32)
-            }).or_insert(0) += 1; */
+            // *s.entry(unsafe {
+            //     std::mem::transmute::<f32, i32>((x[1] - i[1]) as f32 / (x[0] - i[0]) as f32)
+            // }).or_insert(0) += 1;
             *s.entry(((x[1] - i[1]) as f32 / (x[0] - i[0]) as f32).to_bits() as i32).or_insert(0) += 1;
         }
         counter = s.drain().map(|x| x.1).max().unwrap_or(counter).max(counter);
 
-        if counter > points.len() as i32 / 2 { break; }
+        if counter > i32::try_from(points.len()).expect("i32 error") / 2 { break; }
     }
+
     counter + 1
 }
 //-----------------------------------------------------

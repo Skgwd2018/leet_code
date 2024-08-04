@@ -20,6 +20,7 @@ pub fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
             }
         });
     }
+
     room_map.into_iter().all(|x| x)
 
     // dfs解法
@@ -72,11 +73,11 @@ pub fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
 // 解法二:上面的优化版
 pub fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
     // Find
-    fn find(i: usize, par: &[usize]) -> usize {
-        let mut i = i;
+    fn find(mut i: usize, par: &[usize]) -> usize {
         while par[i] != i {
             i = par[i];
         }
+
         i
     }
 
@@ -118,7 +119,7 @@ pub fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
     }
 
     // answer as i32
-    i32::try_from(answer).expect("Err")
+    i32::try_from(answer).expect("i32 error")
 }
 //-----------------------------------------------------
 
@@ -132,22 +133,22 @@ pub fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
 // 题目数据:保证每个城市在重新规划路线方向后都能到达城市 0
 // n = 6, connections: [[0,1], [1,3], [2,3], [4,0], [4,5]]
 pub fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
-    let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
-    for e in &connections {
-        let (a, b) = (e[0] as usize, e[1] as usize);
-        g[a].push((b as i32, 1));
-        g[b].push((a as i32, 0));
-    }
-
     fn dfs(a: usize, fa: i32, g: &Vec<Vec<(i32, i32)>>) -> i32 {
         let mut answer = 0;
-        for &(b, c) in g[a].iter() {
+        for &(b, c) in &g[a] {
             if b != fa {
                 answer += c + dfs(b as usize, a as i32, g);
             }
         }
 
         answer
+    }
+
+    let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
+    for e in &connections {
+        let (a, b) = (e[0] as usize, e[1] as usize);
+        g[a].push((b as i32, 1));
+        g[b].push((a as i32, 0));
     }
 
     dfs(0, -1, &g)
@@ -265,8 +266,8 @@ pub fn calc_equation(equations: Vec<Vec<String>>, values: Vec<f64>, queries: Vec
 pub fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
     let dir = [-1, 0, 1, 0, -1]; // 方向
     let entrance = (entrance[0], entrance[1]); // 入口位置
-    let n = maze.len() as i32;    // 行数
-    let m = maze[0].len() as i32; // 列数
+    let n = i32::try_from(maze.len()).expect("i32 error");    // 行数
+    let m = i32::try_from(maze[0].len()).expect("i32 error"); // 列数
     // BinaryHeap(二叉堆)，主要用于处理那些需要优先队列特性的场景。
     // 二叉堆通常用于实现优先队列,其中每个元素都有一个“优先级”,并且队列按照优先级(而不是元素插入的顺序)来对元素进行排序。
     let mut bh = BinaryHeap::new();
@@ -282,7 +283,8 @@ pub fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
             // 如果移动后的位置在迷宫范围外,且当前位置不是入口,则返回当前步数的相反数(因为步数是从0开始的,所以其相反数实际上是负的路径长度,表示无法找到出口)。
             // 如果当前位置是入口,则继续处理其他方向。
             if x < 0 || x >= n || y < 0 || y >= m {
-                if curr != entrance { return -cnt; } else { continue; }
+                if curr == entrance { continue; }
+                return -cnt;
             }
             let (xx, yy) = (x as usize, y as usize);
             // 如果移动后的位置在迷宫范围内且是可通过的(即字符为 '.'),则将该位置推入队列,并将其步数减1(表示离入口更近了一步)。
@@ -412,7 +414,7 @@ pub fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
 // 因为 nums 是唯一最短的超序列，所以返回true。
 pub fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool {
     let mut map = HashMap::new();
-    sequences.into_iter().for_each(|seq| {
+    for seq in sequences {
         // .windows() 返回一个迭代器，遍历所有长度大小的连续窗口。窗口重叠。如果切片小于大小，迭代器将不返回任何值。
         // .windows() 是 Iterator trait 的一个扩展方法，用于在切片（slice）或类似容器的迭代器上。
         // 它返回一个新的迭代器，该迭代器遍历原始数据中的所有连续窗口（或子切片）。窗口的大小由 windows() 方法的参数指定，并且窗口是重叠的。
@@ -424,7 +426,7 @@ pub fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool
         seq.windows(2).for_each(|win| {
             map.entry(win[0]).or_insert(HashSet::new()).insert(win[1]);
         });
-    });
+    }
 
     // 对于 nums（一个 Vec<i32>），windows(2) 遍历所有长度为2的连续子切片。
     // 即如果 nums 是 [1, 2, 3, 4]，那么 nums.windows(2) 将生成一个迭代器，依次返回 &[1, 2]、&[2, 3] 和 &[3, 4]。
@@ -459,7 +461,7 @@ pub fn crack_safe(n: i32, k: i32) -> String {
             if !seen.contains(&nei) {
                 seen.insert(nei);
                 dfs(nei % highest, highest, k, seen, ans);
-                ans.push((x as u8 + b'0') as char);
+                ans.push((u8::try_from(x).expect("u8 error") + b'0') as char);
                 // println!("{:?}",ans);
             }
         }
@@ -470,6 +472,7 @@ pub fn crack_safe(n: i32, k: i32) -> String {
     let highest = 10_i32.pow(n as u32 - 1);
     dfs(0, highest, k, &mut seen, &mut ans);
     ans.push_str(&"0".repeat((n - 1) as usize));
+
     ans
 }
 //-----------------------------------------------------

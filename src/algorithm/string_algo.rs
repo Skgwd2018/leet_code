@@ -4,7 +4,7 @@ use std::cmp;
 // 给定两个字符串 haystack 和 needle ，请在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标(下标从 0 开始)。
 // 如果 needle 不是 haystack 的一部分，则返回 -1
 pub fn str_str(haystack: String, needle: String) -> i32 {
-    haystack.find(&needle).map(|n| n as i32).unwrap_or(-1)
+    haystack.find(&needle).map_or(-1, |n| i32::try_from(n).expect("i32 error"))
 }
 //-----------------------------------------------------
 
@@ -45,15 +45,6 @@ pub fn merge_alternately(word1: String, word2: String) -> String {
 /// 1071.字符串的最大公因子(字符串,数学)
 // 题目要求:字符串中的字符全是字母
 pub fn _gcd_of_strings(str1: String, str2: String) -> String {
-    let len1 = str1.len();
-    let len2 = str2.len();
-
-    // 求两个字符串长度的最大公约数
-    // .find()：用于查找单个元素,返回满足条件的第一个元素(如果存在)。返回类型为 Option<T>。
-    // .filter()：返回一个新迭代器，包含所有满足条件的元素。返回类型为实现了 Iterator<Item=T> 的类型。
-    let gec_len = (1..=cmp::min(len1, len2)).rev()
-        .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
-
     fn can_divide(s1: &str, s2: &str) -> bool {
         // .chunks_exact(s2.len()) 将 s1 的字节切片分割成长度为 s2.len() 的块。
         // 如果 s1 的长度不是 s2.len() 的整数倍,这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0，所以这里不会有问题。
@@ -64,6 +55,14 @@ pub fn _gcd_of_strings(str1: String, str2: String) -> String {
     // let cd1 = can_divide(&str1, &str1[0..gec_len]);
     // let cd2 = can_divide(&str2, &str1[0..gec_len]);
     // println!("cd1: {cd1}, cd2: {cd2}");
+
+    let (len1, len2) = (str1.len(), str2.len());
+    // 求两个字符串长度的最大公约数
+    // .find()：用于查找单个元素,返回满足条件的第一个元素(如果存在)。返回类型为 Option<T>。
+    // .filter()：返回一个新迭代器，包含所有满足条件的元素。返回类型为实现了 Iterator<Item=T> 的类型。
+    let gec_len = (1..=cmp::min(len1, len2)).rev()
+        .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
+
     if can_divide(&str1, &str1[0..gec_len]) && can_divide(&str2, &str1[0..gec_len]) {
         return str1[0..gec_len].to_string();
     }
@@ -81,20 +80,20 @@ pub fn _gcd_of_strings(str1: String, str2: String) -> String {
 // 当一定存在公因子时，最大公因子字符的长度一定就是两个字符串长度的最大公因数。
 // 公因子字符串也就是str1或str2的前缀下标。范围为:[0，最大公因数]
 pub fn gcd_of_strings2(str1: String, str2: String) -> String {
-    // let s1 = str1.clone() + &str2;  // 消耗内存稍高，运行稍快
-    // let s2 = str2.clone() + &str1;
-    let s1 = format!("{str1}{str2}"); // 消耗内存稍低，但是运行稍慢
-    let s2 = format!("{str2}{str1}");
-    if s1 != s2 {
-        return String::new();
-    }
-
     fn get_gcd(a: usize, b: usize) -> usize {
         if b == 0 {
             a
         } else {
             get_gcd(b, a % b)
         }
+    }
+
+    // let s1 = str1.clone() + &str2;  // 消耗内存稍高，运行稍快
+    // let s2 = str2.clone() + &str1;
+    let s1 = format!("{str1}{str2}"); // 消耗内存稍低，但是运行稍慢
+    let s2 = format!("{str2}{str1}");
+    if s1 != s2 {
+        return String::new();
     }
 
     str1[0..get_gcd(str1.len(), str2.len())].to_string()
@@ -199,7 +198,7 @@ pub fn reverse_words(s: String) -> String {
 // 题目要求:chars不为空
 pub fn compress(chars: &mut [char]) -> i32 {
     let n = chars.len();
-    if n <= 1 { return n as i32; }
+    if n <= 1 { return i32::try_from(n).expect("i32 error"); }
 
     let (mut idx, mut count) = (0, 1);
     for i in 1..n {

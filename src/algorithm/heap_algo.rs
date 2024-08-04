@@ -68,15 +68,14 @@ impl SmallestInfiniteSet {
     }
 
     pub fn pop_smallest(&mut self) -> i32 {
-        match self.set.iter().next() {
-            Some(&value) => {
-                self.set.remove(&value);
-                value
-            }
-            None => {
-                self.point += 1;
-                self.point - 1
-            }
+        if let Some(&value) = self.set.iter().next() {
+            self.set.remove(&value);
+
+            value
+        } else {
+            self.point += 1;
+
+            self.point - 1
         }
     }
 
@@ -174,7 +173,7 @@ pub fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
         // println!("cost sort ----> {costs:?}"); // [2, 2, 7, 8, 10, 11, 12, 17, 20]
         // return costs.iter().take(k).map(|&x| x as i64).sum(); // [2, 2, 7] 即 11
         let (l, m, _g) = costs.select_nth_unstable(k - 1);
-        return l.iter().map(|&x| x as i64).sum::<i64>() + *m as i64;
+        return l.iter().map(|&x| i64::from(x)).sum::<i64>() + i64::from(*m);
         // println!("lesser ----> {l:?}");  // [2, 2]
         // println!("median ----> {m}");    // 7
         // println!("greater ----> {g:?}"); // [8, 10, 11, 12, 17, 20]

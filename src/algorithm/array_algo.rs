@@ -34,9 +34,7 @@ pub fn can_place_flowers(flowerbed: Vec<i32>, mut n: i32) -> bool {
         // 检查头尾&相邻项的问题
         if flowerbed[i] == 0 && (i == 0 || flowerbed[i - 1] == 0) && (i == len - 1 || flowerbed[i + 1] == 0) {
             n -= 1;
-            /*if n == 0 {
-                return true;
-            }*/
+            // if n == 0 { return true; }
 
             i += 2; // 下个位置肯定不能种花,可以跳过
         } else {
@@ -113,6 +111,7 @@ pub fn increasing_triplet(nums: Vec<i32>) -> bool {
 // 3 和 8 的最大公约数是 1
 pub fn find_gcd(nums: Vec<i32>) -> i32 {
     let (min, max) = (*nums.iter().min().unwrap(), *nums.iter().max().unwrap());
+
     (1..=min).rev().find(|i| min % i == 0 && max % i == 0).unwrap()
 }
 //-----------------------------------------------------
@@ -195,9 +194,7 @@ fn insert_sort(nums: &mut Vec<i32>) {
                 break;
             }
 
-            if j == 0 {
-                nums[0] = insert_val;
-            }
+            if j == 0 { nums[0] = insert_val; }
         }
     }
 }
@@ -220,12 +217,11 @@ fn select_sort(nums: &mut Vec<i32>) {
     }
 }
 
-/// 4.归并排序，时间复杂度：O(nlogn)，空间复杂度：O(n)，稳定性排序
+/// 4.归并排序，时间复杂度：O(nlogn),空间复杂度：O(n),稳定性排序
 #[allow(unused)]
 fn merge_sort(nums: &mut Vec<i32>) {
     let n = nums.len();
-
-    merge(nums, 0, n)
+    merge(nums, 0, n);
 }
 fn merge(nums: &mut Vec<i32>, beg: usize, end: usize) {
     if beg + 1 >= end { return; }
@@ -233,30 +229,33 @@ fn merge(nums: &mut Vec<i32>, beg: usize, end: usize) {
     let mid = (beg + end) / 2;
     merge(nums, beg, mid);
     merge(nums, mid, end);
-
-    sort(nums, beg, mid, end)
+    sort(nums, beg, mid, end);
 }
 fn sort(nums: &mut Vec<i32>, beg: usize, mid: usize, end: usize) {
     let nums2 = nums[mid..end].to_vec();
-    let mut idx1 = mid - 1;
-    let mut idx2 = nums2.len() - 1;
-    let mut idx = end - 1;
+    let (mut idx1, mut idx2, mut idx) = (mid - 1, nums2.len() - 1, end - 1);
 
     loop {
         if nums[idx1] > nums2[idx2] {
             nums[idx] = nums[idx1];
             idx -= 1;
-            if idx1 != beg { idx1 -= 1; } else {
-                for i in 0..=idx2 {
-                    nums[i + beg] = nums2[i];
-                }
-
+            if idx1 == beg {
+                // for i in 0..=idx2 { nums[i + beg] = nums2[i]; } // 作用同下
+                // 用于将一个切片（slice）的内容复制到另一个切片中。这个函数通常用于处理字节数据或者需要在两个切片之间复制数据时
+                // let src = [1, 2, 3, 4];
+                // let mut dst = [0; 4]; // 初始化一个全为0的切片
+                // dst.copy_from_slice(&src); // 将src的内容复制到dst中
+                // println!("{:?}", dst); // 输出: [1, 2, 3, 4]
+                nums[beg..=(idx2 + beg)].copy_from_slice(&nums2[..=idx2]);
                 break;
             }
+
+            idx1 -= 1;
         } else {
             nums[idx] = nums2[idx2];
             idx -= 1;
-            if idx2 != 0 { idx2 -= 1; } else { break; }
+            if idx2 == 0 { break; }
+            idx2 -= 1;
         }
     }
 }
@@ -279,14 +278,18 @@ fn quick(nums: &mut Vec<i32>, beg: usize, end: usize) {
     let mut idx = beg;
     let (mut l, mut r) = (beg + 1, end);
     while l < r {
-        while l < r && nums[r - 1] > val { r -= 1; }
+        while l < r && nums[r - 1] > val {
+            r -= 1;
+        }
         if l < r {
             nums[idx] = nums[r - 1];
             idx = r - 1;
             r -= 1;
         }
 
-        while l < r && nums[l] < val { l += 1; }
+        while l < r && nums[l] < val {
+            l += 1;
+        }
         if l < r {
             nums[idx] = nums[l];
             idx = l;
@@ -327,7 +330,9 @@ fn heap_fy(nums: &mut Vec<i32>, mut idx: usize, n: usize) {
         if right_idx < n && nums[right_idx] > nums[max_idx] {
             max_idx = right_idx;
         }
-        if max_idx == idx { break; }
+        if max_idx == idx {
+            break;
+        }
 
         nums.swap(idx, max_idx);
         idx = max_idx;

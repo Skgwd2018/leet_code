@@ -22,6 +22,7 @@ pub fn remove_stars(s: String) -> String {
             stack.push(b);
         }
     }
+
     String::from_utf8(stack).unwrap()
 }
 //-----------------------------------------------------
@@ -50,6 +51,7 @@ pub fn asteroid_collision(mut asteroids: Vec<i32>) -> Vec<i32> {
             }
             index -= 1;
         }
+
         i += 1;
     }
 

@@ -2,15 +2,21 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use leet_code::algorithm::{
-    array_algo, backtracking_algo, binary_search_algo, binary_tree_algo::{BSTIterator, TreeNode},
+    array_algo, backtracking_algo, binary_search_algo,
+    binary_tree_algo::{BSTIterator, TreeNode},
     bit_operation_algo, dynamic_programming_algo, game_theory_algo, graph_algo, hash_algo,
-    heap_algo::{self, SmallestInfiniteSet}, linked_list_algo::ListNode, min_spanning_tree_algo,
-    monotone_stack_algo::{self, StockSpanner}, prefix_sum_algo, queue_algo,
-    randomized_algo::{self, Solution, Solution2}, scan_line_algo, set_data_algo, sliding_window_algo,
-    stack_algo, string_algo, trie_tree_algo::{self, Trie}, two_pointers_algo,
+    heap_algo::{self, SmallestInfiniteSet},
+    linked_list_algo::ListNode, min_spanning_tree_algo,
+    monotone_stack_algo::{self, StockSpanner},
+    prefix_sum_algo, queue_algo,
+    randomized_algo::{self, Solution, Solution2},
+    scan_line_algo, set_data_algo, sliding_window_algo,
+    stack_algo, string_algo,
+    trie_tree_algo::{self, Trie},
+    two_pointers_algo,
 };
 
-// 忽略提示含有大量行的函数
+// 忽略提示含有大量行的函数,超100行即是超量
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
 fn main() {
     println!("------ 28.找出字符串中第一个匹配项的下标(字符串匹配) ------");
@@ -262,7 +268,7 @@ fn main() {
     println!("----- 1493.删掉一个元素以后全为 1 的最长子数组(数组,动态规划,滑动窗口) ------");
     let nums = vec![0, 1, 1, 1, 0, 1, 1, 0, 1];
     let answer = sliding_window_algo::longest_subarray(nums);
-    println!("longest_subarray: {answer}");
+    println!("longest_subarray: {answer}"); // 5
 
     println!("------ 1657.确定两个字符串是否接近(字符串,哈希表,计数) ------");
     let word1 = "cabbba".to_string();
@@ -294,7 +300,7 @@ fn main() {
     // 碰撞规则：两个小行星相互碰撞，较小的小行星会爆炸。如果两颗小行星大小相同，则两颗小行星都会爆炸。两颗移动方向相同的小行星，永远不会发生碰撞。
     let asteroids = vec![10, 2, -5];
     let answer = stack_algo::asteroid_collision(asteroids);
-    println!("asteroid_collision: {answer:?}");
+    println!("asteroid_collision: {answer:?}"); // [10]
 
     println!("------ 394.字符串解码(栈,字符串,递归) ------");
     let s = "3[a12[c]]".to_string();  // accccccccccccaccccccccccccacccccccccccc
@@ -305,7 +311,7 @@ fn main() {
     println!("----- 649.Dota2 参议院(贪心,队列,字符串) ------");
     let senate = String::from("RDD");
     let answer = queue_algo::predict_party_victory(senate);
-    println!("predict_party_victory: {answer}");
+    println!("predict_party_victory: {answer}"); // Dire
 
     println!("------ 2095.删除链表的中间节点(链表,双指针) ------");
     let node_head = ListNode::delete_middle(node_rev);
@@ -386,7 +392,7 @@ fn main() {
     let rooms = vec![vec![1], vec![2], vec![3], vec![]]; // true
     // let rooms = vec![vec![1, 3], vec![3, 0, 1], vec![2], vec![0]]; // false
     let answer = graph_algo::can_visit_all_rooms(rooms);
-    println!("can_visit_all_rooms: {answer}");
+    println!("can_visit_all_rooms: {answer}"); // true
 
     println!("----- 547.省份数量(并查集,图) ------");
     // 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
@@ -424,7 +430,7 @@ fn main() {
     // 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
     let grid = vec![vec![2, 1, 1], vec![1, 1, 0], vec![0, 1, 1]];
     let answer = graph_algo::oranges_rotting(grid);
-    println!("oranges_rotting: {answer}");
+    println!("oranges_rotting: {answer}"); // 4
 
     println!("----- 215.数组中的第k个最大元素(数组,分治,快速选择,排序,堆(优先队列)) ------");
     let nums = vec![3, 2, 1, 5, 6, 4];
@@ -487,7 +493,7 @@ fn main() {
     println!("----- 198.打家劫舍(数组,动态规划) ------");
     let nums = vec![2, 7, 9, 3, 1];
     let answer = dynamic_programming_algo::rob(nums);
-    println!("rob: {answer}");
+    println!("rob: {answer}"); // 12
 
     println!("----- 790.多米诺和托米诺平铺(动态规划) ------");
     let answer = dynamic_programming_algo::num_tilings(3);
@@ -608,9 +614,9 @@ fn main() {
     println!("sequence_reconstruction: {answer}"); // true
 
     println!("----- 912.排序数组(桶排序,分治,数组,基数排序,计数排序,归并排序,堆(优先队列)) ------");
-    let nums = vec![5, 1, 1, 2, 0, 0];
+    let nums = vec![5, 1, 1, 8, 2, 18, 11, 0, 0, 4, 28];
     let answer = array_algo::sort_array(nums);
-    println!("sort_array: {answer:?}");
+    println!("sort_array: {answer:?}"); // [0, 0, 1, 1, 2, 4, 5, 8, 11, 18, 28]
 
     println!("----- 1584.连接所有点的最小费用(并查集,图,最小生成树) ------");
     let points = vec![vec![3, 12], vec![-2, 5], vec![-4, 1]];
@@ -644,11 +650,11 @@ fn main() {
     println!("----- 149.直线上最多的点数(几何,数学,数组,哈希表) ------");
     let points = vec![[1, 1], [3, 2], [5, 3], [4, 1], [2, 3], [1, 4]];
     let answer = hash_algo::max_points(points);
-    println!("max_points: {answer}");
+    println!("max_points: {answer}"); // 4
 
     println!("----- 753.破解保险箱(DFS,图,欧拉回路) ------");
     let answer = graph_algo::crack_safe(2, 2);
-    println!("crack_safe: {answer}");
+    println!("crack_safe: {answer}"); // 01100
 
     println!("----- 391.完美矩形(数组,扫描线) ------");
     let rectangles = vec![vec![1, 1, 3, 3], vec![3, 1, 4, 2], vec![3, 2, 4, 4], vec![1, 3, 2, 4], vec![2, 3, 3, 4]];

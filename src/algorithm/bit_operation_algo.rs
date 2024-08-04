@@ -35,7 +35,6 @@ pub fn single_number(nums: Vec<i32>) -> i32 {
     // 如果数组为空, reduce() 会返回一个 None,需要使用 unwrap() 来获取结果,这可能会导致运行时错误(如果数组为空)。
     // 在这种情况下, reduce() 运行更高效
     // nums.into_iter().reduce(|x, y| x ^ y).unwrap()
-
     nums.iter().fold(0, |single, num| single ^ num)
 }
 //-----------------------------------------------------
@@ -68,7 +67,7 @@ pub fn min_flips(a: i32, b: i32, c: i32) -> i32 {
     answer*/
 
     // 解法三:
-    (((a | b) ^ c).count_ones() + ((a & b) & !c).count_ones()) as i32
+    i32::try_from(((a | b) ^ c).count_ones() + ((a & b) & !c).count_ones()).expect("i32 error")
 }
 //-----------------------------------------------------
 

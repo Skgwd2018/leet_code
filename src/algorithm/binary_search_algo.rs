@@ -96,7 +96,7 @@ pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
 
     // 解法二:
     // let mut right = *piles.iter().max().unwrap(); 计算这个二分法的上界
-    let (mut left, mut right) = (1, 1000000000); // 假设一个二分法的上界
+    let (mut left, mut right) = (1, 1_000_000_000); // 假设一个二分法的上界
     while left < right {
         // 二分中间数
         let mid = left + ((right - left) >> 1);
@@ -108,6 +108,7 @@ pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
             right = mid;
         }
     }
+
     left
 }
 //-----------------------------------------------------

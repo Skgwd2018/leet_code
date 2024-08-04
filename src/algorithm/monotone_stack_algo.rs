@@ -21,7 +21,7 @@ pub fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
         // stack[stack.len() - 1] 这个运行会稍微快
         while !stack.is_empty() && t > temperatures[stack[stack.len() - 1]] {
             let j = stack.pop().unwrap();
-            answer[j] = (i - j) as i32;
+            answer[j] = i32::try_from(i - j).expect("i32 error");
         }
         stack.push(i);
     }

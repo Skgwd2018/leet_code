@@ -71,10 +71,10 @@ impl ListNode {
             if i == count / 2 {
                 curr.next = node_next.next;
                 break;
-            } else {
-                curr.next = Some(node_next);
-                curr = curr.next.as_mut().unwrap();
             }
+
+            curr.next = Some(node_next);
+            curr = curr.next.as_mut().unwrap();
 
             i += 1;
         }
@@ -89,9 +89,8 @@ impl ListNode {
     // 输入: head = [2, 1, 3, 5, 6, 4, 7]
     // 输出:        [2, 3, 6, 7, 1, 5, 4]
     pub fn odd_even_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        if head.is_none() {
-            return head;
-        }
+        if head.is_none() { return head; }
+
         // let mut odd = Some(Box::new(ListNode::new(0)));
         let mut odd = None; // 内存消耗更低
         let mut curr_odd = &mut odd;

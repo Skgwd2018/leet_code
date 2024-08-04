@@ -70,7 +70,7 @@ impl TreeNode {
         // pre_order() 函数实际上是在 leaf_similar() 函数内部定义的局部函数。局部函数与闭包相似，但有区别：
         // 局部函数:是一个在另一个函数内部定义的命名函数。它们的行为类似于常规函数,并且可以访问其包含作用域中的变量。
         // 闭包:是一个匿名函数，可以捕获其环境中的变量。闭包通常用于实现高阶函数,它们可以像其他值一样传递。
-        //      闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
+        //     闭包通常使用 | 符号来定义，并可以捕获其外部的变量。
         /*fn pre_order(node: Option<Rc<RefCell<TreeNode>>>, values: &mut Vec<i32>) {
             if let Some(node) = node {
                 let left = node.borrow_mut().left.take();
@@ -137,6 +137,7 @@ impl TreeNode {
                 Ordering::Less => node = curr_node.borrow().right.clone(),
             };
         }
+
         None
     }
 
@@ -391,7 +392,7 @@ impl BSTIterator {
         let mut stack = vec![];
         let mut node = root;
 
-        while node.is_some() || stack.len() > 0 {
+        while node.is_some() || !stack.is_empty() {
             while let Some(n) = node {
                 node = n.borrow_mut().left.take();
                 stack.push(n);
@@ -413,6 +414,7 @@ impl BSTIterator {
 
         let v = self.data[self.index];
         self.index += 1;
+        
         v
     }
 

@@ -60,6 +60,7 @@ pub fn find_min_arrow_shots(mut points: Vec<Vec<i32>>) -> i32 {
             p_end = end;
         }
     }
+
     cnt
 }
 //-----------------------------------------------------

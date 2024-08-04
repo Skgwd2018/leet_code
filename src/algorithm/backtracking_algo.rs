@@ -2,9 +2,12 @@
 pub fn letter_combinations(digits: String) -> Vec<String> {
     let mut answer: Vec<String> = Vec::new();
     let mut value: Vec<char> = Vec::new();
-    match digits.is_empty() {
+    /* match digits.is_empty() {
         true => (),
         false => get_letters(&digits, 0, &mut value, &mut answer),
+    } */
+    if !digits.is_empty() {
+        get_letters(&digits, 0, &mut value, &mut answer);
     }
 
     answer
@@ -21,6 +24,7 @@ fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, answer: &mu
         answer.push(s);
         return;
     }
+
     // .iter().nth(n) 返回迭代器的第n个元素
     // 注:所有前面的元素以及返回的元素都将从迭代器中消耗掉。即前面的元素将被丢弃，并且在同一迭代器上多次调用第n(0)个元素将返回不同的元素。
     let dig_list = match digits.chars().nth(index).unwrap() {
@@ -55,7 +59,7 @@ pub fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
     ///      k:还需要找出多少个正整数。
     ///      n:当前组合还需要凑足的和。
     fn backtrace(answer: &mut Vec<Vec<i32>>, curr: &mut Vec<i32>, i: i32, k: i32, n: i32) {
-        let c = k - curr.len() as i32;
+        let c = k - i32::try_from(curr.len()).expect("usize error");
         // 剪枝条件:用于提前终止递归,这个条件基于组合数学中的公式,用于确定当前情况下是否还有可能找到一个满足条件的组合。
         if n < 0 || n > (i * 2 - c + 1) * c / 2 { return; }
         // 递归终止条件
@@ -63,6 +67,7 @@ pub fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
             answer.push(curr.clone());
             return;
         }
+
         // 回溯过程
         for j in (1..=i).rev() {
             if j < c { break; }
@@ -74,6 +79,7 @@ pub fn combination_sum3(k: i32, n: i32) -> Vec<Vec<i32>> {
 
     let mut answer = vec![];
     backtrace(&mut answer, &mut vec![], 9, k, n);
+
     answer
 }
 //-----------------------------------------------------

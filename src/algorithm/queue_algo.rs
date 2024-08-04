@@ -25,11 +25,8 @@ impl RecentCounter {
         }*/
         // 题目要求:保证 每次对 ping 的调用都使用比之前更大的 t 值
         while let Some(&front) = self.requests.front() {
-            if front < t - 3000 {
-                self.requests.pop_front();
-            } else {
-                break;
-            }
+            if front >= t - 3000 { break; }
+            self.requests.pop_front();
         }
 
         i32::try_from(self.requests.len()).unwrap_or_default()
