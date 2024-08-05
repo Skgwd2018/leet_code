@@ -147,19 +147,31 @@ pub fn count_good_triplets(arr: Vec<i32>, a: i32, b: i32, c: i32) -> i32 {
 //-----------------------------------------------------
 
 /// 912.排序数组(桶排序,分治,数组,基数排序,计数排序,归并排序,堆(优先队列))
-// 给定一个整数数组 nums，请你将该数组升序排列。
+// 给定一个整数数组 nums，将该数组升序排列。
 pub fn sort_array(mut nums: Vec<i32>) -> Vec<i32> {
-    // bubble_sort(&mut nums); // 冒泡排序
-    // insert_sort(&mut nums); // 插入排序
-    // select_sort(&mut nums); // 选择排序
-    merge_sort(&mut nums); // 归并排序
-    // quick_sort(&mut nums); // 快速排序
-    // heap_sort(&mut nums); // 堆排序
+    // mut 关键字用于函数参数nums上, 允许函数内部对nums进行可变操作
+    // 由于nums是按值传递的，即在函数内部你将获得nums的一个完全独立的副本。
+    // 因此，对nums的任何修改都不会影响到原始的数据结构（除非通过某种方式返回这个修改后的副本）。
+    // 如果函数并没有返回任何值，则原始数据保持不变。
+    // 如果希望函数内部处理数据的副本，以避免对原始数据的直接修改，则使用mut版本的函数签名
+    // (注意，由于是按值传递，实际上需要在函数内部修改并返回这个副本，否则修改将不会反映到原始数据上)。
+
+    // &mut 表示传入的是一个可变的引用（mutable reference）到Vec<i32>。
+    // 即函数内部可以直接修改原始数据结构，因为函数接收的是对原始数据的直接引用。
+    // 由于是按引用传递，没有数据的复制发生，这使得函数操作更加高效，特别是当处理大型数据结构时。
+    // 如果希望函数能够修改原始数据，并且不想因为数据复制而消耗额外的内存或性能，应该使用 &mut 函数签名。
+
+    // bubble_sort(&mut nums); // 冒泡排序(超时)
+    // insert_sort(&mut nums); // 插入排序(1712ms, 2.74mb)
+    // select_sort(&mut nums); // 选择排序(超时)
+    merge_sort(&mut nums); // 归并排序(31ms, 2.76mb)
+    // quick_sort(&mut nums); // 快速排序(40ms, 2.88mb)
+    // heap_sort(&mut nums); // 堆排序(53ms, 2.70mb)
 
     nums
 }
 
-/// 1.冒泡排序，时间复杂度：O(n^2)，空间复杂度：O(1)，稳定性排序
+/// 1.冒泡排序,时间复杂度:O(n^2),空间复杂度:O(1),稳定性排序
 #[allow(unused)]
 fn bubble_sort(nums: &mut Vec<i32>) {
     let n = nums.len();
@@ -205,15 +217,15 @@ fn select_sort(nums: &mut Vec<i32>) {
     let n = nums.len();
 
     for i in (1..n).rev() {
-        let mut max_idx = i;
+        let mut max_index = i;
 
         for j in 0..i {
-            if nums[j] > nums[max_idx] {
-                max_idx = j;
+            if nums[j] > nums[max_index] {
+                max_index = j;
             }
         }
 
-        nums.swap(i, max_idx);
+        nums.swap(i, max_index);
     }
 }
 
@@ -223,39 +235,39 @@ fn merge_sort(nums: &mut Vec<i32>) {
     let n = nums.len();
     merge(nums, 0, n);
 }
-fn merge(nums: &mut Vec<i32>, beg: usize, end: usize) {
-    if beg + 1 >= end { return; }
+fn merge(nums: &mut Vec<i32>, start: usize, end: usize) {
+    if start + 1 >= end { return; }
 
-    let mid = (beg + end) / 2;
-    merge(nums, beg, mid);
+    let mid = (start + end) / 2;
+    merge(nums, start, mid);
     merge(nums, mid, end);
-    sort(nums, beg, mid, end);
+    sort(nums, start, mid, end);
 }
-fn sort(nums: &mut Vec<i32>, beg: usize, mid: usize, end: usize) {
+fn sort(nums: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
     let nums2 = nums[mid..end].to_vec();
-    let (mut idx1, mut idx2, mut idx) = (mid - 1, nums2.len() - 1, end - 1);
+    let (mut index1, mut index2, mut index) = (mid - 1, nums2.len() - 1, end - 1);
 
     loop {
-        if nums[idx1] > nums2[idx2] {
-            nums[idx] = nums[idx1];
-            idx -= 1;
-            if idx1 == beg {
-                // for i in 0..=idx2 { nums[i + beg] = nums2[i]; } // 作用同下
+        if nums[index1] > nums2[index2] {
+            nums[index] = nums[index1];
+            index -= 1;
+            if index1 == start {
+                // for i in 0..=index2 { nums[i + start] = nums2[i]; } // 作用同下
                 // 用于将一个切片（slice）的内容复制到另一个切片中。这个函数通常用于处理字节数据或者需要在两个切片之间复制数据时
                 // let src = [1, 2, 3, 4];
                 // let mut dst = [0; 4]; // 初始化一个全为0的切片
                 // dst.copy_from_slice(&src); // 将src的内容复制到dst中
                 // println!("{:?}", dst); // 输出: [1, 2, 3, 4]
-                nums[beg..=(idx2 + beg)].copy_from_slice(&nums2[..=idx2]);
+                nums[start..=(index2 + start)].copy_from_slice(&nums2[..=index2]);
                 break;
             }
 
-            idx1 -= 1;
+            index1 -= 1;
         } else {
-            nums[idx] = nums2[idx2];
-            idx -= 1;
-            if idx2 == 0 { break; }
-            idx2 -= 1;
+            nums[index] = nums2[index2];
+            index -= 1;
+            if index2 == 0 { break; }
+            index2 -= 1;
         }
     }
 }
@@ -266,24 +278,24 @@ fn quick_sort(nums: &mut Vec<i32>) {
     let n = nums.len();
     quick(nums, 0, n);
 }
-fn quick(nums: &mut Vec<i32>, beg: usize, end: usize) {
-    if beg + 1 >= end { return; }
+fn quick(nums: &mut Vec<i32>, start: usize, end: usize) {
+    if start + 1 >= end { return; }
 
     // 相当于随机选取一个点
-    let idx = rand::thread_rng().gen_range(beg..end);
-    //let idx = (beg + end) / 2;
-    nums.swap(beg, idx);
-    let val = nums[beg];
+    let index = rand::thread_rng().gen_range(start..end);
+    //let index = (start + end) / 2;
+    nums.swap(start, index);
+    let val = nums[start];
 
-    let mut idx = beg;
-    let (mut l, mut r) = (beg + 1, end);
+    let mut index = start;
+    let (mut l, mut r) = (start + 1, end);
     while l < r {
         while l < r && nums[r - 1] > val {
             r -= 1;
         }
         if l < r {
-            nums[idx] = nums[r - 1];
-            idx = r - 1;
+            nums[index] = nums[r - 1];
+            index = r - 1;
             r -= 1;
         }
 
@@ -291,15 +303,15 @@ fn quick(nums: &mut Vec<i32>, beg: usize, end: usize) {
             l += 1;
         }
         if l < r {
-            nums[idx] = nums[l];
-            idx = l;
+            nums[index] = nums[l];
+            index = l;
             l += 1;
         }
     }
 
-    nums[idx] = val;
-    quick(nums, beg, idx);
-    quick(nums, idx + 1, end);
+    nums[index] = val;
+    quick(nums, start, index);
+    quick(nums, index + 1, end);
 }
 
 /// 6.堆排序，时间复杂度：O(nlogn)，空间复杂度：O(1)，非稳定性排序
@@ -318,24 +330,24 @@ fn heap_sort(nums: &mut Vec<i32>) {
         heap_fy(nums, 0, i);
     }
 }
-fn heap_fy(nums: &mut Vec<i32>, mut idx: usize, n: usize) {
+fn heap_fy(nums: &mut Vec<i32>, mut index: usize, n: usize) {
     loop {
-        let mut max_idx = idx;
-        let left_idx = idx * 2 + 1;
-        let right_idx = left_idx + 1;
+        let mut max_index = index;
+        let left_index = index * 2 + 1;
+        let right_index = left_index + 1;
 
-        if left_idx < n && nums[left_idx] > nums[max_idx] {
-            max_idx = left_idx;
+        if left_index < n && nums[left_index] > nums[max_index] {
+            max_index = left_index;
         }
-        if right_idx < n && nums[right_idx] > nums[max_idx] {
-            max_idx = right_idx;
+        if right_index < n && nums[right_index] > nums[max_index] {
+            max_index = right_index;
         }
-        if max_idx == idx {
+        if max_index == index {
             break;
         }
 
-        nums.swap(idx, max_idx);
-        idx = max_idx;
+        nums.swap(index, max_index);
+        index = max_index;
     }
 }
 //-----------------------------------------------------
