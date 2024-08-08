@@ -4,13 +4,14 @@ use std::rc::Rc;
 use leet_code::algorithm::{
     array_algo, backtracking_algo, binary_search_algo,
     binary_tree_algo::{BSTIterator, TreeNode},
-    bit_operation_algo, divide_and_conquer_algo, dynamic_programming_algo, game_theory_algo, graph_algo, hash_algo,
+    bit_operation_algo, divide_and_conquer_algo, dynamic_programming_algo, game_theory_algo,
+    graph_algo, greedy_algo, hash_algo,
     heap_algo::{self, SmallestInfiniteSet},
     linked_list_algo::ListNode, min_spanning_tree_algo,
     monotone_stack_algo::{self, StockSpanner},
     prefix_sum_algo, queue_algo,
     randomized_algo::{self, Solution, Solution2},
-    scan_line_algo, set_data_algo, sliding_window_algo, stack_algo, string_algo,
+    scan_line_algo, sliding_window_algo, stack_algo, string_algo,
     trie_tree_algo::{self, Trie},
     two_pointers_algo,
 };
@@ -228,7 +229,7 @@ fn main() {
     // 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
     // 三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 < nums[4] == 4 < nums[5] == 6,返回true
     let nums = vec![2, 1, 5, 0, 4, 6];
-    let answer = array_algo::increasing_triplet(nums);
+    let answer = greedy_algo::increasing_triplet(nums);
     println!("increasing_triplet: {answer}"); // true
 
     println!("------ 443.压缩字符串(字符串,双指针) ------");
@@ -309,7 +310,7 @@ fn main() {
 
     println!("----- 649.Dota2 参议院(贪心,队列,字符串) ------");
     let senate = String::from("RDD");
-    let answer = queue_algo::predict_party_victory(senate);
+    let answer = greedy_algo::predict_party_victory(senate);
     println!("predict_party_victory: {answer}"); // Dire
 
     println!("------ 2095.删除链表的中间节点(链表,双指针) ------");
@@ -549,18 +550,18 @@ fn main() {
 
     println!("----- 435.无重叠区间(数组,贪心算法(greedy algorithm),动态规划) ------");
     let intervals = vec![vec![1, 2], vec![2, 3], vec![3, 4], vec![1, 3]];
-    let answer = set_data_algo::erase_overlap_intervals(intervals);
+    let answer = greedy_algo::erase_overlap_intervals(intervals);
     println!("erase_overlap_intervals: {answer}"); // 1
 
     println!("----- 452.用最少数量的箭引爆气球(贪心算法(greedy algorithm),数组,排序) ------");
     // 有许多球形气球贴在一堵用 XY 平面表示的墙面上。
-    // 墙面上的气球记录在整数数组 points ，其中points[i] = [Xstart, Xend] 表示水平直径在 Xstart 和 Xend之间的气球。你不知道气球的确切 y 坐标。
+    // 墙面上的气球记录在整数数组 points,其中points[i] = [Xstart, Xend] 表示水平直径在 Xstart 和 Xend之间的气球。你不知道气球的确切 y 坐标。
     // 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。
-    // 在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 Xstart，Xend，且满足 Xstart ≤ X ≤ Xend，则该气球会被 引爆 。
-    // 可以射出的弓箭的数量 没有限制 。弓箭一旦被射出之后，可以无限地前进。
-    // 数组 points ,返回引爆所有气球所必须射出的 最小 弓箭数。
+    // 在坐标 x 处射出一支箭,若有一个气球的直径的开始和结束坐标为 Xstart, Xend, 且满足 Xstart ≤ X ≤ Xend，则该气球会被 引爆。
+    // 可以射出的弓箭的数量 没有限制.弓箭一旦被射出之后,可以无限地前进。
+    // 数组 points, 返回引爆所有气球所必须射出的 最小 弓箭数。
     let points = vec![vec![10, 16], vec![2, 8], vec![1, 6], vec![7, 12]];
-    let answer = set_data_algo::find_min_arrow_shots(points);
+    let answer = greedy_algo::find_min_arrow_shots(points);
     println!("find_min_arrow_shots: {answer}"); // 2
 
     println!("----- 739.每日温度(栈,数组,单调栈) ------");

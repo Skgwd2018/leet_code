@@ -69,3 +69,6 @@ pub mod game_theory_algo;
 
 /// 分治
 pub mod divide_and_conquer_algo;
+
+/// 贪心
+pub mod greedy_algo;
