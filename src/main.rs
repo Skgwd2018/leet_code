@@ -175,6 +175,14 @@ fn main() {
     let answer = dynamic_programming_algo::min_cost_climbing_stairs(cost);
     println!("min_cost_climbing_stairs: {answer}"); // 6
 
+    println!("----- 509.斐波那契数(记忆化搜索,动态规划) ------");
+    let answer = dynamic_programming_algo::fib(28);
+    println!("fib: {answer}"); // 317811
+
+    println!("----- 70.爬楼梯(记忆化搜索,动态规划) ------");
+    let answer = dynamic_programming_algo::climb_stairs(3);
+    println!("climb_stairs: {answer}"); // 3
+
     println!("------ 338.比特位计数(位运算,动态规划) ------");
     let n = 5;
     let answer = bit_operation_algo::count_bits(n);
@@ -188,14 +196,6 @@ fn main() {
     println!("----- 1025.除数博弈(脑筋急转弯,数学,动态规划,博弈) ------");
     let answer = game_theory_algo::divisor_game(2);
     println!("divisor_game: {answer}"); // true
-
-    println!("----- 509.斐波那契数(记忆化搜索,动态规划) ------");
-    let answer = dynamic_programming_algo::fib(28);
-    println!("fib: {answer}"); // 317811
-
-    println!("----- 70.爬楼梯(记忆化搜索,动态规划) ------");
-    let answer = dynamic_programming_algo::climb_stairs(3);
-    println!("climb_stairs: {answer}"); // 3
 
     println!("----- 1979.找出数组的最大公约数(数组,数学,数论) ------");
     let nums = vec![7, 5, 6, 8, 3];
