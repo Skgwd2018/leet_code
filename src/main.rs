@@ -225,9 +225,6 @@ fn main() {
     println!("product_except_self: {answer:?}"); // [24, 12, 8, 6]
 
     println!("----- 334.递增的三元子序列(贪心,数组) ------");
-    // 判断数组nums中是否存在长度为 3 的递增子序列。
-    // 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
-    // 三元组 (3, 4, 5) 满足题意，因为 nums[3] == 0 < nums[4] == 4 < nums[5] == 6,返回true
     let nums = vec![2, 1, 5, 0, 4, 6];
     let answer = greedy_algo::increasing_triplet(nums);
     println!("increasing_triplet: {answer}"); // true
@@ -246,10 +243,8 @@ fn main() {
     println!("Max water: {max_area}"); // 49
 
     println!("----- 1679.K和数对的最大数目(数组,哈希表,双指针,排序) ------");
-    // 整数数组 nums 和整数 k ,每一步操作中，需要从数组中选出和为 k 的两个整数，并将它们移出数组。返回你可以对数组执行的最大操作数。
     let nums = vec![3, 1, 3, 4, 3];
-    let k = 6;
-    let answer = two_pointers_algo::max_operations(nums, k);
+    let answer = two_pointers_algo::max_operations(nums, 6);
     println!("max_operations: {answer}"); // 1
 
     println!("------ 1456.定长子串中元音的最大数目(字符串,滑动窗口) ------");
@@ -259,7 +254,6 @@ fn main() {
     println!("max_vowels: {answer}"); // 3
 
     println!("----- 1004.最大连续1的个数 III(数组,双指针,前缀和,滑动窗口) ------");
-    // 二进制数组 nums 和整数 k，如果可以翻转最多 k 个 0 ，则返回 数组中连续 1 的最大个数 。
     let nums = vec![0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1];
     let k = 3;
     let answer = sliding_window_algo::longest_ones(nums, k);
@@ -277,13 +271,7 @@ fn main() {
     println!("close_strings: {answer}"); // true
 
     println!("----- 2352.相等行列对(数组,哈希,矩阵,模拟) ------");
-    // 给你一个下标从 0 开始、大小为 n x n 的整数矩阵 grid ，返回满足 Ri 行和 Cj 列相等的行列对 (Ri, Cj) 的数目。
-    // 如果行和列以相同的顺序包含相同的元素（即相等的数组），则认为二者是相等的。
     let grid = vec![vec![3, 1, 2, 2], vec![1, 4, 4, 5], vec![2, 4, 2, 2], vec![2, 4, 2, 2]];
-    // 存在三对相等行列对：
-    // - (第 0 行，第 0 列)：[3,1,2,2]
-    // - (第 2 行, 第 2 列)：[2,4,2,2]
-    // - (第 3 行, 第 2 列)：[2,4,2,2]
     let answer = hash_algo::equal_pairs(grid);
     println!("equal_pairs: {answer}"); // 3
 
@@ -294,10 +282,6 @@ fn main() {
     println!("remove_stars: {answer}");
 
     println!("----- 735.小行星碰撞(数组,栈,模拟) ------");
-    // 整数数组 asteroids，表示在同一行的小行星。
-    // 对于数组中的每一个元素，其绝对值表示小行星的大小，正负表示小行星的移动方向（正表示向右移动，负表示向左移动）。每一颗小行星以相同的速度移动。
-    // 找出碰撞后剩下的所有小行星。
-    // 碰撞规则：两个小行星相互碰撞，较小的小行星会爆炸。如果两颗小行星大小相同，则两颗小行星都会爆炸。两颗移动方向相同的小行星，永远不会发生碰撞。
     let asteroids = vec![10, 2, -5];
     let answer = stack_algo::asteroid_collision(asteroids);
     println!("asteroid_collision: {answer:?}"); // [10]
@@ -395,10 +379,6 @@ fn main() {
     println!("can_visit_all_rooms: {answer}"); // true
 
     println!("----- 547.省份数量(并查集,图) ------");
-    // 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
-    // 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
-    // 给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。
-    // 返回矩阵中 省份 的数量。
     let is_connected = vec![vec![1, 1, 0], vec![1, 1, 0], vec![0, 0, 1]];
     let answer = graph_algo::find_circle_num2(is_connected);
     println!("find_circle_num: {answer}"); // 2
@@ -424,10 +404,6 @@ fn main() {
     println!("nearest_exit: {answer}"); // 1
 
     println!("----- 994.腐烂的橘子(bfs,数组,矩阵) ------");
-    // 在给定的 m x n 网格 grid 中，每个单元格可以有以下三个值之一：
-    // 0: 空单元格; 1: 新鲜橘子; 2: 腐烂的橘子。
-    // 每分钟，腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
-    // 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 -1 。
     let grid = vec![vec![2, 1, 1], vec![1, 1, 0], vec![0, 1, 1]];
     let answer = graph_algo::oranges_rotting(grid);
     println!("oranges_rotting: {answer}"); // 4
@@ -471,11 +447,6 @@ fn main() {
     println!("find_peak_element: {answer}"); // 7
 
     println!("----- 875.爱吃香蕉的珂珂(数组,二分查找) ------");
-    // 这里有 n 堆香蕉，第 i 堆中有 piles[i] 根香蕉。警卫已经离开了，将在 h 小时后回来。
-    // 珂珂可以决定她吃香蕉的速度 k (单位:根/小时)。每个小时，她将会选择一堆香蕉，从中吃掉 k 根。
-    // 如果这堆香蕉少于 k 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。
-    // 珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。
-    // 返回她可以在 h 小时内吃掉所有香蕉的最小速度 k(k 为整数)。
     let piles = vec![30, 11, 23, 4, 20];
     let h = 6;
     let answer = binary_search_algo::min_eating_speed(piles, h);
@@ -510,7 +481,7 @@ fn main() {
     println!("----- 714.买卖股票的最佳时机含手续费(数组,贪心,动态规划) ------");
     let prices = vec![1, 3, 2, 8, 4, 9];
     let fee = 2;
-    // 解释：能够达到的最大利润:
+    // 解释:能够达到的最大利润:
     // 在此处买入 prices[0] = 1
     // 在此处卖出 prices[3] = 8
     // 在此处买入 prices[4] = 4
@@ -554,12 +525,6 @@ fn main() {
     println!("erase_overlap_intervals: {answer}"); // 1
 
     println!("----- 452.用最少数量的箭引爆气球(贪心算法(greedy algorithm),数组,排序) ------");
-    // 有许多球形气球贴在一堵用 XY 平面表示的墙面上。
-    // 墙面上的气球记录在整数数组 points,其中points[i] = [Xstart, Xend] 表示水平直径在 Xstart 和 Xend之间的气球。你不知道气球的确切 y 坐标。
-    // 一支弓箭可以沿着 x 轴从不同点 完全垂直 地射出。
-    // 在坐标 x 处射出一支箭,若有一个气球的直径的开始和结束坐标为 Xstart, Xend, 且满足 Xstart ≤ X ≤ Xend，则该气球会被 引爆。
-    // 可以射出的弓箭的数量 没有限制.弓箭一旦被射出之后,可以无限地前进。
-    // 数组 points, 返回引爆所有气球所必须射出的 最小 弓箭数。
     let points = vec![vec![10, 16], vec![2, 8], vec![1, 6], vec![7, 12]];
     let answer = greedy_algo::find_min_arrow_shots(points);
     println!("find_min_arrow_shots: {answer}"); // 2
@@ -570,9 +535,9 @@ fn main() {
     println!("daily_temperatures: {answer:?}"); // [1, 1, 4, 2, 1, 1, 0, 0]
 
     println!("----- 901.股票价格跨度(单调栈,数据流,设计,栈) ------");
-    // 设计一个算法收集某些股票的每日报价，并返回该股票当日价格的 跨度。
-    // 当日股票价格的 跨度 被定义为股票价格小于或等于今天价格的最大连续日数(从今天开始往回数，包括今天)。
-    // 例:如果未来7天股票的价格是 [100,80,60,70,60,75,85]，那么股票跨度将是 [1,1,1,2,1,4,6]。
+    // 设计一个算法收集某些股票的每日报价,并返回该股票当日价格的 跨度。
+    // 当日股票价格的 跨度 被定义为股票价格小于或等于今天价格的最大连续日数(从今天开始往回数,包括今天)。
+    // 例:如果未来7天股票的价格是 [100, 80, 60, 70, 60, 75, 85],那么股票跨度将是 [1, 1, 1, 2, 1, 4, 6]
     let mut stock_spanner = StockSpanner::new();
     let ret_1 = stock_spanner.next(100);
     println!("stock_spanner.next(100): {ret_1}");  // 1
@@ -624,16 +589,16 @@ fn main() {
     println!("min_cost_connect_points: {answer}"); // 18
 
     println!("----- 398.随机数索引(水塘抽样,数学,随机化,哈希表) ------");
-    // 给定一个可能含有 重复元素 的整数数组 nums ，请你随机输出给定的目标数字 target 的索引。你可以假设给定的数字一定存在于数组中。
-    // 实现 Solution2 类：
+    // 给定一个可能含有 重复元素 的整数数组 nums,请你随机输出给定的目标数字 target 的索引。你可以假设给定的数字一定存在于数组中。
+    // 实现 Solution2 类:
     // Solution2(int[] nums) 用数组 nums 初始化对象。
-    // int pick(int target) 从 nums 中选出一个满足 nums[i] == target 的随机索引 i 。如果存在多个有效的索引，则每个索引的返回概率应当相等。
+    // int pick(int target) 从 nums 中选出一个满足 nums[i] == target 的随机索引 i 。如果存在多个有效的索引,则每个索引的返回概率应当相等。
     // 输入
     // ["Solution2", "pick", "pick", "pick"]
     // [[[1, 2, 3, 3, 3]], [3], [1], [3]]
     // 输出
     // [null, 4, 0, 2]
-    // 解释：
+    // 解释:
     // Solution2 solution = new Solution2([1, 2, 3, 3, 3]);
     // solution.pick(3); // 随机返回索引 2, 3 或者 4 之一。每个索引的返回概率应该相等。
     // solution.pick(1); // 返回 0 。因为只有 nums[0] 等于 1 。
@@ -664,5 +629,5 @@ fn main() {
     println!("----- 218.天际线问题(树状数组,线段树,分治,有序集合,堆(优先队列),扫描线) ------");
     let buildings = vec![vec![2, 9, 10], vec![3, 7, 15], vec![5, 12, 12], vec![15, 20, 10], vec![19, 24, 8]];
     let answer = scan_line_algo::get_skyline(buildings);
-    println!("get_skyline: {answer:?}"); // [[2,10],[3,15],[7,12],[12,0],[15,10],[20,8],[24,0]]
+    println!("get_skyline: {answer:?}"); // [[2, 10], [3, 15], [7, 12], [12, 0], [15, 10], [20, 8], [24, 0]]
 }

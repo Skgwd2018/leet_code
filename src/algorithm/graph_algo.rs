@@ -71,6 +71,10 @@ pub fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
 
 /// 547.省份数量(并查集,图,bfs,dfs)
 // 解法二:上面的优化版
+// 有 n 个城市,其中一些彼此相连,另一些没有相连。如果 城市a 与 城市b 直接相连,且 城市b 与 城市c 直接相连,那么 城市a 与 城市c 间接相连。
+// 省份 是一组直接或间接相连的城市,组内不含其他没有相连的城市。
+// 给你一个 n x n 的矩阵 isConnected,其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连,而 isConnected[i][j] = 0 表示二者不直接相连。
+// 返回矩阵中 省份 的数量
 pub fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
     // Find
     fn find(mut i: usize, par: &[usize]) -> usize {
@@ -353,6 +357,10 @@ pub fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
 //-----------------------------------------------------
 
 /// 994.腐烂的橘子(bfs,数组,矩阵)
+// 在给定的 m x n 网格 grid 中,每个单元格可以有以下三个值之一:
+// 0: 空单元格; 1: 新鲜橘子; 2: 腐烂的橘子;
+// 每分钟,腐烂的橘子 周围 4 个方向上相邻 的新鲜橘子都会腐烂。
+// 返回 直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能,返回 -1
 pub fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
     let (m, n) = (grid.len(), grid[0].len());
     let mut queue = VecDeque::new();
