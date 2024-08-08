@@ -81,25 +81,6 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
 }
 //-----------------------------------------------------
 
-/// 334.递增的三元子序列(贪心,数组)
-// 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k,使得 nums[i] < nums[j] < nums[k],返回 true;否则,返回 false
-pub fn increasing_triplet(nums: Vec<i32>) -> bool {
-    let (mut first, mut second) = (i32::MAX, i32::MAX);
-    for num in nums {
-        // 贪心算法(Greed Algorithm)
-        if num <= first {
-            first = num;
-        } else if num <= second {
-            second = num;
-        } else {
-            return true;
-        }
-    }
-
-    false
-}
-//-----------------------------------------------------
-
 /// 1979.找出数组的最大公约数(数组,数学,数论)
 // 给定一个整数数组 nums ，返回数组中最大数和最小数的 最大公约数。
 // 两个数的 最大公约数 是能够被两个数整除的最大正整数。
