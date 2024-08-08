@@ -70,9 +70,9 @@ pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
 }
 //-----------------------------------------------------
 
-/// 1493.删掉一个元素以后全为 1 的最长子数组(数组,动态规划,滑动窗口)
-// 给定一个二进制数组 nums，需要从中删掉一个元素。请在删掉元素的结果数组中，返回最长的且只包含 1 的非空子数组的长度。
-// 如果不存在这样的子数组，请返回 0
+/// 1493.删掉一个元素以后全为 1 的最长子数组(数组,滑动窗口,动态规划)
+// 给定一个二进制数组 nums,需要从中删掉一个元素。请在删掉元素的结果数组中,返回最长的且只包含 1 的非空子数组的长度。
+// 如果不存在这样的子数组,请返回 0
 pub fn longest_subarray(nums: Vec<i32>) -> i32 {
     /*let (mut zero_cnt, mut max_len, mut n) = (0, 0, 0);
     for (i, &num) in nums.iter().enumerate() {
@@ -99,11 +99,11 @@ pub fn longest_subarray(nums: Vec<i32>) -> i32 {
 //-----------------------------------------------------
 
 /// LCR 057.存在重复元素 III(数组,桶排序,有序集合,滑动窗口)
-// 给定一个整数数组 nums 和两个整数 k 和 t 。
-// 请判断是否存在 两个不同下标 i 和 j，使得 abs(nums[i] - nums[j]) <= t ，同时又满足 abs(i - j) <= k 。
-// 如果存在则返回 true，不存在返回 false。
-// 输入：nums = [1,5,9,1,5,9], k = 2, t = 3
-// 输出：false
+// 给定一个整数数组 nums 和两个整数 k 和 t
+// 请判断是否存在 两个不同下标 i 和 j,使得 abs(nums[i] - nums[j]) <= t ,同时又满足 abs(i - j) <= k
+// 如果存在则返回 true,不存在返回 false
+// 输入: nums = [1, 5, 9, 1, 5, 9], k = 2, t = 3
+// 输出: false
 pub fn contains_nearby_almost_duplicate(nums: Vec<i32>, k: i32, t: i32) -> bool {
     let k = k as usize;
     let mut v: BTreeSet<i32> = BTreeSet::new();

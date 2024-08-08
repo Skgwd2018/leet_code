@@ -39,10 +39,10 @@ impl SmallestInfiniteSet {
 }*/
 
 // BTreeSet 主要特点:
-// 1.有序：BTreeSet 会自动对其元素进行排序。当你遍历集合时，元素会按照升序排列。
-// 2.不重复：与所有集合类型一样，BTreeSet 不允许重复的元素。
-// 3.快速查找：由于基于 B 树实现，BTreeSet 提供了快速的查找、插入和删除操作。
-// 注意：BTreeSet 的排序是基于元素的默认排序。对于自定义类型，可能需要实现 Ord trait 来定义如何排序这些元素。
+// 1.有序: BTreeSet 会自动对其元素进行排序。当你遍历集合时,元素会按照升序排列。
+// 2.不重复: 与所有集合类型一样,BTreeSet 不允许重复的元素。
+// 3.快速查找: 由于基于 B 树实现,BTreeSet 提供了快速的查找、插入和删除操作。
+// 注意: BTreeSet 的排序是基于元素的默认排序。对于自定义类型,可能需要实现 Ord trait 来定义如何排序这些元素。
 #[derive(Default)]
 pub struct SmallestInfiniteSet {
     point: i32,
@@ -78,7 +78,7 @@ impl SmallestInfiniteSet {
 
 /// 2542.最大子序列的分数(贪心+排序+堆(优先队列-最小堆),数组)
 // 给定两个下标从 0 开始的整数数组 nums1 和 nums2,两者长度都是 n,再给一个正整数 k。必须从 nums1 中选一个长度为 k 的 子序列 对应的下标。
-// 对于选择的下标 i0, i1, ...， ik - 1, 你的 分数 定义如下:
+// 对于选择的下标 i0, i1, ..., ik - 1, 你的 分数 定义如下:
 // nums1 中下标对应元素求和,乘以 nums2 中下标对应元素的 最小值。
 // 用公式表示: (nums1[i0] + nums1[i1] +...+ nums1[ik - 1]) * min(nums2[i0], nums2[i1], ... , nums2[ik - 1])
 // 返回 最大 可能的分数。
@@ -118,12 +118,12 @@ pub fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: usize) -> i64 {
     answer*/
 
     // 解法二:
-    // 合并nums1、 nums2得到数组vec，并按照nums2元素的大小对vec进行降序排序。
+    // 合并nums1、 nums2得到数组vec,并按照nums2元素的大小对vec进行降序排序。
     let mut vec: Vec<(i32, i32)> = nums1.into_iter().zip(nums2).collect();
     vec.sort_by(|a, b| a.1.cmp(&b.1).reverse());
 
     let mut heap = BinaryHeap::<Reverse<i32>>::new();
-    // 按照vec的顺序计算前k个nums1元素和sum，并且将其放入最小堆中，并计算出迭代前初始答案answer
+    // 按照vec的顺序计算前k个nums1元素和sum,并且将其放入最小堆中,并计算出迭代前初始答案answer
     let mut sum: i64 = vec[..k].iter().map(|p| {
         heap.push(Reverse(p.0));
         i64::from(p.0)
@@ -146,11 +146,11 @@ pub fn max_score(nums1: Vec<i32>, nums2: Vec<i32>, k: usize) -> i64 {
 /// 堆/优先队列
 // 题目:给你一个下标从 0 开始的整数数组 costs,其中 costs[i] 是雇佣第 i 位工人的代价。
 // 同时给你两个整数 k 和 candidates。我们想根据以下规则恰好雇佣 k 位工人：
-// 总共进行 k 轮雇佣，且每一轮恰好雇佣一位工人。
-// 在每一轮雇佣中，从最前面 candidates 和最后面 candidates 人中选出代价最小的一位工人，如果有多位代价相同且最小的工人，选择下标更小的一位工人。
-// 例: costs = [3,2,7,7,1,2] 且 candidates = 2,第一轮雇佣中，我们选择第 4 位工人，因为他的代价最小 [3,2,7,7,1,2]。
-// 第二轮雇佣，我们选择第 1 位工人，因为他们的代价与第 4 位工人一样都是最小代价，而且下标更小，[3,2,7,7,2]。注意每一轮雇佣后，剩余工人的下标可能会发生变化。
-// 如果剩余员工数目不足 candidates 人，那么下一轮雇佣他们中代价最小的一人，如果有多位代价相同且最小的工人，选择下标更小的一位工人。
+// 总共进行 k 轮雇佣,且每一轮恰好雇佣一位工人。
+// 在每一轮雇佣中,从最前面 candidates 和最后面 candidates 人中选出代价最小的一位工人,如果有多位代价相同且最小的工人,选择下标更小的一位工人。
+// 例: costs = [3, 2, 7, 7, 1, 2] 且 candidates = 2,第一轮雇佣中,我们选择第 4 位工人,因为他的代价最小 [3, 2, 7, 7, 1, 2]。
+// 第二轮雇佣,我们选择第 1 位工人,因为他们的代价与第 4 位工人一样都是最小代价,而且下标更小,[3, 2, 7, 7, 2]。注意每一轮雇佣后,剩余工人的下标可能会发生变化。
+// 如果剩余员工数目不足 candidates 人,那么下一轮雇佣他们中代价最小的一人,如果有多位代价相同且最小的工人,选择下标更小的一位工人。
 // 一位工人只能被选择一次。
 // 返回雇佣恰好 k 位工人的总代价。
 pub fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
@@ -177,7 +177,7 @@ pub fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
     // let mut numbers = vec![1, 3, 2];
     // numbers.sort_by_key(|&x| Reverse(x));
     // println!("numbers: {numbers:?}"); // [3, 2, 1]
-    // Reverse() 用于逆序存储成本值，可以使 BinaryHeap 按照降序的方式排列，从而可以从堆的顶部取出最大的成本值
+    // Reverse() 用于逆序存储成本值,可以使 BinaryHeap 按照降序的方式排列,从而可以从堆的顶部取出最大的成本值
     for i in 0..candidates {
         prev.push(Reverse(costs[i])); // 前 candidates 个成本值放入 prev 堆中,并逆序放入(通过 Reverse 结构)
         suff.push(Reverse(costs[n - 1 - i])); // 最后 candidates 个成本值放入 suff 堆中,并逆序放入
@@ -187,7 +187,7 @@ pub fn total_cost(mut costs: Vec<i32>, k: i32, candidates: i32) -> i64 {
     // 双指针操作
     let (mut i, mut j) = (candidates, n - candidates - 1); // 4 7
     (0..k).map(|_| {
-        // .peek() 取出堆中的最大值，由于使用Reverse，所以取出的反而是最小值
+        // .peek() 取出堆中的最大值,由于使用Reverse,所以取出的反而是最小值
         let (p, s) = (prev.peek().unwrap().0, suff.peek().unwrap().0);
         // println!("p ----> {p}"); // 2 7 10
         // println!("s ----> {s}"); // 8 8 8

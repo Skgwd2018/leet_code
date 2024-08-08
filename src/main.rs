@@ -265,7 +265,7 @@ fn main() {
     let answer = sliding_window_algo::longest_ones(nums, k);
     println!("longest_ones: {answer}"); // 10
 
-    println!("----- 1493.删掉一个元素以后全为 1 的最长子数组(数组,动态规划,滑动窗口) ------");
+    println!("----- 1493.删掉一个元素以后全为 1 的最长子数组(数组,滑动窗口,动态规划) ------");
     let nums = vec![0, 1, 1, 1, 0, 1, 1, 0, 1];
     let answer = sliding_window_algo::longest_subarray(nums);
     println!("longest_subarray: {answer}"); // 5
