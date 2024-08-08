@@ -66,3 +66,6 @@ pub mod randomized_algo;
 
 /// 博弈
 pub mod game_theory_algo;
+
+/// 分治
+pub mod divide_and_conquer_algo;

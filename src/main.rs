@@ -4,14 +4,13 @@ use std::rc::Rc;
 use leet_code::algorithm::{
     array_algo, backtracking_algo, binary_search_algo,
     binary_tree_algo::{BSTIterator, TreeNode},
-    bit_operation_algo, dynamic_programming_algo, game_theory_algo, graph_algo, hash_algo,
+    bit_operation_algo, divide_and_conquer_algo, dynamic_programming_algo, game_theory_algo, graph_algo, hash_algo,
     heap_algo::{self, SmallestInfiniteSet},
     linked_list_algo::ListNode, min_spanning_tree_algo,
     monotone_stack_algo::{self, StockSpanner},
     prefix_sum_algo, queue_algo,
     randomized_algo::{self, Solution, Solution2},
-    scan_line_algo, set_data_algo, sliding_window_algo,
-    stack_algo, string_algo,
+    scan_line_algo, set_data_algo, sliding_window_algo, stack_algo, string_algo,
     trie_tree_algo::{self, Trie},
     two_pointers_algo,
 };
@@ -435,7 +434,7 @@ fn main() {
     println!("----- 215.数组中的第k个最大元素(数组,分治,快速选择,排序,堆(优先队列)) ------");
     let nums = vec![3, 2, 1, 5, 6, 4];
     // let nums = vec![3, 2, 3, 1, 2, 4, 5, 5, 6];
-    let answer = heap_algo::find_kth_largest(nums, 2);
+    let answer = divide_and_conquer_algo::find_kth_largest(nums, 2);
     println!("find_kth_largest: {answer}"); // 5
 
     println!("----- 2336.无限集中的最小数字(堆/优先队列) ------");
