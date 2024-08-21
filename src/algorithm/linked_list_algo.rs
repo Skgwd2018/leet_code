@@ -61,7 +61,7 @@ impl ListNode {
         // 遍历链表
         while ptr.is_some() {
             count += 1;
-            ptr = &ptr.as_ref().unwrap().next;
+            ptr = &ptr.as_ref()?.next;
         }
 
         let mut temp_head = Box::new(ListNode { val: 0, next: head });
@@ -74,7 +74,7 @@ impl ListNode {
             }
 
             curr.next = Some(node_next);
-            curr = curr.next.as_mut().unwrap();
+            curr = curr.next.as_mut()?;
 
             i += 1;
         }
@@ -109,10 +109,10 @@ impl ListNode {
                 // 通过解引用curr_even来修改它指向的Option<Box<ListNode>>。将curr_even设置为Some(curr),
                 // 即让curr_even指向新的节点curr,而不是修改curr_even当前指向的节点的next字段。
                 *curr_even = Some(curr);
-                curr_even = &mut curr_even.as_mut().unwrap().next;
+                curr_even = &mut curr_even.as_mut()?.next;
             } else {
                 *curr_odd = Some(curr);
-                curr_odd = &mut curr_odd.as_mut().unwrap().next;
+                curr_odd = &mut curr_odd.as_mut()?.next;
             }
 
             is_even = !is_even;

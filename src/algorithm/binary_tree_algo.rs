@@ -149,7 +149,7 @@ impl TreeNode {
         fn dfs5(root: Option<Rc<RefCell<TreeNode>>>, key: i32) -> Option<Rc<RefCell<TreeNode>>> {
             // if root.is_none() { return None; }
             root.as_ref()?; // 同上
-            let mut node = root.as_ref().unwrap().borrow_mut();
+            let mut node = root.as_ref()?.borrow_mut();
             // 递归查找与key值相同的节点,同时设置左、右节点等于返回的子树
             match node.val.cmp(&key) {
                 Ordering::Greater => node.left = dfs5(node.left.take(), key),
@@ -164,10 +164,10 @@ impl TreeNode {
                         (true, false) => node.right.take(),
                         (false, true) => node.left.take(),
                         (false, false) => {
-                            let mut min_code = node.right.clone().unwrap();
+                            let mut min_code = node.right.clone()?;
                             while min_code.borrow_mut().left.is_some() {
                                 let t = min_code.borrow_mut().left.clone();
-                                min_code = t.unwrap();
+                                min_code = t?;
                             }
                             min_code.borrow_mut().left = node.left.take();
 
@@ -277,7 +277,7 @@ impl TreeNode {
     pub fn lowest_common_ancestor(root: Option<Rc<RefCell<TreeNode>>>, p: Option<Rc<RefCell<TreeNode>>>, q: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
         if root.is_none() || root == p || root == q { return root; }
 
-        let node_ref = root.as_ref().unwrap();
+        let node_ref = root.as_ref()?;
         let left = Self::lowest_common_ancestor(node_ref.borrow_mut().left.take(), p.clone(), q.clone());
         let right = Self::lowest_common_ancestor(node_ref.borrow_mut().right.take(), p, q);
         if left.is_some() && right.is_some() { return root; }
