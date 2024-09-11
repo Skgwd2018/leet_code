@@ -10,6 +10,13 @@ repository = "https://github.com/Skgwd2018/leet_code"
 [dependencies]
 rand = "0.8.5"
 
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "my_benchmark"
+harness = false
+
 # https://doc.rust-lang.org/cargo/reference/profiles.html
 [profile.release]
 codegen-units = 1
