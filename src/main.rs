@@ -19,6 +19,19 @@ use leet_code::algorithm::{
 // 忽略提示含有大量行的函数,超100行即是超量
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
 fn main() {
+    println!("------ 前缀和 ------");
+    let nums = vec![1, 2, 3, 4, 5, 6];
+    let answer = prefix_sum_algo::prefix_sum_ex(nums, 1, 3);
+    println!("prefix_sum_ex: {answer}"); // 9
+
+    println!("------ 双指针 ------");
+    let nums = vec![1, 2, 3, 4, 6];
+    let target = 6;
+    match two_pointers_algo::two_pointer_ex(&nums, target) {
+        None => println!("No two sum solution found for the given array and target."),
+        Some((index1, index2)) => println!("Indices of the numbers that add up to {}: {} and {}", target, index1, index2),
+    } // 1, 3
+
     println!("------ 28.找出字符串中第一个匹配项的下标(字符串匹配) ------");
     let haystack = String::from("sadbutsad");
     let needle = String::from("sad");
