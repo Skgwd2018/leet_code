@@ -1,6 +1,28 @@
 use std::collections::Bound::{Included, Unbounded};
 use std::collections::BTreeSet;
 
+// 滑动窗口(Sliding Window)
+// 滑动窗口模式用于查找满足特定条件的子数组或子字符串，通过维护一个元素窗口来优化时间复杂度。在处理涉及连续子数组或子字符串的问题时，可使用该模式。
+// 示例问题：找出大小为k的子数组的最大和。
+// 示例：输入：nums = [2, 1, 5, 1, 3, 2]，k = 3 输出：9
+// 解释：先计算前k个元素的和。每次将窗口向右滑动一个元素，减去移出窗口的元素，再加上新进入窗口的元素。记录遇到的最大和。
+pub fn sliding_window_ex(nums: &[i32], k: usize) -> i32 {
+    assert!(nums.len() >= k, "Array length is less than k");
+
+    // 初始化窗口和:计算前k个元素的和
+    let mut window_sum = nums.iter().take(k).sum();
+    // 初始化最大和
+    let mut max_sum = window_sum;
+    // 滑动窗口操作，更新 窗口和(window_sum) 以及 最大和(max_sum)
+    for i in k..nums.len() {
+        window_sum += nums[i] - nums[i - k];
+        max_sum = i32::max(max_sum, window_sum);
+    }
+
+    max_sum
+}
+//-----------------------------------------------------
+
 /// 643.子数组最大平均数Ⅰ(数组,滑动窗口)
 /// 找出平均数最大值且长度为 k 的连续子数组
 pub fn find_max_average(nums: Vec<i32>, k: usize) -> f64 {
