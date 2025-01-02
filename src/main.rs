@@ -25,12 +25,43 @@ fn main() {
     println!("prefix_sum_ex: {answer}"); // 9
 
     println!("------ 双指针 ------");
-    let nums = vec![1, 2, 3, 4, 6];
+    let nums = [1, 2, 3, 4, 6];
     let target = 6;
     match two_pointers_algo::two_pointer_ex(&nums, target) {
-        None => println!("No two sum solution found for the given array and target."),
-        Some((index1, index2)) => println!("Indices of the numbers that add up to {}: {} and {}", target, index1, index2),
+        None => println!("None."),
+        Some((index1, index2)) => println!("target: {}, index: ({}, {})", target, index1, index2),
     } // 1, 3
+
+    println!("------ 滑动窗口 ------");
+    let nums = [2, 1, 5, 1, 3, 2];
+    let answer = sliding_window_algo::sliding_window_ex(&nums, 3);
+    println!("sliding_window_ex: {answer}"); // 9
+
+    println!("------ 单调栈 ------");
+    let nums = [2, 1, 2, 4, 3];
+    let answer = monotone_stack_algo::monotone_stack_ex(&nums);
+    println!("monotone_stack_ex: {answer:?}"); // [4, 2, 4, -1, -1]
+
+    // 用于操作显示信息
+    if true { return; }
+
+    println!("------ FizzBuzz game ------");
+    // 对1到100之间的每个数字进行以下操作：
+    // 如果数字是3的倍数，则输出“Fizz”;如果数字是5的倍数，则输出“Buzz”;如果数字既是3的倍数又是5的倍数，则输出“FizzBuzz”;否则，输出该数字本身。
+    for x in 1..=100 {
+        let (mod_3, mod_5) = (x % 3, x % 5);
+
+        if mod_3 == 0 && mod_5 == 0 {
+            print!("FizzBuzz ");
+        } else if mod_3 == 0 {
+            print!("Fizz ");
+        } else if mod_5 == 0 {
+            print!("Buzz ");
+        } else {
+            print!("{x} ");
+        }
+    };
+    println!();
 
     println!("------ 28.找出字符串中第一个匹配项的下标(字符串匹配) ------");
     let haystack = String::from("sadbutsad");
