@@ -26,6 +26,7 @@ pub fn monotone_stack_ex(nums: &[i32]) -> Vec<i32> {
             let index = stack.pop().unwrap();
             answer[index] = nums[i];
         }
+        
         // 将当前元素的索引压入栈中
         stack.push(i);
     }
