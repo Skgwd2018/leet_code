@@ -30,6 +30,47 @@ fn guess(num: i32) -> i32 {
 }
 //-----------------------------------------------------
 
+// 变形二分查找(Modified Binary Search)
+// 变形二分查找模式对二分查找进行改进，以解决更广泛的问题，例:在旋转排序数组中查找元素。在处理涉及排序或旋转数组，且需要查找特定元素的问题时，可使用该模式。
+// 示例问题：在一个旋转排序数组中查找元素。示例：输入：nums = [4, 5, 6, 7, 0, 1, 2]，target = 0 输出：4
+// 解释：进行二分查找时，额外增加一个判断，以确定数组的哪一半是有序的。然后检查目标元素是否在有序的那一半范围内。如果在，就在这一半中查找；否则，在另一半中查找。
+pub fn search_rotate_array(nums: &[i32], target: i32) -> Option<usize> {
+    let (mut left, mut right) = (0, nums.len() - 1);
+
+    while left <= right {
+        // 根据左右指针计算中间索引mid
+        let mid = left + (right - left) / 2;
+        // 如果中间元素等于目标值，则返回其索引。
+        if nums[mid] == target {
+            return Some(mid);
+        }
+
+        // 判断哪一半是有序的
+        if nums[left] <= nums[mid] {
+            // 左半部分有序
+            if nums[left] <= target && target <= nums[mid] {
+                // 目标值在左半部分范围内
+                right = mid - 1;
+            } else {
+                // 目标值在右半部分或者不存在
+                left = mid + 1;
+            }
+        } else {
+            // 右半部分有序
+            if nums[mid] < target && target <= nums[right] {
+                // 目标值在右半部分范围内
+                left = mid + 1;
+            } else {
+                // 目标值在左半部分或者不存在
+                right = mid - 1;
+            }
+        }
+    }
+
+    None
+}
+//-----------------------------------------------------
+
 /// 2300.咒语和药水的成功对数(数组,双指针,二分查找)
 pub fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Vec<i32> {
     potions.sort_unstable(); // 默认升序排列
