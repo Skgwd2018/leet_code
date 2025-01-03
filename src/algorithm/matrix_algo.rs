@@ -2,7 +2,7 @@
 // 示例问题:对二维网格进行颜色填充。将与起始单元格相连通的所有单元格都更改为新颜色。
 // 示例：输入:image = [[1,1,1], [1,1,0], [1,0,1]]，sr = 1，sc = 1，newColor = 2 输出：[[2,2,2], [2,2,0], [2,0,1]]
 // 解释：使用DFS或BFS从给定单元格开始遍历矩阵。将连通单元格的颜色更改为新颜色。
-pub fn flood_fill(image: &mut Vec<Vec<i32>>, sr: usize, sc: usize, new_color: i32) {
+pub fn matrix_ex(image: &mut Vec<Vec<i32>>, sr: usize, sc: usize, new_color: i32) {
     let original_color = image[sr][sc];
     if original_color != new_color {
         dfs(image, sr, sc, original_color, new_color);

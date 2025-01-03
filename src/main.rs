@@ -39,8 +39,13 @@ fn main() {
 
     println!("------ 矩阵遍历 ------");
     let mut image = vec![vec![1, 1, 1], vec![1, 1, 0], vec![1, 0, 1]];
-    matrix_algo::flood_fill(&mut image, 1, 1, 2);
-    println!("image: {:?}", image); // image: [[2, 2, 2], [2, 2, 0], [2, 0, 1]]
+    matrix_algo::matrix_ex(&mut image, 1, 1, 2);
+    println!("matrix_ex: {:?}", image); // [[2, 2, 2], [2, 2, 0], [2, 0, 1]]
+
+    println!("------ 回溯 ------");
+    let mut nums = vec![1, 2, 3];
+    let answer = backtracking_algo::backtracking_ex(&mut nums);
+    println!("backtracking_ex: {:?}", answer); // [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 1, 2]]
 
     // 用于操作显示信息
     if true { return; }
