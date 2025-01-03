@@ -72,3 +72,6 @@ pub mod divide_and_conquer_algo;
 
 /// 贪心
 pub mod greedy_algo;
+
+/// 矩阵
+pub mod matrix_algo;
