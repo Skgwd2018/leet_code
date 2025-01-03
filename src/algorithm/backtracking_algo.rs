@@ -1,3 +1,28 @@
+// 回溯（Backtracking）
+// 回溯算法会探索所有可能的解，当某条解的路径行不通时就回溯。当需要找出满足给定约束条件的所有(或部分)解时，例如组合问题(生成排列、组合或子集等)，可使用该模式。
+// 示例问题：生成给定数字列表的所有排列。
+// 示例：输入：nums = [1, 2, 3] 输出：[[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]
+// 解释：使用递归来生成排列。对于每个元素，将其包含在当前排列中，并递归地生成剩余元素的排列。当某条路径下的所有排列都生成后，进行回溯。
+pub fn backtracking_ex(nums: &mut Vec<i32>) -> Vec<Vec<i32>> {
+    fn backtrack(answer: &mut Vec<Vec<i32>>, nums: &mut Vec<i32>, start: usize) {
+        if start == nums.len() {
+            answer.push(nums.clone());
+            return;
+        }
+
+        for i in start..nums.len() {
+            nums.swap(start, i); // 将当前数字移动到排列的起始位置
+            backtrack(answer, nums, start + 1); // 递归构建剩余数字的排列
+            nums.swap(start, i); // 回溯：将数字移回原位
+        }
+    }
+
+    let mut answer = Vec::new();
+    backtrack(&mut answer, nums, 0);
+    answer
+}
+//-----------------------------------------------------
+
 /// 17.电话号码的字母组合(字符串,哈希表,回溯)
 pub fn letter_combinations(digits: String) -> Vec<String> {
     let mut answer: Vec<String> = Vec::new();
