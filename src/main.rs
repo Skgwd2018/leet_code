@@ -47,8 +47,12 @@ fn main() {
     let answer = backtracking_algo::backtracking_ex(&mut nums);
     println!("backtracking_ex: {:?}", answer); // [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 1, 2]]
 
+    println!("------ 动态规划 ------");
+    let answer = dynamic_programming_algo::fib(6);
+    println!("fib: {answer}"); // 8
+
     // 用于操作显示信息
-    if true { return; }
+    // if true { return; }
 
     println!("------ FizzBuzz game ------");
     // 对1到100之间的每个数字进行以下操作：
