@@ -21,7 +21,7 @@ pub fn guess_number(n: i32) -> i32 {
 
 // 题目提供的
 fn guess(num: i32) -> i32 {
-    // 这里应该是调用实际的猜数字接口的逻辑,但在这只是模拟一下,假设选中的数字是某个固定的值,比如7
+    // 这里应该是调用实际的猜数字接口的逻辑,但只是模拟一下,假设选中的数字是某个固定的值,比如7
     match num.cmp(&7) {
         Ordering::Equal => 0,
         Ordering::Greater => -1,

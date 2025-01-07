@@ -1,4 +1,4 @@
-// 回溯（Backtracking）
+// 回溯(Backtracking)
 // 回溯算法会探索所有可能的解，当某条解的路径行不通时就回溯。当需要找出满足给定约束条件的所有(或部分)解时，例如组合问题(生成排列、组合或子集等)，可使用该模式。
 // 示例问题：生成给定数字列表的所有排列。
 // 示例：输入：nums = [1, 2, 3] 输出：[[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]]
@@ -13,7 +13,7 @@ pub fn backtracking_ex(nums: &mut Vec<i32>) -> Vec<Vec<i32>> {
         for i in start..nums.len() {
             nums.swap(start, i); // 将当前数字移动到排列的起始位置
             backtrack(answer, nums, start + 1); // 递归构建剩余数字的排列
-            nums.swap(start, i); // 回溯：将数字移回原位
+            nums.swap(start, i); // 回溯:将数字移回原位
         }
     }
 

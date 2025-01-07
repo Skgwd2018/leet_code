@@ -13,20 +13,14 @@ fn dfs(image: &mut Vec<Vec<i32>>, r: usize, c: usize, original_color: i32, new_c
     let (rows, cols) = (image.len(), image[0].len());
 
     // 检查边界条件和颜色匹配
-    if r >= rows || c >= cols || image[r][c] != original_color {
-        return;
-    }
+    if r >= rows || c >= cols || image[r][c] != original_color { return; }
 
     // 将当前单元格的颜色更改为新颜色
     image[r][c] = new_color;
 
     // 递归地对上、下、左、右四个方向的相邻单元格进行DFS
-    if r > 0 {
-        dfs(image, r - 1, c, original_color, new_color); // 上
-    }
+    if r > 0 { dfs(image, r - 1, c, original_color, new_color); } // 上
     dfs(image, r + 1, c, original_color, new_color); // 下
-    if c > 0 {
-        dfs(image, r, c - 1, original_color, new_color); // 左
-    }
+    if c > 0 { dfs(image, r, c - 1, original_color, new_color); } // 左
     dfs(image, r, c + 1, original_color, new_color); // 右
 }
