@@ -15,6 +15,15 @@ fn main() {
     let answer = prefix_sum_algo::prefix_sum_ex(nums, 1, 3);
     println!("prefix_sum_ex: {answer}"); // 9
 
+    // 编写一个函数来查找字符串数组中的最长公共前缀，如果不存在公共前缀，返回空字符串 "".
+    let nums = vec!["flower", "flow", "flight"];
+    // let nums = vec!["dog", "racecar", "car"];
+    let answer = prefix_sum_algo::longest_common_prefix(nums);
+    println!("longest_common_prefix: {answer}");
+
+    // 用于操作显示信息
+    if true { return; }
+
     println!("------ 双指针 ------");
     let nums = [1, 2, 3, 4, 6];
     let target = 6;

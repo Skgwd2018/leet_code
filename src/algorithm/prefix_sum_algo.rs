@@ -17,6 +17,39 @@ pub fn prefix_sum_ex(nums: Vec<i32>, i: usize, j: usize) -> i32 {
 }
 //-----------------------------------------------------
 
+/// 最长公共前缀
+pub fn longest_common_prefix(str_vec: Vec<&str>) -> String {
+    if str_vec.is_empty() { return String::new(); }
+
+    let first_word = str_vec[0];
+    let mut prefix_bytes = &first_word.as_bytes()[..];
+
+    for word in str_vec.iter().skip(1) {
+        // let mut i = 0;
+        // while i < prefix.len() && i < word.len() && prefix.as_bytes()[i] == word.as_bytes()[i] {
+        //     i += 1;
+        // }
+        // // truncate() 是 String 类型的一个方法。当调用这个方法时，实际上是修改这个字符串实例，使其长度变短。会修改原有字符串
+        // // truncate() 方法接受一个单个的参数 i，这个参数是一个无符号整数(usize 类型)，表示要保留的字符的数量。
+        // // 索引是从0开始的，所以 truncate(0) 会产生一个空字符串，而 truncate(prefix.len()) 实际上不会改变字符串(保留了所有字符)。
+        // prefix.truncate(i);
+        //
+        // if prefix.is_empty() { break; }
+
+        let word_bytes = word.as_bytes();
+        let mut i = 0;
+        while i < prefix_bytes.len() && i < word_bytes.len() && prefix_bytes[i] == word_bytes[i] {
+            i += 1;
+        }
+        prefix_bytes = &prefix_bytes[..i];
+
+        if prefix_bytes.is_empty() { break; }
+    }
+
+    // from_utf8_lossy() 为了确保在将字节切片转换为字符串时不会丢失信息
+    String::from_utf8_lossy(prefix_bytes).to_string()
+}
+
 /// 1732.找到最高海拔(数组,前缀和)
 /// 使用归约操作解决前缀和问题
 pub fn largest_altitude(gain: Vec<i32>) -> i32 {
