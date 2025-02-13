@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use rand::distributions::{Distribution, Uniform};
+use rand::distr::{Distribution, Uniform};
 use rand::Rng;
 
 /// 470.用 rand7函数 实现 rand10函数 (数学,拒绝采样,概率与统计,随机化)
@@ -9,7 +9,7 @@ use rand::Rng;
 // 输入: 3
 // 输出: [3, 8, 10]
 fn rand7() -> i32 {
-    rand::thread_rng().gen_range(1..=7)
+    rand::rng().random_range(1..=7)
 }
 
 pub fn rand10() -> i32 {
@@ -39,8 +39,8 @@ impl Solution {
     }
 
     pub fn rand_point(&self) -> Vec<f64> {
-        let mut rng = rand::thread_rng();
-        let die = Uniform::from(-self.r..=self.r);
+        let mut rng = rand::rng();
+        let die = Uniform::new(-self.r, self.r).unwrap();
         loop {
             let (x, y): (f64, f64) = (die.sample(&mut rng), die.sample(&mut rng));
             if x * x + y * y <= self.r * self.r {
@@ -78,8 +78,8 @@ impl Solution2 {
         }).1*/
 
         if let Some(v) = self.map.get(&target) {
-            let mut rng = rand::thread_rng();
-            i32::try_from(v[rng.gen_range(0..v.len())]).expect("i32 error")
+            let mut rng = rand::rng();
+            i32::try_from(v[rng.random_range(0..v.len())]).expect("i32 error")
         } else {
             -1
         }

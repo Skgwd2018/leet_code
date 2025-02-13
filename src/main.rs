@@ -1,11 +1,12 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use leet_code::algorithm::{array_algo, backtracking_algo, binary_search_algo, binary_tree_algo::{BSTIterator, TreeNode}, bit_operation_algo,
-                           divide_and_conquer_algo, dynamic_programming_algo, game_theory_algo, graph_algo, greedy_algo, hash_algo,
-                           heap_algo::{self, SmallestInfiniteSet}, linked_list_algo::ListNode, matrix_algo, min_spanning_tree_algo,
-                           monotone_stack_algo::{self, StockSpanner}, prefix_sum_algo, queue_algo, randomized_algo::{self, Solution, Solution2},
-                           scan_line_algo, sliding_window_algo, stack_algo, string_algo, trie_tree_algo::{self, Trie}, two_pointers_algo};
+use leet_code::algorithm::{array_algo, backtracking_algo, binary_search_algo, binary_tree_algo::{BSTIterator, TreeNode},
+                           bit_operation_algo, divide_and_conquer_algo, dynamic_programming_algo, game_theory_algo, graph_algo,
+                           greedy_algo, hash_algo, heap_algo::{self, SmallestInfiniteSet}, linked_list_algo::ListNode, matrix_algo,
+                           min_spanning_tree_algo, monotone_stack_algo::{self, StockSpanner}, prefix_sum_algo, queue_algo,
+                           randomized_algo::{self, Solution, Solution2}, scan_line_algo, sliding_window_algo, stack_algo, string_algo,
+                           trie_tree_algo::{self, Trie}, two_pointers_algo};
 
 // 忽略提示含有大量行的函数,超100行即是超量
 #[allow(clippy::too_many_lines, clippy::many_single_char_names, clippy::similar_names)]
@@ -29,7 +30,7 @@ fn main() {
     let target = 6;
     match two_pointers_algo::two_pointer_ex(&nums, target) {
         None => println!("None."),
-        Some((index1, index2)) => println!("target: {}, index: ({}, {})", target, index1, index2),
+        Some((index1, index2)) => println!("target: {target}, index: ({index1}, {index2})"),
     } // 1, 3
 
     println!("------ 滑动窗口 ------");
@@ -42,7 +43,7 @@ fn main() {
     let target = 0;
     match binary_search_algo::search_rotate_array(&nums, target) {
         None => println!("None."),
-        Some(index) => println!("target: {}, index: {}", target, index),
+        Some(index) => println!("target: {target}, index: {index}"),
     } // 4
 
     println!("------ 动态规划 ------");
@@ -52,7 +53,7 @@ fn main() {
     println!("------ 回溯 ------");
     let mut nums = vec![1, 2, 3];
     let answer = backtracking_algo::backtracking_ex(&mut nums);
-    println!("backtracking_ex: {:?}", answer); // [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 1, 2]]
+    println!("backtracking_ex: {answer:?}"); // [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 2, 1], [3, 1, 2]]
 
     println!("------ 单调栈 ------");
     let nums = [2, 1, 2, 4, 3];
@@ -62,7 +63,7 @@ fn main() {
     println!("------ 矩阵遍历 ------");
     let mut image = vec![vec![1, 1, 1], vec![1, 1, 0], vec![1, 0, 1]];
     matrix_algo::matrix_ex(&mut image, 1, 1, 2);
-    println!("matrix_ex: {:?}", image); // [[2, 2, 2], [2, 2, 0], [2, 0, 1]]
+    println!("matrix_ex: {image:?}"); // [[2, 2, 2], [2, 2, 0], [2, 0, 1]]
 
     // 用于操作显示信息
     // if true { return; }

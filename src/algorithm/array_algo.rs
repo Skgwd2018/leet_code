@@ -313,7 +313,7 @@ fn quick(nums: &mut Vec<i32>, start: usize, end: usize) {
     // 平均时间复杂度为O(n log n),最坏情况是时间复杂度退化到O(n^2),这通常发生在已经接近排序完成或完全未排序的情况下。
     // 通过随机选择基准值或使用三数取中等方法可以减小这种情况发生的概率。
     // 随机选取一个点
-    let pivot = rand::thread_rng().gen_range(start..end); // 执行效率相比下面的更高
+    let pivot = rand::rng().random_range(start..end); // 执行效率相比下面的更高
     // let pivot = (start + end) / 2; //执行效率较低
     nums.swap(start, pivot);
     let val = nums[start];

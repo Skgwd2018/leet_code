@@ -84,15 +84,23 @@ pub fn get_skyline(buildings: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     let mut prev = 0; // 记录上一个延展线的最大高度
     map.insert(0, 1);
     for &(x, h) in &build_edges {
-        match h {
-            i32::MIN..=-1 => {
-                map.entry(-h).and_modify(|e| *e += 1).or_insert(1); // 左端点,高度出堆
-            }
-            0..=i32::MAX => {
-                *map.get_mut(&h).unwrap() -= 1;
-                if map.get(&h).unwrap() == &0 {
-                    map.remove(&h);
-                }
+        // match h {
+        //     i32::MIN..=-1 => {
+        //         map.entry(-h).and_modify(|e| *e += 1).or_insert(1); // 左端点,高度出堆
+        //     }
+        //     0..=i32::MAX => {
+        //         *map.get_mut(&h).unwrap() -= 1;
+        //         if map.get(&h).unwrap() == &0 {
+        //             map.remove(&h);
+        //         }
+        //     }
+        // }
+        if let i32::MIN..=-1 = h {
+            map.entry(-h).and_modify(|e| *e += 1).or_insert(1); // 左端点,高度出堆
+        } else {
+            *map.get_mut(&h).unwrap() -= 1;
+            if map.get(&h).unwrap() == &0 {
+                map.remove(&h);
             }
         }
         // 取出最高高度,如果和前一个矩形的顶部延展线不重合,可以记录

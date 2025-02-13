@@ -438,7 +438,8 @@ pub fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool
 
     // 对于 nums(一个 Vec<i32>), windows(2) 遍历所有长度为2的连续子切片。
     // 即如果 nums 是 [1, 2, 3, 4],那么 nums.windows(2) 将生成一个迭代器,依次返回 &[1, 2]、&[2, 3] 和 &[3, 4]
-    nums.windows(2).all(|win| map.get(&win[0]).map_or(false, |set| set.contains(&win[1])))
+    // nums.windows(2).all(|win| map.get(&win[0]).map_or(false, |set| set.contains(&win[1])))
+    nums.windows(2).all(|win| map.get(&win[0]).is_some_and(|set| set.contains(&win[1])))
 }
 //-----------------------------------------------------
 

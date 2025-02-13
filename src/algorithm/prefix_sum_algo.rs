@@ -22,7 +22,7 @@ pub fn longest_common_prefix(str_vec: Vec<&str>) -> String {
     if str_vec.is_empty() { return String::new(); }
 
     let first_word = str_vec[0];
-    let mut prefix_bytes = &first_word.as_bytes()[..];
+    let mut prefix_bytes = first_word.as_bytes();
 
     for word in str_vec.iter().skip(1) {
         // let mut i = 0;
