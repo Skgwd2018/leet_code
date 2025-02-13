@@ -8,7 +8,7 @@ repository = "https://github.com/Skgwd2018/leet_code"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.5"
+rand = "0.9.0"
 
 [dev-dependencies]
 criterion = { version = "0.5.1", features = ["html_reports"] }
