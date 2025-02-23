@@ -4,7 +4,7 @@
 // 请返回将所有点连接的最小总费用。只有任意两点之间 有且仅有 一条简单路径时,才认为所有点都已连接。
 // 输入: points = [[3, 12], [-2, 5], [-4, 1]]
 // 输出: 18
-pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+pub fn min_cost_connect_points(points: &[Vec<i32>]) -> i32 {
     // Kruskal 算法
     let n = points.len();
     let mut edges = Vec::new();

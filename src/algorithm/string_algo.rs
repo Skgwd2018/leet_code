@@ -3,13 +3,13 @@ use std::cmp;
 /// 28.找出字符串中第一个匹配项的下标(字符串匹配)
 // 给定两个字符串 haystack 和 needle,请在 haystack 字符串中找出 needle 字符串的第一个匹配项的下标(下标从 0 开始)。
 // 如果 needle 不是 haystack 的一部分,则返回 -1
-pub fn str_str(haystack: String, needle: String) -> i32 {
-    haystack.find(&needle).map_or(-1, |n| i32::try_from(n).expect("i32 error"))
+pub fn str_str(haystack: &str, needle: &str) -> i32 {
+    haystack.find(needle).map_or(-1, |n| i32::try_from(n).expect("i32 error"))
 }
 //-----------------------------------------------------
 
 /// 1768.交替合并字符串(字符串,双指针)
-pub fn merge_alternately(word1: String, word2: String) -> String {
+pub fn merge_alternately(word1: &str, word2: &str) -> String {
     // let len1 = word.len();
     // let len2 = word.chars().count();
     // word.len():这个方法直接返回字符串中字节的数量。在Rust中,String是一个UTF-8编码的字符串,所以len()方法返回的是字节的数量。
@@ -44,7 +44,7 @@ pub fn merge_alternately(word1: String, word2: String) -> String {
 
 /// 1071.字符串的最大公因子(字符串,数学)
 // 题目要求:字符串中的字符全是字母
-pub fn _gcd_of_strings(str1: String, str2: String) -> String {
+pub fn _gcd_of_strings(str1: &str, str2: &str) -> String {
     fn can_divide(s1: &str, s2: &str) -> bool {
         // .chunks_exact(s2.len()) 将 s1 的字节切片分割成长度为 s2.len() 的块。
         // 如果 s1 的长度不是 s2.len() 的整数倍,这个函数会抛出一个 panic。但由于s1.len() % s2.len() == 0,所以这里不会有问题。
@@ -63,7 +63,7 @@ pub fn _gcd_of_strings(str1: String, str2: String) -> String {
     let gec_len = (1..=cmp::min(len1, len2)).rev()
         .find(|&i| len1 % i == 0 && len2 % i == 0).unwrap_or_else(|| cmp::min(len1, len2));
 
-    if can_divide(&str1, &str1[0..gec_len]) && can_divide(&str2, &str1[0..gec_len]) {
+    if can_divide(str1, &str1[0..gec_len]) && can_divide(str2, &str1[0..gec_len]) {
         return str1[0..gec_len].to_string();
     }
 
@@ -79,7 +79,7 @@ pub fn _gcd_of_strings(str1: String, str2: String) -> String {
 // 如果两个字符串交替相加后,值仍然相等,即str1 + str2 == str2 + str1时,就可以认为存在公因子字符串。
 // 当一定存在公因子时,最大公因子字符的长度一定就是两个字符串长度的最大公因数。
 // 公因子字符串也就是str1或str2的前缀下标。范围为:[0, 最大公因数]
-pub fn gcd_of_strings2(str1: String, str2: String) -> String {
+pub fn gcd_of_strings2(str1: &str, str2: &str) -> String {
     fn get_gcd(a: usize, b: usize) -> usize {
         if b == 0 {
             a
@@ -120,7 +120,7 @@ fn is_vowel(c: char) -> bool {
 }
 
 /// 345.反转字符串中的元音字母(字符串,双指针)
-pub fn reverse_vowels(s: String) -> String {
+pub fn reverse_vowels(s: &str) -> String {
     let mut chars: Vec<char> = s.chars().collect();
     // 双指针操作
     let (mut i, mut j) = (0, chars.len() - 1);
@@ -168,7 +168,7 @@ pub fn reverse_vowels(s: String) -> String {
 // 单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。
 // 返回 单词 顺序颠倒且 单词 之间用单个空格连接的结果字符串。
 // 题目要求:输入的字符串s中可能会存在前导空格、尾随空格或者单词间的多个空格。返回的结果字符串中,单词间应当仅用单个空格分隔,且不包含任何额外的空格。
-pub fn reverse_words(s: String) -> String {
+pub fn reverse_words(s: &str) -> String {
     /*let mut words: VecDeque<String> = VecDeque::new();
     let mut curr_word = String::new();
     for c in s.trim().chars() {
@@ -245,7 +245,7 @@ pub fn compress(chars: &mut [char]) -> i32 {
 // i = 0 且 j = 3 ,因为 isPrefixAndSuffix("a", "aa") 为 true
 // i = 1 且 j = 2 ,因为 isPrefixAndSuffix("aba", "ababa") 为 true
 // 因此,答案是 4
-pub fn count_prefix_suffix_pairs(words: Vec<String>) -> i32 {
+pub fn count_prefix_suffix_pairs(words: &[String]) -> i32 {
     /*fn is_prefix_and_suffix(str1: &str, str2: &str) -> bool {
         if str1.len() > str2.len() { return false; }
 

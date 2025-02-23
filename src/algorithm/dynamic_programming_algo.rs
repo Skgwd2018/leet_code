@@ -56,7 +56,7 @@ pub fn tribonacci(n: i32) -> i32 {
 //-----------------------------------------------------
 
 /// 746.使用最小花费爬楼梯(数组,动态规划)
-pub fn min_cost_climbing_stairs(cost: Vec<i32>) -> i32 {
+pub fn min_cost_climbing_stairs(cost: &[i32]) -> i32 {
     let (p1, p2) = (2..cost.len()).fold((cost[0], cost[1]), |(c1, c2), i| (c2, c1.min(c2) + cost[i]));
 
     p1.min(p2)
@@ -107,7 +107,7 @@ pub fn climb_stairs(n: i32) -> i32 {
 // 输出: 12
 // 解释: 偷窃 1 号房屋(金额 = 2), 偷窃 3 号房屋(金额 = 9), 接着偷窃 5 号房屋(金额 = 1)
 //      偷窃到的最高金额 = 2 + 9 + 1 = 12
-pub fn rob(nums: Vec<i32>) -> i32 {
+pub fn rob(nums: &[i32]) -> i32 {
     nums.iter().skip(1).fold((nums[0], 0), |dp, &n| (dp.0, dp.0).max((dp.1 + n, dp.0))).0
 }
 //-----------------------------------------------------
@@ -166,7 +166,7 @@ pub fn unique_paths(m: usize, n: usize) -> i32 {
 // 一个字符串的 子序列 是指这样一个新的字符串:它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
 // 例如: "ace" 是 "abcde" 的子序列,但 "aec" 不是 "abcde" 的子序列。
 // 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
-pub fn longest_common_subsequence(text1: String, text2: String) -> i32 {
+pub fn longest_common_subsequence(text1: &str, text2: &str) -> i32 {
     /*let (m, n) = (text1.len(), text2.len());
     // 因为dp[i][j] 是表示下标(i-1, j-1) 的 最长公共子序列,由于 i / j == 0 都是无意义的,可以初始化为0
     let mut dp = vec![vec![0; n + 1]; m + 1];
@@ -210,7 +210,7 @@ pub fn longest_common_subsequence(text1: String, text2: String) -> i32 {
 // 给定一个整数数组 prices,其中 prices[i]表示第 i 天的股票价格; 整数 fee 代表了交易股票的手续费用。
 // 可以无限次地完成交易,但是每笔交易都需要付手续费。如果已经购买了一个股票,在卖出它之前就不能再继续购买股票了,返回获得利润的最大值。
 // 注意:这里的一笔交易指买入持有并卖出股票的整个过程,每笔交易你只需要为支付一次手续费。
-pub fn max_profit(prices: Vec<i32>, fee: i32) -> i32 {
+pub fn max_profit(prices: &[i32], fee: i32) -> i32 {
     prices.iter().fold((0, -prices[0]), |(sell, buy), p| (sell.max(buy + p - fee), buy.max(sell - p))).0
 }
 //-----------------------------------------------------
@@ -226,7 +226,7 @@ pub fn max_profit(prices: Vec<i32>, fee: i32) -> i32 {
 // enention -> exention (将 'n' 替换为 'x')
 // exention -> exection (将 'n' 替换为 'c')
 // exection -> execution (插入 'u')
-pub fn min_distance(word1: String, word2: String) -> i32 {
+pub fn min_distance(word1: &str, word2: &str) -> i32 {
     let (m, n) = (word1.len(), word2.len());
     let mut dp = vec![vec![0; n + 1]; m + 1];
     // 初始化 dp 的第一行和第一列为其索引值

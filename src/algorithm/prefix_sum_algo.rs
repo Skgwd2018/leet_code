@@ -4,7 +4,7 @@
 // 示例问题：给定一个数组nums，回答关于特定区间[i, j]内元素之和的多个查询。
 // 示例：输入：nums = [1, 2, 3, 4, 5, 6]，i = 1，j = 3 输出：9
 // 解释：预处理数组A以创建前缀和数组：P = [1, 3, 6, 10, 15, 21]。要找出索引i和j之间的元素和，使用公式：P[j] - P[i - 1]。
-pub fn prefix_sum_ex(nums: Vec<i32>, i: usize, j: usize) -> i32 {
+pub fn prefix_sum_ex(nums: &[i32], i: usize, j: usize) -> i32 {
     // .scan() 接受一个初始状态(在这个例子中是0)和一个闭包(closure)。常用于处理前缀和问题.
     // 这个闭包有两个参数：sum(累加器，初始值为0) 和 &x(当前迭代到的元素的引用，由于.iter()产生的是不可变引用，所以这里也是不可变引用)。
     // 闭包的返回类型是Option<T>，本例中，T是i32类型。每次迭代时，闭包需要返回一个Some(value)，这个value会被.scan()方法收集起来，作为结果迭代器的一个元素。
@@ -18,7 +18,7 @@ pub fn prefix_sum_ex(nums: Vec<i32>, i: usize, j: usize) -> i32 {
 //-----------------------------------------------------
 
 /// 最长公共前缀
-pub fn longest_common_prefix(str_vec: Vec<&str>) -> String {
+pub fn longest_common_prefix(str_vec: &[&str]) -> String {
     if str_vec.is_empty() { return String::new(); }
 
     let first_word = str_vec[0];
@@ -52,7 +52,7 @@ pub fn longest_common_prefix(str_vec: Vec<&str>) -> String {
 
 /// 1732.找到最高海拔(数组,前缀和)
 /// 使用归约操作解决前缀和问题
-pub fn largest_altitude(gain: Vec<i32>) -> i32 {
+pub fn largest_altitude(gain: &[i32]) -> i32 {
     /*let (mut highest, mut sum) = (0, 0);
     for g in gain {
         sum += g;
@@ -75,7 +75,7 @@ pub fn largest_altitude(gain: Vec<i32>) -> i32 {
 // 如果中心下标位于数组最左端,那么左侧数之和视为 0,因为在下标的左侧不存在元素。这一点对于中心下标位于数组最右端同样适用。
 // 如果数组有多个中心下标,应该返回 最靠近左边 的那一个。如果数组不存在中心下标,返回 -1 。
 // #[allow(clippy::cast_possible_truncation, clippy::cast_possible_wrap)]
-pub fn pivot_index(nums: Vec<i32>) -> i32 {
+pub fn pivot_index(nums: &[i32]) -> i32 {
     let mut sum: i32 = nums.iter().sum();
     for (i, v) in nums.iter().enumerate() {
         sum -= v;

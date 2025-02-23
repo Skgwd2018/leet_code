@@ -13,17 +13,17 @@ use leet_code::algorithm::{array_algo, backtracking_algo, binary_search_algo, bi
 fn main() {
     println!("------ 前缀和 ------");
     let nums = vec![1, 2, 3, 4, 5, 6];
-    let answer = prefix_sum_algo::prefix_sum_ex(nums, 1, 3);
+    let answer = prefix_sum_algo::prefix_sum_ex(&nums, 1, 3);
     println!("prefix_sum_ex: {answer}"); // 9
 
     // 编写一个函数来查找字符串数组中的最长公共前缀，如果不存在公共前缀，返回空字符串 "".
     let nums = vec!["flower", "flow", "flight"];
     // let nums = vec!["dog", "racecar", "car"];
-    let answer = prefix_sum_algo::longest_common_prefix(nums);
+    let answer = prefix_sum_algo::longest_common_prefix(&nums);
     println!("longest_common_prefix: {answer}");
 
     // 用于操作显示信息
-    if true { return; }
+    // if true { return; }
 
     println!("------ 双指针 ------");
     let nums = [1, 2, 3, 4, 6];
@@ -89,19 +89,19 @@ fn main() {
     println!("------ 28.找出字符串中第一个匹配项的下标(字符串匹配) ------");
     let haystack = String::from("sadbutsad");
     let needle = String::from("sad");
-    let answer = string_algo::str_str(haystack, needle);
+    let answer = string_algo::str_str(&haystack, &needle);
     println!("str_str: {answer}"); // 0
 
     println!("------ 1768.交替合并字符串(字符串,双指针) ------");
     let word1 = String::from("abcde");
     let word2 = String::from("xyz");
-    let answer = string_algo::merge_alternately(word1, word2);
+    let answer = string_algo::merge_alternately(&word1, &word2);
     println!("merge_alternately: {answer}"); // axbyczde
 
     println!("------ 1071.字符串的最大公因子(字符串,数学) ------");
     let str1 = String::from("ABABAB");
     let str2 = String::from("AB");
-    let answer = string_algo::gcd_of_strings2(str1, str2);
+    let answer = string_algo::gcd_of_strings2(&str1, &str2);
     println!("gcd_of_strings: {answer}"); // AB
 
     println!("------ 1431.拥有最多糖果的孩子(数组) ------");
@@ -115,12 +115,12 @@ fn main() {
     let flowerbed = vec![1, 0, 0, 0, 1, 0, 0];
     // let flowerbed = vec![0, 1, 0];
     let n = 3;
-    let answer = array_algo::can_place_flowers(flowerbed, n);
+    let answer = array_algo::can_place_flowers(&flowerbed, n);
     println!("can_place_flowers {n}: {answer}"); // true
 
     println!("------ 345.反转字符串中的元音字母(字符串,双指针) ------");
-    let s = "leetcode".to_string();
-    // let s = "hello".to_string();
+    let s = "leetcode";
+    // let s = "hello";
     let answer = string_algo::reverse_vowels(s);
     println!("reverse_vowels: {answer}"); // leotcede
 
@@ -132,22 +132,22 @@ fn main() {
     println!("------ 392.判断子序列(字符串,双指针,动态规划) ------");
     let s = "ace";
     let t = "abcde";
-    println!("Is '{}' a sub of '{}'? {}", s, t, two_pointers_algo::is_subsequence(s.to_string(), t.to_string())); // true
+    println!("Is '{}' a sub of '{}'? {}", s, t, two_pointers_algo::is_subsequence(s, t)); // true
 
     println!("------ 643.子数组最大平均数Ⅰ(数组,滑动窗口) ------");
     let nums = vec![1, 12, -5, -6, 50, 3];
-    let answer = sliding_window_algo::find_max_average(nums, 4);
+    let answer = sliding_window_algo::find_max_average(&nums, 4);
     println!("find_max_average: {answer}"); // 12.75
 
     println!("------ 1732.找到最高海拔(数组,前缀和) ------");
     let gain = vec![-5, 1, 5, 0, -7];
     // let gain = vec![-4, -3, -2, -1, 4, 3, 2];
-    let answer = prefix_sum_algo::largest_altitude(gain);
+    let answer = prefix_sum_algo::largest_altitude(&gain);
     println!("largest_altitude: {answer}"); // 1
 
     println!("------ 724.寻找数组的中心下标(数组,前缀和) ------");
     let nums = vec![1, 7, 3, 6, 5, 6];
-    let answer = prefix_sum_algo::pivot_index(nums);
+    let answer = prefix_sum_algo::pivot_index(&nums);
     println!("pivot_index: {answer}"); // 3
 
     println!("------ 2215.找出两数组的不同(数组,哈希表) ------");
@@ -239,7 +239,7 @@ fn main() {
     println!("------ 746.使用最小花费爬楼梯(数组,动态规划) ------");
     // let cost = vec![10, 15, 20]; // 15
     let cost = vec![1, 100, 1, 1, 1, 100, 1, 1, 100, 1]; // 6
-    let answer = dynamic_programming_algo::min_cost_climbing_stairs(cost);
+    let answer = dynamic_programming_algo::min_cost_climbing_stairs(&cost);
     println!("min_cost_climbing_stairs: {answer}"); // 6
 
     println!("----- 509.斐波那契数(记忆化搜索,动态规划) ------");
@@ -257,7 +257,7 @@ fn main() {
 
     println!("------ 136.只出现一次的数字(位运算,数组) ------");
     let nums = vec![4, 1, 2, 1, 2];
-    let answer = bit_operation_algo::single_number(nums);
+    let answer = bit_operation_algo::single_number(&nums);
     println!("single_number: {answer}"); // 4
 
     println!("----- 1025.除数博弈(脑筋急转弯,数学,动态规划,博弈) ------");
@@ -266,29 +266,29 @@ fn main() {
 
     println!("----- 1979.找出数组的最大公约数(数组,数学,数论) ------");
     let nums = vec![7, 5, 6, 8, 3];
-    let answer = array_algo::find_gcd(nums);
+    let answer = array_algo::find_gcd(&nums);
     println!("find_gcd: {answer}"); // 1
 
     println!("----- 1534.统计好三元组(数组,枚举) ------");
     let arr = vec![3, 0, 1, 1, 9, 7];
-    let answer = array_algo::count_good_triplets(arr, 7, 2, 3);
+    let answer = array_algo::count_good_triplets(&arr, 7, 2, 3);
     println!("count_good_triplets: {answer}"); // 4
 
     println!("----- 3042.统计前后缀下标对 I(字典树,字符串匹配,哈希函数,滚动哈希) ------");
     let words = vec!["a".to_string(), "aba".to_string(), "ababa".to_string(), "aa".to_string()];
-    let answer = string_algo::count_prefix_suffix_pairs(words);
+    let answer = string_algo::count_prefix_suffix_pairs(&words);
     println!("count_prefix_suffix_pairs: {answer}"); // 4
 
     println!("\n-------------up---------------\n");
 
     println!("------ 151.反转字符串中的单词(字符串,双指针) ------");
-    let s = "  a good   example ".to_string();
+    let s = "  a good   example ";
     let answer = string_algo::reverse_words(s);
     println!("reverse_words: {answer}"); // example good a
 
     println!("------ 238.除自身以外数组的乘积(数组,前缀和) ------");
     let nums = vec![1, 2, 3, 4];
-    let answer = array_algo::product_except_self(nums);
+    let answer = array_algo::product_except_self(&nums);
     println!("product_except_self: {answer:?}"); // [24, 12, 8, 6]
 
     println!("----- 334.递增的三元子序列(贪心,数组) ------");
@@ -306,7 +306,7 @@ fn main() {
     println!("------ 11.盛最多水的容器(数组,双指针,贪心) ------");
     let height = vec![1, 8, 6, 2, 5, 4, 8, 3, 7];
     // let height = vec![1, 1];
-    let max_area = two_pointers_algo::max_area(height);
+    let max_area = two_pointers_algo::max_area(&height);
     println!("Max water: {max_area}"); // 49
 
     println!("----- 1679.K和数对的最大数目(数组,哈希表,双指针,排序) ------");
@@ -315,7 +315,7 @@ fn main() {
     println!("max_operations: {answer}"); // 1
 
     println!("------ 1456.定长子串中元音的最大数目(字符串,滑动窗口) ------");
-    let s = "abciiidef".to_string();
+    let s = "abciiidef";
     let k = 3;
     let answer = sliding_window_algo::max_vowels(s, k);
     println!("max_vowels: {answer}"); // 3
@@ -323,7 +323,7 @@ fn main() {
     println!("----- 1004.最大连续1的个数 III(数组,双指针,前缀和,滑动窗口) ------");
     let nums = vec![0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1];
     let k = 3;
-    let answer = sliding_window_algo::longest_ones(nums, k);
+    let answer = sliding_window_algo::longest_ones(&nums, k);
     println!("longest_ones: {answer}"); // 10
 
     println!("----- 1493.删掉一个元素以后全为 1 的最长子数组(数组,滑动窗口,动态规划) ------");
@@ -332,20 +332,20 @@ fn main() {
     println!("longest_subarray: {answer}"); // 5
 
     println!("------ 1657.确定两个字符串是否接近(字符串,哈希表,计数) ------");
-    let word1 = "cabbba".to_string();
-    let word2 = "abbccc".to_string();
+    let word1 = "cabbba";
+    let word2 = "abbccc";
     let answer = hash_algo::close_strings(word1, word2);
     println!("close_strings: {answer}"); // true
 
     println!("----- 2352.相等行列对(数组,哈希,矩阵,模拟) ------");
     let grid = vec![vec![3, 1, 2, 2], vec![1, 4, 4, 5], vec![2, 4, 2, 2], vec![2, 4, 2, 2]];
-    let answer = hash_algo::equal_pairs(grid);
+    let answer = hash_algo::equal_pairs(&grid);
     println!("equal_pairs: {answer}"); // 3
 
     println!("------ 2390.从字符串中移除星号(栈,字符串) ------");
     let s = "leet**cod*e".to_string(); // lecoe
     // let s = String::from("erase*****"); // ""
-    let answer = stack_algo::remove_stars(s);
+    let answer = stack_algo::remove_stars(&s);
     println!("remove_stars: {answer}");
 
     println!("----- 735.小行星碰撞(数组,栈,模拟) ------");
@@ -354,14 +354,14 @@ fn main() {
     println!("asteroid_collision: {answer:?}"); // [10]
 
     println!("------ 394.字符串解码(栈,字符串,递归) ------");
-    let s = "3[a12[c]]".to_string();  // accccccccccccaccccccccccccacccccccccccc
+    let s = "3[a12[c]]";  // accccccccccccaccccccccccccacccccccccccc
     // let s = "3[a]2[bc]".to_string(); // aaabcbc
     let answer = stack_algo::decode_string(s);
     println!("decode_string: {answer}"); // accccccccccccaccccccccccccacccccccccccc
 
     println!("----- 649.Dota2 参议院(贪心,队列,字符串) ------");
     let senate = String::from("RDD");
-    let answer = greedy_algo::predict_party_victory(senate);
+    let answer = greedy_algo::predict_party_victory(&senate);
     println!("predict_party_victory: {answer}"); // Dire
 
     println!("------ 2095.删除链表的中间节点(链表,双指针) ------");
@@ -442,7 +442,7 @@ fn main() {
     println!("----- 841.钥匙和房间(dfs,bfs,图) ------");
     let rooms = vec![vec![1], vec![2], vec![3], vec![]]; // true
     // let rooms = vec![vec![1, 3], vec![3, 0, 1], vec![2], vec![0]]; // false
-    let answer = graph_algo::can_visit_all_rooms(rooms);
+    let answer = graph_algo::can_visit_all_rooms(&rooms);
     println!("can_visit_all_rooms: {answer}"); // true
 
     println!("----- 547.省份数量(并查集,图) ------");
@@ -452,7 +452,7 @@ fn main() {
 
     println!("----- 1466.重新规划路线(图,dfs,bfs) ------");
     let connections = vec![vec![0, 1], vec![1, 3], vec![2, 3], vec![4, 0], vec![4, 5]];
-    let answer = graph_algo::min_reorder(6, connections);
+    let answer = graph_algo::min_reorder(6, &connections);
     println!("min_reorder: {answer}"); // 3
 
     println!("----- 399.除法求值(dfs,bfs,并查集,图,数组,字符串,最短路径) ------");
@@ -461,13 +461,13 @@ fn main() {
     let values = vec![1.5, 2.5, 5.0];
     let queries = vec![vec!["a".to_owned(), "c".to_owned()], vec!["c".to_owned(), "b".to_owned()],
                        vec!["bc".to_owned(), "cd".to_owned()], vec!["cd".to_owned(), "bc".to_owned()]];
-    let answer = graph_algo::calc_equation(equations, values, queries);
+    let answer = graph_algo::calc_equation(&equations, &values, queries);
     println!("calc_equation: {answer:?}"); // [3.75, 0.4, 5.0, 0.2]
 
     println!("----- 1926.迷宫中离入口最近的出口(图,bfs) ------");
     let maze = vec![vec!['+', '+', '.', '+'], vec!['.', '.', '.', '+'], vec!['+', '+', '+', '.']];
     let entrance = vec![1, 2];
-    let answer = graph_algo::nearest_exit(maze, entrance);
+    let answer = graph_algo::nearest_exit(maze, &entrance);
     println!("nearest_exit: {answer}"); // 1
 
     println!("----- 994.腐烂的橘子(bfs,数组,矩阵) ------");
@@ -505,23 +505,23 @@ fn main() {
     let spells = vec![5, 1, 3];
     let potions = vec![1, 2, 3, 4, 5];
     let success = 7;
-    let answer = binary_search_algo::successful_pairs(spells, potions, success);
+    let answer = binary_search_algo::successful_pairs(&spells, potions, success);
     println!("successful_pairs: {answer:?}"); // [4, 0, 3]
 
     println!("----- 162.寻找峰值元素的索引(数组,二分查找) ------");
     let nums = vec![1, 6, 7, 5, 6, 8, 8, 8];
-    let answer = binary_search_algo::find_peak_element(nums);
+    let answer = binary_search_algo::find_peak_element(&nums);
     println!("find_peak_element: {answer}"); // 7
 
     println!("----- 875.爱吃香蕉的珂珂(数组,二分查找) ------");
     let piles = vec![30, 11, 23, 4, 20];
     let h = 6;
-    let answer = binary_search_algo::min_eating_speed(piles, h);
+    let answer = binary_search_algo::min_eating_speed(&piles, h);
     println!("min_eating_speed: {answer}"); // 23
 
     println!("----- 17.电话号码的字母组合(字符串,哈希表,回溯) ------");
     let digits = String::from("23");
-    let answer = backtracking_algo::letter_combinations(digits);
+    let answer = backtracking_algo::letter_combinations(&digits);
     println!("letter_combinations: {answer:?}"); // ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
 
     println!("----- 216.组合总和Ⅲ(数组,回溯) ------");
@@ -530,7 +530,7 @@ fn main() {
 
     println!("----- 198.打家劫舍(数组,动态规划) ------");
     let nums = vec![2, 7, 9, 3, 1];
-    let answer = dynamic_programming_algo::rob(nums);
+    let answer = dynamic_programming_algo::rob(&nums);
     println!("rob: {answer}"); // 12
 
     println!("----- 790.多米诺和托米诺平铺(动态规划) ------");
@@ -542,7 +542,7 @@ fn main() {
     println!("unique_paths: {answer}"); // 28
 
     println!("----- 1143.最长公共子序列(字符串,动态规划) ------");
-    let answer = dynamic_programming_algo::longest_common_subsequence("abcde".to_string(), "ace".to_string());
+    let answer = dynamic_programming_algo::longest_common_subsequence("abcde", "ace");
     println!("longest_common_subsequence: {answer}"); // 3
 
     println!("----- 714.买卖股票的最佳时机含手续费(数组,贪心,动态规划) ------");
@@ -554,12 +554,12 @@ fn main() {
     // 在此处买入 prices[4] = 4
     // 在此处卖出 prices[5] = 9
     // 总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8
-    let answer = dynamic_programming_algo::max_profit(prices, fee);
+    let answer = dynamic_programming_algo::max_profit(&prices, fee);
     println!("max_profit: {answer}"); // 8
 
     println!("----- 72.编辑距离(字符串,动态规划) ------");
-    let word1 = "intention".to_string();
-    let word2 = "execution".to_string();
+    let word1 = "intention";
+    let word2 = "execution";
     let answer = dynamic_programming_algo::min_distance(word1, word2);
     println!("min_distance: {answer}"); // 5
 
@@ -569,20 +569,20 @@ fn main() {
 
     println!("----- 208.实现Trie(前缀树,设计,字典树,哈希表,字符串) ------");
     let mut trie = Trie::new();
-    let word = "apple".to_string();
-    trie.insert(word.clone());
+    let word = "apple";
+    trie.insert(word);
     let ret_2 = trie.search(word);
-    let prefix = "app".to_string();
-    let ret_3 = trie.search(prefix.clone());
-    let ret_4 = trie.starts_with(prefix.clone());
-    trie.insert(prefix.clone());
+    let prefix = "app";
+    let ret_3 = trie.search(prefix);
+    let ret_4 = trie.starts_with(prefix);
+    trie.insert(prefix);
     let ret_6 = trie.search(prefix);
     println!("ret_2: {ret_2}, ret_3: {ret_3}, ret_4: {ret_4}, ret_6: {ret_6}"); // true, false, true, true
 
     println!("----- 1268.搜索推荐系统(数组,字符串,字典树,二分查找,排序,堆(优先队列)) ------");
     let products = vec!["mobile".to_string(), "mouse".to_string(), "moneypot".to_string(),
                         "monitor".to_string(), "mousepad".to_string()];
-    let search_word = "mouse".to_string();
+    let search_word = "mouse";
     let answer = trie_tree_algo::suggested_products(products, search_word);
     println!("suggested_products: {answer:#?}"); // [["mobile", "moneypot", "monitor"], ["mobile", "moneypot", "monitor"], ["mouse", "mousepad"], ["mouse", "mousepad"], ["mouse", "mousepad"]]
 
@@ -598,7 +598,7 @@ fn main() {
 
     println!("----- 739.每日温度(栈,数组,单调栈) ------");
     let temperatures = vec![73, 74, 75, 71, 69, 72, 76, 73];
-    let answer = monotone_stack_algo::daily_temperatures(temperatures);
+    let answer = monotone_stack_algo::daily_temperatures(&temperatures);
     println!("daily_temperatures: {answer:?}"); // [1, 1, 4, 2, 1, 1, 0, 0]
 
     println!("----- 901.股票价格跨度(单调栈,数据流,设计,栈) ------");
@@ -632,7 +632,7 @@ fn main() {
 
     println!("----- LCR 057.存在重复元素 III(数组,桶排序,有序集合,滑动窗口) ------");
     let nums = vec![1, 5, 9, 1, 5, 9];
-    let answer = sliding_window_algo::contains_nearby_almost_duplicate(nums, 2, 3);
+    let answer = sliding_window_algo::contains_nearby_almost_duplicate(&nums, 2, 3);
     println!("contains_nearby_almost_duplicate: {answer}"); // false
 
     println!("----- 526.优美的排列(位运算,动态规划,回溯,状态压缩) ------");
@@ -642,7 +642,7 @@ fn main() {
     println!("----- LCR 115.序列重建(图,拓扑排序,数组) ------");
     let nums = vec![1, 2, 3];
     let sequences = vec![[1, 2], [1, 3], [2, 3]];
-    let answer = graph_algo::sequence_reconstruction(nums, sequences);
+    let answer = graph_algo::sequence_reconstruction(&nums, sequences);
     println!("sequence_reconstruction: {answer}"); // true
 
     println!("----- 912.排序数组(桶排序,分治,数组,基数排序,计数排序,归并排序,堆(优先队列)) ------");
@@ -652,7 +652,7 @@ fn main() {
 
     println!("----- 1584.连接所有点的最小费用(并查集,图,最小生成树) ------");
     let points = vec![vec![3, 12], vec![-2, 5], vec![-4, 1]];
-    let answer = min_spanning_tree_algo::min_cost_connect_points(points);
+    let answer = min_spanning_tree_algo::min_cost_connect_points(&points);
     println!("min_cost_connect_points: {answer}"); // 18
 
     println!("----- 398.随机数索引(水塘抽样,数学,随机化,哈希表) ------");
@@ -690,7 +690,7 @@ fn main() {
 
     println!("----- 391.完美矩形(数组,扫描线) ------");
     let rectangles = vec![vec![1, 1, 3, 3], vec![3, 1, 4, 2], vec![3, 2, 4, 4], vec![1, 3, 2, 4], vec![2, 3, 3, 4]];
-    let answer = scan_line_algo::is_rectangle_cover(rectangles);
+    let answer = scan_line_algo::is_rectangle_cover(&rectangles);
     println!("is_rectangle_cover: {answer}"); // true
 
     println!("----- 218.天际线问题(树状数组,线段树,分治,有序集合,堆(优先队列),扫描线) ------");

@@ -27,7 +27,7 @@ pub fn kids_with_candies(candies: Vec<i32>, extra_candies: i32) -> Vec<bool> {
 /// 605.种花问题(数组,贪心)
 // 题目要求:每朵花的旁边都不能种花，所以种花必须是间隔种1朵
 // n:是否可以种的花数量
-pub fn can_place_flowers(flowerbed: Vec<i32>, mut n: i32) -> bool {
+pub fn can_place_flowers(flowerbed: &[i32], mut n: i32) -> bool {
     let len = flowerbed.len();
     let mut i = 0;
     while i < len {
@@ -48,7 +48,7 @@ pub fn can_place_flowers(flowerbed: Vec<i32>, mut n: i32) -> bool {
 
 /// 238.除自身以外数组的乘积(数组,前缀和)
 // 给你一个整数数组 nums，返回 数组 answer ，其中 answer[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积，且不能使用除法
-pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+pub fn product_except_self(nums: &[i32]) -> Vec<i32> {
     /*let n = nums.len();
     let mut answer = vec![0; n];
     answer[n - 1] = 1;
@@ -90,7 +90,7 @@ pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
 // nums 中最小的数是 3
 // nums 中最大的数是 8
 // 3 和 8 的最大公约数是 1
-pub fn find_gcd(nums: Vec<i32>) -> i32 {
+pub fn find_gcd(nums: &[i32]) -> i32 {
     let (min, max) = (*nums.iter().min().unwrap(), *nums.iter().max().unwrap());
 
     (1..=min).rev().find(|i| min % i == 0 && max % i == 0).unwrap()
@@ -109,7 +109,7 @@ pub fn find_gcd(nums: Vec<i32>) -> i32 {
 // 输入：arr = [3,0,1,1,9,7], a = 7, b = 2, c = 3
 // 输出：4
 // 解释：一共有 4 个好三元组：[(3,0,1), (3,0,1), (3,1,1), (0,1,1)]
-pub fn count_good_triplets(arr: Vec<i32>, a: i32, b: i32, c: i32) -> i32 {
+pub fn count_good_triplets(arr: &[i32], a: i32, b: i32, c: i32) -> i32 {
     let mut ans = 0;
     for i in 0..arr.len() {
         for j in i + 1..arr.len() {
@@ -184,7 +184,7 @@ pub fn sort_array(mut nums: Vec<i32>) -> Vec<i32> {
 
 /// 1.冒泡排序,时间复杂度:O(n^2),空间复杂度:O(1),稳定性排序
 #[allow(unused)]
-fn bubble_sort(nums: &mut Vec<i32>) {
+fn bubble_sort(nums: &mut [i32]) {
     let n = nums.len();
 
     for i in (1..n).rev() {
@@ -203,7 +203,7 @@ fn bubble_sort(nums: &mut Vec<i32>) {
 
 /// 2.插入排序,时间复杂度:O(n^2),空间复杂度:O(1),稳定性排序
 #[allow(unused)]
-fn insert_sort(nums: &mut Vec<i32>) {
+fn insert_sort(nums: &mut [i32]) {
     let n = nums.len();
 
     for i in 1..n {
@@ -224,7 +224,7 @@ fn insert_sort(nums: &mut Vec<i32>) {
 
 /// 3.选择排序,时间复杂度:O(n^2),空间复杂度:O(1),非稳定性排序
 #[allow(unused)]
-fn select_sort(nums: &mut Vec<i32>) {
+fn select_sort(nums: &mut [i32]) {
     let n = nums.len();
 
     for i in (1..n).rev() {
@@ -268,7 +268,7 @@ fn merge(nums: &mut Vec<i32>, start: usize, end: usize) {
     // start:0, mid:5, end:11
     sort(nums, start, mid, end);
 }
-fn sort(nums: &mut Vec<i32>, start: usize, mid: usize, end: usize) {
+fn sort(nums: &mut [i32], start: usize, mid: usize, end: usize) {
     let nums2 = nums[mid..end].to_vec();
     let (mut index1, mut index2, mut index) = (mid - 1, nums2.len() - 1, end - 1);
 
@@ -347,7 +347,7 @@ fn quick(nums: &mut Vec<i32>, start: usize, end: usize) {
 
 /// 6.堆排序,时间复杂度:O(n log n),空间复杂度:O(1),非稳定性排序
 #[allow(unused)]
-fn heap_sort(nums: &mut Vec<i32>) {
+fn heap_sort(nums: &mut [i32]) {
     let n = nums.len();
 
     // 1.建立大顶堆
@@ -364,7 +364,7 @@ fn heap_sort(nums: &mut Vec<i32>) {
         heap_fy(nums, 0, i);
     }
 }
-fn heap_fy(nums: &mut Vec<i32>, mut index: usize, n: usize) {
+fn heap_fy(nums: &mut [i32], mut index: usize, n: usize) {
     loop {
         let mut max_index = index;
         let left_index = index * 2 + 1;
@@ -416,7 +416,7 @@ fn counting_sort(mut nums: Vec<i32>) -> Vec<i32> {
 // 通常情况下,基数排序的时间复杂度优于传统的比较排序算法(如快速排序、归并排序等)，特别是当待排序的数是多位数且分布均匀时。
 // 然而,基数排序需要额外的空间来存储临时数据,且对于数据范围很大的情况可能不太适用。
 #[allow(unused)]
-fn radix_sort(nums: &mut Vec<i32>) {
+fn radix_sort(nums: &mut [i32]) {
     if nums.is_empty() { return; }
 
     const BASE: u32 = 256; // 基,大于等于2才有意义

@@ -43,7 +43,7 @@ pub fn move_zeroes(nums: &mut Vec<i32>) {
 
 /// 392.判断子序列(字符串,双指针,动态规划)
 // 给定字符串 s 和 t,判断 s 是否为 t 的子序列
-pub fn is_subsequence(s: String, t: String) -> bool {
+pub fn is_subsequence(s: &str, t: &str) -> bool {
     let s_chars: Vec<char> = s.chars().collect();
     let t_chars = t.chars().collect::<Vec<char>>();
     let (s_len, t_len) = (s_chars.len(), t_chars.len());
@@ -63,7 +63,7 @@ pub fn is_subsequence(s: String, t: String) -> bool {
 //-----------------------------------------------------
 
 /// 11.盛最多水的容器(数组,双指针,贪心)
-pub fn max_area(height: Vec<i32>) -> i32 {
+pub fn max_area(height: &[i32]) -> i32 {
     // 双指针操作
     let (mut left, mut right) = (0, height.len() - 1);
     let mut max_area = 0;

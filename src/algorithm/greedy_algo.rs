@@ -22,7 +22,7 @@ pub fn increasing_triplet(nums: Vec<i32>) -> bool {
 //-----------------------------------------------------
 
 /// 649.Dota2 参议院(贪心+双端队列,字符串)
-pub fn predict_party_victory(senate: String) -> String {
+pub fn predict_party_victory(senate: &str) -> String {
     /*let mut radiant = VecDeque::new();
     let mut dire = VecDeque::new();
     for (i, ch) in senate.char_indices() {

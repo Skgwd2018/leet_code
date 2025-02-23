@@ -28,7 +28,7 @@ fn quick_select(nums: &mut Vec<i32>, left: usize, right: usize, k: usize) -> i32
     }
 }
 #[allow(unused)]
-fn partition(nums: &mut Vec<i32>, left: usize, right: usize) -> usize {
+fn partition(nums: &mut [i32], left: usize, right: usize) -> usize {
     let pivot = nums[right];
     let mut i = left;
     for j in left..right {

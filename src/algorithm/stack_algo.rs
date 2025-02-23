@@ -2,7 +2,7 @@
 // 给你一个包含若干星号 * 的字符串 s
 // 在一步操作中,可以:选中 s 中的一个星号。
 // 移除星号 左侧 最近的那个 非星号 字符,并移除该星号自身。返回移除 所有 星号之后的字符串。
-pub fn remove_stars(s: String) -> String {
+pub fn remove_stars(s: &str) -> String {
     // 栈操作
     let mut stack = Vec::new();
     /*for c in s.chars() {
@@ -66,7 +66,7 @@ pub fn asteroid_collision(mut asteroids: Vec<i32>) -> Vec<i32> {
 /// 394.字符串解码(栈,字符串,递归)
 // 题目要求:原始数据不包含数字,所有的数字只表示重复的次数 k,例:不会出现像 3a 或 2[4] 的输入
 //         s 中所有整数的取值范围为 [1, 300]
-pub fn decode_string(s: String) -> String {
+pub fn decode_string(s: &str) -> String {
     // 栈操作
     let mut stack = Vec::new();
     let mut curr_num = 0;

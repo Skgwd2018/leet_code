@@ -21,7 +21,7 @@ pub fn count_bits(n: i32) -> Vec<i32> {
 // 假设数组中重复的元素为x,只出现一次的元素为y。
 // 将数组中的所有元素进行异或运算,由于x出现了两次,所以x和x异或的结果为0,而y只出现了一次,所以最后的结果就是y。
 /// 异或（XOR）运算问题。异或运算有一个重要的性质:任何数和0异或都等于它本身,任何数和其自身异或都等于0。
-pub fn single_number(nums: Vec<i32>) -> i32 {
+pub fn single_number(nums: &[i32]) -> i32 {
     /*let mut single = 0;
     nums.iter().for_each(|num| single ^= num);
     single*/

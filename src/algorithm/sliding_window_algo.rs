@@ -25,7 +25,7 @@ pub fn sliding_window_ex(nums: &[i32], k: usize) -> i32 {
 
 /// 643.子数组最大平均数Ⅰ(数组,滑动窗口)
 /// 找出平均数最大值且长度为 k 的连续子数组
-pub fn find_max_average(nums: Vec<i32>, k: usize) -> f64 {
+pub fn find_max_average(nums: &[i32], k: usize) -> f64 {
     // 推荐使用 assert! 比 panic! 更好
     // if nums.len() < k { panic!("Array length is less than k"); }
     assert!(nums.len() >= k, "Array length is less than k");
@@ -44,7 +44,7 @@ pub fn find_max_average(nums: Vec<i32>, k: usize) -> f64 {
 
 /// 1456.定长子串中元音的最大数目(字符串,滑动窗口)
 // 题目要求:s 由小写英文字母组成且非空
-pub fn max_vowels(s: String, k: usize) -> i32 {
+pub fn max_vowels(s: &str, k: usize) -> i32 {
     // let k = k as usize;
     if s.len() < k { return 0; }
     // let s = s.chars().collect::<Vec<char>>();
@@ -76,7 +76,7 @@ pub fn max_vowels(s: String, k: usize) -> i32 {
 /// 1004.最大连续1的个数 III(数组,双指针,前缀和,滑动窗口)
 // 给定二进制数组 nums 和整数 k,如果可以翻转最多 k 个 0 ,则返回 数组中连续 1 的最大个数
 // nums = [0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], K = 3
-pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
+pub fn longest_ones(nums: &[i32], k: i32) -> i32 {
     // 双指针
     let (mut answer, mut left, mut cnt) = (0, 0, 0);
     for (right, &num) in nums.iter().enumerate() {
@@ -127,8 +127,7 @@ pub fn longest_subarray(nums: Vec<i32>) -> i32 {
 // 如果存在则返回 true,不存在返回 false
 // 输入: nums = [1, 5, 9, 1, 5, 9], k = 2, t = 3
 // 输出: false
-pub fn contains_nearby_almost_duplicate(nums: Vec<i32>, k: i32, t: i32) -> bool {
-    let k = k as usize;
+pub fn contains_nearby_almost_duplicate(nums: &[i32], k: usize, t: i32) -> bool {
     let mut v: BTreeSet<i32> = BTreeSet::new();
     for i in 0..nums.len() {
         let iter = v.range((Included(nums[i].max(i32::MIN + t) - t), Unbounded)).next();

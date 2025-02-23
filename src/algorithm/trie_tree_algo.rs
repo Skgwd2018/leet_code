@@ -20,7 +20,7 @@ impl Trie {
     pub fn new() -> Self { Self::default() }
 
     /// 向前缀树中插入字符串 word
-    pub fn insert(&mut self, word: String) {
+    pub fn insert(&mut self, word: &str) {
         /* let mut curr = self;
         for i in word.bytes().map(|b| (b - b'a') as usize) {
             curr = curr.child[i].get_or_insert_with(Default::default);
@@ -41,7 +41,7 @@ impl Trie {
     }
 
     ///  如果字符串 word 在前缀树中,返回 true(即在检索之前已经插入);否则返回 false
-    pub fn search(&self, word: String) -> bool {
+    pub fn search(&self, word: &str) -> bool {
         let mut curr = self;
         for i in word.bytes().map(|b| (b - b'a') as usize) {
             match &curr.child[i] {
@@ -54,7 +54,7 @@ impl Trie {
     }
 
     /// 如果之前已经插入的字符串 word 的前缀之一为 prefix,返回 true;否则返回 false
-    pub fn starts_with(&self, prefix: String) -> bool {
+    pub fn starts_with(&self, prefix: &str) -> bool {
         let mut curr = self;
         for i in prefix.bytes().map(|b| (b - b'a') as usize) {
             match &curr.child[i] {
@@ -74,7 +74,7 @@ impl Trie {
 // 请你设计一个推荐系统,在依次输入单词 searchWord 的每一个字母后,推荐 products 数组中前缀与 searchWord 相同的最多三个产品。
 // 如果前缀相同的可推荐产品超过三个,请按字典序返回最小的三个。
 // 请你以二维数组的形式,返回在输入 searchWord 每个字母后相应的推荐商品的列表。
-pub fn suggested_products(mut products: Vec<String>, search_word: String) -> Vec<Vec<String>> {
+pub fn suggested_products(mut products: Vec<String>, search_word: &str) -> Vec<Vec<String>> {
     let mut answer = vec![];
     products.sort_unstable();
     // 遍历搜索词的所有可能前缀

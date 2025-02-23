@@ -4,7 +4,7 @@ use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 // 有 n 个房间,房间按从 0 到 n - 1 编号。最初,除 0 号房间外的其余所有房间都被锁住。目标是进入所有的房间,但不能在没有获得钥匙的时候进入锁住的房间。
 // 当进入一个房间,可能会在里面找到一套不同的钥匙,每把钥匙上都有对应的房间号,即表示钥匙可以打开的房间。可以拿上所有钥匙去解锁其他房间。
 // 给定一个数组 rooms 其中 rooms[i] 是进入 i 号房间可以获得的钥匙集合。如果能进入 所有 房间返回 true,否则返回 false。
-pub fn can_visit_all_rooms(rooms: Vec<Vec<i32>>) -> bool {
+pub fn can_visit_all_rooms(rooms: &[Vec<i32>]) -> bool {
     // bfs解法
     let mut queue = VecDeque::new();
     let mut room_map = vec![false; rooms.len()];
@@ -136,7 +136,7 @@ pub fn find_circle_num2(is_connected: Vec<Vec<i32>>) -> i32 {
 // 请你帮助重新规划路线方向,使每个城市都可以访问城市 0 。返回需要变更方向的最小路线数。
 // 题目数据:保证每个城市在重新规划路线方向后都能到达城市 0
 // n = 6, connections: [[0, 1], [1, 3], [2, 3], [4, 0], [4, 5]]
-pub fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
+pub fn min_reorder(n: i32, connections: &[Vec<i32>]) -> i32 {
     fn dfs(a: usize, fa: i32, g: &Vec<Vec<(i32, i32)>>) -> i32 {
         let mut answer = 0;
         for &(b, c) in &g[a] {
@@ -149,7 +149,7 @@ pub fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
     }
 
     let mut g: Vec<Vec<(i32, i32)>> = vec![vec![]; n as usize];
-    for e in &connections {
+    for e in connections {
         let (a, b) = (e[0] as usize, e[1] as usize);
         g[a].push((b as i32, 1));
         g[b].push((a as i32, 0));
@@ -165,7 +165,7 @@ pub fn min_reorder(n: i32, connections: Vec<Vec<i32>>) -> i32 {
 // 返回 所有问题的答案。如果存在某个无法确定的答案,则用 -1.0 替代这个答案。如果问题中出现了给定的已知条件中没有出现的字符串,也需要用 -1.0 替代这个答案。
 // 注意:输入总是有效的。可以假设除法运算中不会出现除数为 0 的情况,且不存在任何矛盾的结果。
 // 注意:未在等式列表中出现的变量是未定义的,因此无法确定它们的答案。
-pub fn calc_equation(equations: Vec<Vec<String>>, values: Vec<f64>, queries: Vec<Vec<String>>) -> Vec<f64> {
+pub fn calc_equation(equations: &[Vec<String>], values: &[f64], queries: Vec<Vec<String>>) -> Vec<f64> {
     /*
     // graph1:将图转化为邻接矩阵
     let mut graph1 = HashMap::new();
@@ -267,7 +267,7 @@ pub fn calc_equation(equations: Vec<Vec<String>>, values: Vec<f64>, queries: Vec
 /// 1926.迷宫中离入口最近的出口(图,bfs)
 /// 迷宫出口(BFS广度优先搜索)
 // maze[i][j] 要么是 '.' ,要么是 '+'
-pub fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+pub fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: &[i32]) -> i32 {
     let dir = [-1, 0, 1, 0, -1]; // 方向
     let entrance = (entrance[0], entrance[1]); // 入口位置
     let n = i32::try_from(maze.len()).expect("i32 error");    // 行数
@@ -304,7 +304,7 @@ pub fn nearest_exit(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
 }
 
 // 解法二:适合迷宫规模较小的情况
-pub fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: Vec<i32>) -> i32 {
+pub fn _nearest_exit2(mut maze: Vec<Vec<char>>, entrance: &[i32]) -> i32 {
     let mut clones = VecDeque::from_iter([(entrance[0] as usize, entrance[1] as usize)]);
     maze[entrance[0] as usize][entrance[1] as usize] = 'x';
     let mut n_step = 0;
@@ -420,7 +420,7 @@ pub fn oranges_rotting(mut grid: Vec<Vec<i32>>) -> i32 {
 // 序列 [1, 3] 是它的一个子序列: [1, 2, 3]
 // 序列 [2, 3] 是它的一个子序列: [1, 2, 3]
 // 因为 nums 是唯一最短的超序列,所以返回true。
-pub fn sequence_reconstruction(nums: Vec<i32>, sequences: Vec<[i32; 2]>) -> bool {
+pub fn sequence_reconstruction(nums: &[i32], sequences: Vec<[i32; 2]>) -> bool {
     let mut map = HashMap::new();
     for seq in sequences {
         // .windows() 返回一个迭代器,遍历所有长度大小的连续窗口。窗口重叠。如果切片小于大小,迭代器将不返回任何值。

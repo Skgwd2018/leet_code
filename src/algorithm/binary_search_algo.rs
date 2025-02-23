@@ -72,7 +72,7 @@ pub fn search_rotate_array(nums: &[i32], target: i32) -> Option<usize> {
 //-----------------------------------------------------
 
 /// 2300.咒语和药水的成功对数(数组,双指针,二分查找)
-pub fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -> Vec<i32> {
+pub fn successful_pairs(spells: &[i32], mut potions: Vec<i32>, success: i64) -> Vec<i32> {
     potions.sort_unstable(); // 默认升序排列
     let n = potions.len();
     // partition_point() 内部使用 binary_search_by 进行查找
@@ -87,7 +87,7 @@ pub fn successful_pairs(spells: Vec<i32>, mut potions: Vec<i32>, success: i64) -
 /// 162.寻找峰值元素的索引(数组,二分查找)
 // 峰值元素是指其值严格大于左右相邻值的元素。
 // 给你一个整数数组 nums,找到峰值元素并返回其索引。数组可能包含多个峰值,在这种情况下,返回 任何一个峰值 所在位置即可。
-pub fn find_peak_element(nums: Vec<i32>) -> i32 {
+pub fn find_peak_element(nums: &[i32]) -> i32 {
     // 双指针
     let (mut left, mut right) = (0, nums.len() - 1);
     // 二分搜索
@@ -116,7 +116,7 @@ pub fn find_peak_element(nums: Vec<i32>) -> i32 {
 // 如果这堆香蕉少于 k 根,她将吃掉这堆的所有香蕉,然后这一小时内不会再吃更多的香蕉。
 // 珂珂喜欢慢慢吃,但仍然想在警卫回来前吃掉所有的香蕉。
 // 返回她可以在 h 小时内吃掉所有香蕉的最小速度 k(整数)
-pub fn min_eating_speed(piles: Vec<i32>, h: i32) -> i32 {
+pub fn min_eating_speed(piles: &[i32], h: i32) -> i32 {
     /*let check = |k: i32| -> bool {
         let mut sum = piles.len() as i32;
         for &p in &piles {

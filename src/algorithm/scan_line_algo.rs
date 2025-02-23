@@ -7,7 +7,7 @@ use std::collections::{BTreeMap, HashSet};
 // 输入: rectangles = [[1, 1, 3, 3], [3, 1, 4, 2], [3, 2, 4, 4], [1, 3, 2, 4], [2, 3, 3, 4]]
 // 输出: true
 // 解释: 5 个矩形一起可以精确地覆盖一个矩形区域
-pub fn is_rectangle_cover(rectangles: Vec<Vec<i32>>) -> bool {
+pub fn is_rectangle_cover(rectangles: &[Vec<i32>]) -> bool {
     let (x1, y1, x2, y2, a, set) = rectangles.iter().fold(
         (i32::MAX, i32::MAX, i32::MIN, i32::MIN, 0, HashSet::new()),
         |(x1, y1, x2, y2, a, mut set), rect| {

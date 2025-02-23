@@ -84,7 +84,7 @@ pub fn unique_occurrences(arr: Vec<i32>) -> bool {
 // 执行操作 2: "baaccc" -> "abbccc"
 // 这个函数的目标是判断两个字符串是否“接近”。
 // 具体来说即是:两个字符串长度相同,并且对于每个字母,两个字符串中该字母的出现次数相同(无论顺序如何)
-pub fn close_strings(word1: String, word2: String) -> bool {
+pub fn close_strings(word1: &str, word2: &str) -> bool {
     if word1.len() != word2.len() { return false; }
 
     let mut word1_cnt = [0; 26]; // 字符计数:用于存储字符串中每个字母的出现次数
@@ -122,7 +122,7 @@ pub fn close_strings(word1: String, word2: String) -> bool {
 // - (第 0 行, 第 0 列): [3, 1, 2, 2]
 // - (第 2 行, 第 2 列): [2, 4, 2, 2]
 // - (第 3 行, 第 2 列): [2, 4, 2, 2]
-pub fn equal_pairs(grid: Vec<Vec<i32>>) -> i32 {
+pub fn equal_pairs(grid: &[Vec<i32>]) -> i32 {
     let (mut cnt, mut cache_map) = (0, HashMap::new());
     // 遍历行,将其作为 key,行出现的次数为 value 存入 HashMap
     grid.iter().for_each(|g| *cache_map.entry(g).or_insert(0) += 1);

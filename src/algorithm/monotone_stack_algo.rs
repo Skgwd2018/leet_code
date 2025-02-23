@@ -42,7 +42,7 @@ pub fn monotone_stack_ex(nums: &[i32]) -> Vec<i32> {
 // 如果气温在这之后都不会升高,请在该位置用 0 来代替。
 // 输入: temperatures = [73, 74, 75, 71, 69, 72, 76, 73]  // 8
 // 输出:                [1, 1, 4, 2, 1, 1, 0, 0]
-pub fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
+pub fn daily_temperatures(temperatures: &[i32]) -> Vec<i32> {
     let mut answer = vec![0; temperatures.len()];
     let mut stack = Vec::new();
     for (i, &t) in temperatures.iter().enumerate() {

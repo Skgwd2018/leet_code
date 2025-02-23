@@ -24,7 +24,7 @@ pub fn backtracking_ex(nums: &mut Vec<i32>) -> Vec<Vec<i32>> {
 //-----------------------------------------------------
 
 /// 17.电话号码的字母组合(字符串,哈希表,回溯)
-pub fn letter_combinations(digits: String) -> Vec<String> {
+pub fn letter_combinations(digits: &str) -> Vec<String> {
     let mut answer: Vec<String> = Vec::new();
     let mut value: Vec<char> = Vec::new();
     /* match digits.is_empty() {
@@ -32,14 +32,14 @@ pub fn letter_combinations(digits: String) -> Vec<String> {
         false => get_letters(&digits, 0, &mut value, &mut answer),
     } */
     if !digits.is_empty() {
-        get_letters(&digits, 0, &mut value, &mut answer);
+        get_letters(digits, 0, &mut value, &mut answer);
     }
 
     answer
 }
 /// backtrack(回溯)
 // digits:输入的字符串, index:当前的索引, value:用于存储当前字母组合的Vec<char>, answer:用于存储所有结果的Vec<String>
-fn get_letters(digits: &String, index: usize, value: &mut Vec<char>, answer: &mut Vec<String>) {
+fn get_letters(digits: &str, index: usize, value: &mut Vec<char>, answer: &mut Vec<String>) {
     if index >= digits.len() {
         // let s = String::from_iter(value.iter()); // 将一个字符迭代器转换为一个字符串
         let s = value.iter().collect(); // 将一个字符迭代器转换为一个字符串
