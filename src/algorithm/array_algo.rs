@@ -242,11 +242,11 @@ fn select_sort(nums: &mut [i32]) {
 
 /// 4.归并排序,时间复杂度:O(n log n),空间复杂度:O(n),稳定性排序,属于分治法(Divide and Conquer)
 #[allow(unused)]
-fn merge_sort(nums: &mut Vec<i32>) {
+fn merge_sort<T: PartialOrd + Copy>(nums: &mut [T]) {
     let n = nums.len();
     merge(nums, 0, n);
 }
-fn merge(nums: &mut Vec<i32>, start: usize, end: usize) {
+fn merge<T: PartialOrd + Copy>(nums: &mut [T], start: usize, end: usize) {
     // println!("1. nums:{:?}, start:{}, end:{}", nums, start, end);
     if start + 1 >= end { return; }
 
@@ -268,7 +268,7 @@ fn merge(nums: &mut Vec<i32>, start: usize, end: usize) {
     // start:0, mid:5, end:11
     sort(nums, start, mid, end);
 }
-fn sort(nums: &mut [i32], start: usize, mid: usize, end: usize) {
+fn sort<T: PartialOrd + Copy>(nums: &mut [T], start: usize, mid: usize, end: usize) {
     let nums2 = nums[mid..end].to_vec();
     let (mut index1, mut index2, mut index) = (mid - 1, nums2.len() - 1, end - 1);
 
